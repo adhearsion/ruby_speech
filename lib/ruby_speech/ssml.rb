@@ -2,6 +2,6 @@ module RubySpeech
   module SSML
     extend ActiveSupport::Autoload
 
-    autoload :Document
+    autoload :Speak
   end # SSML
 end # RubySpeech

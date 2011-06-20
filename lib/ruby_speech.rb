@@ -1,5 +1,9 @@
-require "ruby_speech/version"
+require 'active_support/dependencies/autoload'
+require 'active_support/core_ext/object/blank'
 
 module RubySpeech
-  # Your code goes here...
+  extend ActiveSupport::Autoload
+
+  autoload :SSML
+  autoload :Version
 end

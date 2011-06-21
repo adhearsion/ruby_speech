@@ -3,5 +3,6 @@ module RubySpeech
     extend ActiveSupport::Autoload
 
     autoload :Speak
+    autoload :Voice
   end # SSML
 end # RubySpeech

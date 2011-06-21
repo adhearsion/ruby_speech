@@ -2,7 +2,6 @@ SSML Spec Features
 ==================
 Prosody & Style
 ---------------
-* Allow options hash for setting attributes in initializers
 * Restrict child element types for `<voice/>`, `<emphasis/>`, `<break/>`, `<prosody/>`
 * Documentation
 

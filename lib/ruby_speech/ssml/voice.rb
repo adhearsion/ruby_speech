@@ -5,8 +5,12 @@ module RubySpeech
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
 
-      def self.new
-        super('voice')
+      def self.new(atts = {})
+        super('voice') do |new_node|
+          atts.each_pair do |k, v|
+            new_node.send :"#{k}=", v
+          end
+        end
       end
 
       def gender

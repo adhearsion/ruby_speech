@@ -3,8 +3,12 @@ module RubySpeech
     class Emphasis < Niceogiri::XML::Node
       VALID_LEVELS = [:strong, :moderate, :none, :reduced].freeze
 
-      def self.new
-        super('emphasis')
+      def self.new(atts = {})
+        super('emphasis') do |new_node|
+          atts.each_pair do |k, v|
+            new_node.send :"#{k}=", v
+          end
+        end
       end
 
       def level

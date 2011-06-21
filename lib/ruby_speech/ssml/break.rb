@@ -3,8 +3,12 @@ module RubySpeech
     class Break < Niceogiri::XML::Node
       VALID_STRENGTHS = [:none, :'x-weak', :weak, :medium, :strong, :'x-strong'].freeze
 
-      def self.new
-        super('break')
+      def self.new(atts = {})
+        super('break') do |new_node|
+          atts.each_pair do |k, v|
+            new_node.send :"#{k}=", v
+          end
+        end
       end
 
       def strength

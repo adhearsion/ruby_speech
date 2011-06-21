@@ -6,6 +6,16 @@ module RubySpeech
       its(:node_name) { should == 'voice' }
       its(:name) { should be_nil }
 
+      describe "setting options in initializers" do
+        subject { Voice.new :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul" }
+
+        its(:language)  { should == 'jp' }
+        its(:gender)    { should == :male }
+        its(:age)       { should == 25 }
+        its(:variant)   { should == 2 }
+        its(:name)      { should == 'paul' }
+      end
+
       describe "#language" do
         before { subject.language = 'jp' }
 

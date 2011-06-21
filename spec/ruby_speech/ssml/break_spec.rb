@@ -5,6 +5,13 @@ module RubySpeech
     describe Break do
       its(:name) { should == 'break' }
 
+      describe "setting options in initializers" do
+        subject { Break.new :strength => :strong, :time => 3.seconds }
+
+        its(:strength)  { should == :strong }
+        its(:time)      { should == 3.seconds }
+      end
+
       describe "#strength" do
         before { subject.strength = :strong }
 

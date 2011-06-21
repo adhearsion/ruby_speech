@@ -8,6 +8,13 @@ module RubySpeech
       its(:name) { should == 'speak' }
       its(:language) { should == 'en-US' }
 
+      describe "setting options in initializers" do
+        subject { Speak.new :language => 'jp', :base_uri => 'blah' }
+
+        its(:language) { should == 'jp' }
+        its(:base_uri) { should == 'blah' }
+      end
+
       describe "#language" do
         before { subject.language = 'jp' }
 

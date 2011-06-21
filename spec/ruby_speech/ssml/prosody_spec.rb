@@ -5,6 +5,17 @@ module RubySpeech
     describe Prosody do
       its(:name) { should == 'prosody' }
 
+      describe "setting options in initializers" do
+        subject { Prosody.new :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud }
+
+        its(:pitch)     { should == :medium }
+        its(:contour)   { should == 'something' }
+        its(:range)     { should == '20Hz' }
+        its(:rate)      { should == 2 }
+        its(:duration)  { should == 10.seconds }
+        its(:volume)    { should == :loud }
+      end
+
       describe "#pitch" do
         context "with a pre-defined value" do
           before { subject.pitch = :medium }

@@ -5,8 +5,12 @@ module RubySpeech
       VALID_VOLUMES = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
       VALID_RATES   = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
 
-      def self.new
-        super('prosody')
+      def self.new(atts = {})
+        super('prosody') do |new_node|
+          atts.each_pair do |k, v|
+            new_node.send :"#{k}=", v
+          end
+        end
       end
 
       def pitch

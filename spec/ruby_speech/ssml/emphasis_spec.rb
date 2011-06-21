@@ -5,6 +5,12 @@ module RubySpeech
     describe Emphasis do
       its(:name) { should == 'emphasis' }
 
+      describe "setting options in initializers" do
+        subject { Emphasis.new :level => :strong }
+
+        its(:level) { should == :strong }
+      end
+
       describe "#level" do
         before { subject.level = :strong }
 

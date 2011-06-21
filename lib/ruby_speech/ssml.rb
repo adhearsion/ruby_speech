@@ -4,6 +4,7 @@ module RubySpeech
 
     autoload :Break
     autoload :Emphasis
+    autoload :Prosody
     autoload :Speak
     autoload :Voice
   end # SSML

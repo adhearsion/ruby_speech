@@ -19,6 +19,6 @@ module RubySpeech
 
         its(:base_uri) { should == 'blah' }
       end
-    end # Document
+    end # Speak
   end # SSML
 end # RubySpeech

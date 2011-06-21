@@ -18,6 +18,6 @@ module RubySpeech
       def base_uri=(uri)
         write_attr 'xml:base', uri
       end
-    end # Document
+    end # Speak
   end # SSML
 end # RubySpeech

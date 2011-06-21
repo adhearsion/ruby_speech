@@ -7,6 +7,8 @@
 module RubySpeech
   extend ActiveSupport::Autoload
 
-  autoload :SSML
   autoload :Version
+
+  autoload :SSML
+  autoload :XML
 end

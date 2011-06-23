@@ -12,9 +12,10 @@ module RubySpeech
     # The default value of all prosodic attributes is no change. For example, omitting the rate attribute means that the rate is the same within the element as outside.
     #
     class Prosody < Niceogiri::XML::Node
-      VALID_PITCHES = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
-      VALID_VOLUMES = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
-      VALID_RATES   = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
+      VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
+      VALID_VOLUMES     = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
+      VALID_RATES       = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, Voice].freeze
 
       ##
       # Create a new SSML prosody element
@@ -164,6 +165,11 @@ module RubySpeech
       def volume=(v)
         raise ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), #{VALID_VOLUMES.map(&:inspect).join ', '})" unless (v.is_a?(Numeric) && (0..100).include?(v)) || VALID_VOLUMES.include?(v)
         write_attr :volume, v
+      end
+
+      def <<(arg)
+        raise InvalidChildError, "A Prosody can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
+        super
       end
     end # Prosody
   end # SSML

@@ -184,7 +184,56 @@ module RubySpeech
         end
       end
 
-      # TODO: The prosody element can only contain text to be rendered and the following elements: audio, break, emphasis, mark, p, phoneme, prosody, say-as, sub, s, voice.
+      describe "<<" do
+        it "should accept String" do
+          lambda { subject << 'anything' }.should_not raise_error
+        end
+
+        it "should accept Audio" do
+          pending
+          lambda { subject << Audio.new }.should_not raise_error
+        end
+
+        it "should accept Break" do
+          lambda { subject << Break.new }.should_not raise_error
+        end
+
+        it "should accept Emphasis" do
+          lambda { subject << Emphasis.new }.should_not raise_error
+        end
+
+        it "should accept Mark" do
+          pending
+          lambda { subject << Mark.new }.should_not raise_error
+        end
+
+        it "should accept Phoneme" do
+          pending
+          lambda { subject << Phoneme.new }.should_not raise_error
+        end
+
+        it "should accept Prosody" do
+          lambda { subject << Prosody.new }.should_not raise_error
+        end
+
+        it "should accept SayAs" do
+          pending
+          lambda { subject << SayAs.new }.should_not raise_error
+        end
+
+        it "should accept Sub" do
+          pending
+          lambda { subject << Sub.new }.should_not raise_error
+        end
+
+        it "should accept Voice" do
+          lambda { subject << Voice.new }.should_not raise_error
+        end
+
+        it "should raise InvalidChildError with non-acceptable objects" do
+          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Prosody can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+        end
+      end
     end # Prosody
   end # SSML
 end # RubySpeech

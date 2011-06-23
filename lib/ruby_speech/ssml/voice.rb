@@ -9,6 +9,7 @@ module RubySpeech
       include XML::Language
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, Voice].freeze
 
       ##
       # Create a new SSML voice element
@@ -105,6 +106,11 @@ module RubySpeech
         # TODO: Raise ArgumentError if names contain whitespace
         n = n.join(' ') if n.is_a? Array
         write_attr :name, n
+      end
+
+      def <<(arg)
+        raise InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
+        super
       end
     end # Voice
   end # SSML

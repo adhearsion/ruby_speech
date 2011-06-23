@@ -7,6 +7,7 @@ module RubySpeech
     #
     class Emphasis < Niceogiri::XML::Node
       VALID_LEVELS = [:strong, :moderate, :none, :reduced].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, Voice].freeze
 
       ##
       # Create a new SSML emphasis element
@@ -40,6 +41,11 @@ module RubySpeech
       def level=(l)
         raise ArgumentError, "You must specify a valid level (#{VALID_LEVELS.map(&:inspect).join ', '})" unless VALID_LEVELS.include? l
         write_attr :level, l
+      end
+
+      def <<(arg)
+        raise InvalidChildError, "An Emphasis can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
+        super
       end
     end # Emphasis
   end # SSML

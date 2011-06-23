@@ -60,6 +60,11 @@ module RubySpeech
         raise ArgumentError, "You must specify a valid time (positive float value in seconds)" unless t.is_a?(Numeric) && t >= 0
         write_attr :time, "#{t}s"
       end
+
+      def <<(*args)
+        raise InvalidChildError, "A Break cannot contain children"
+        super
+      end
     end # Break
   end # SSML
 end # RubySpeech

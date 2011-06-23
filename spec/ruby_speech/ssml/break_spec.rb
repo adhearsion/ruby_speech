@@ -51,7 +51,11 @@ module RubySpeech
         end
       end
 
-      # TODO: The break element cannot take children
+      describe "<<" do
+        it "should always raise InvalidChildError" do
+          lambda { subject << 'anything' }.should raise_error(InvalidChildError, "A Break cannot contain children")
+        end
+      end
     end # Break
   end # SSML
 end # RubySpeech

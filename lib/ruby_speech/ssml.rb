@@ -7,5 +7,7 @@ module RubySpeech
     autoload :Prosody
     autoload :Speak
     autoload :Voice
+
+    InvalidChildError = Class.new StandardError
   end # SSML
 end # RubySpeech

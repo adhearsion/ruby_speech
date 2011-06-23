@@ -1,9 +1,5 @@
 SSML Spec Features
 ==================
-Prosody & Style
----------------
-* Restrict child element types for `<voice/>`, `<emphasis/>`, `<break/>`, `<prosody/>`
-
 Document Structure
 ------------------
 * `<p/>` and `<s/>`

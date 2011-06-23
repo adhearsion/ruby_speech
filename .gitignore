@@ -3,3 +3,5 @@
 Gemfile.lock
 pkg/*
 spec/reports
+.yardoc
+doc

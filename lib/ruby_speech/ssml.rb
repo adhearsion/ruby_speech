@@ -5,6 +5,7 @@ module RubySpeech
     autoload :Break
     autoload :Emphasis
     autoload :Prosody
+    autoload :SayAs
     autoload :Speak
     autoload :Voice
 

@@ -9,7 +9,7 @@ module RubySpeech
       include XML::Language
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
-      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, Voice].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML voice element

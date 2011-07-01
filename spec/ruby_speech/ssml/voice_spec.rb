@@ -120,8 +120,7 @@ module RubySpeech
         end
 
         it "should accept SayAs" do
-          pending
-          lambda { subject << SayAs.new }.should_not raise_error
+          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do
@@ -142,8 +141,6 @@ module RubySpeech
           lambda { subject << 1 }.should raise_error(InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
-
-      # TODO: The voice element can only contain text to be rendered and the following elements: audio, break, emphasis, mark, p, phoneme, prosody, say-as, sub, s, voice.
     end # Voice
   end # SSML
 end # RubySpeech

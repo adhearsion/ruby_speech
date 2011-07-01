@@ -217,8 +217,7 @@ module RubySpeech
         end
 
         it "should accept SayAs" do
-          pending
-          lambda { subject << SayAs.new }.should_not raise_error
+          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do

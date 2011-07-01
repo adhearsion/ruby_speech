@@ -3,7 +3,6 @@ SSML Spec Features
 Document Structure
 ------------------
 * `<p/>` and `<s/>`
-* `<say-as/>`
 * `<phoneme/>`
 * `<sub/>`
 * `<lexicon/>`

@@ -7,7 +7,7 @@ module RubySpeech
     #
     class Emphasis < Niceogiri::XML::Node
       VALID_LEVELS = [:strong, :moderate, :none, :reduced].freeze
-      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, Voice].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML emphasis element

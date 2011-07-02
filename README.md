@@ -12,7 +12,7 @@ require 'ruby_speech'
 
 RubySpeech::SSML.draw do
   voice gender: :male, name: 'fred' do
-    text "Hi, I'm Fred. The time is currently "
+    string "Hi, I'm Fred. The time is currently "
     say_as 'date', format: 'dmy' do
       "01/02/1960"
     end
@@ -25,7 +25,7 @@ becomes:
 ```xml
 <speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="en-US">
   <voice gender="male" name="fred">
-    Hi, I'm Fred. The time is currently <say-as interpret-as="date" format="dmy">01/02/1960</say-as>
+    Hi, I'm Fred. The time is currently <say-as format="dmy" interpret-as="date">01/02/1960</say-as>
   </voice>
 </speak>
 ```

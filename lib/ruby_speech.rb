@@ -1,5 +1,15 @@
-require "ruby_speech/version"
+%w{
+  active_support/dependencies/autoload
+  active_support/core_ext/object/blank
+  active_support/core_ext/numeric/time
+  niceogiri
+}.each { |f| require f }
 
 module RubySpeech
-  # Your code goes here...
+  extend ActiveSupport::Autoload
+
+  autoload :Version
+
+  autoload :SSML
+  autoload :XML
 end

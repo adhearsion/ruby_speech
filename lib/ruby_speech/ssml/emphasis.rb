@@ -47,6 +47,10 @@ module RubySpeech
         raise InvalidChildError, "An Emphasis can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def eql?(o)
+        super o, :content, :level
+      end
     end # Emphasis
   end # SSML
 end # RubySpeech

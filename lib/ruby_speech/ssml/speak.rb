@@ -40,6 +40,10 @@ module RubySpeech
       def base_uri=(uri)
         write_attr 'xml:base', uri
       end
+
+      def eql?(o)
+        super o, :language, :base_uri, :content
+      end
     end # Speak
   end # SSML
 end # RubySpeech

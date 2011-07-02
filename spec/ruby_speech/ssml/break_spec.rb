@@ -56,6 +56,30 @@ module RubySpeech
           lambda { subject << 'anything' }.should raise_error(InvalidChildError, "A Break cannot contain children")
         end
       end
+
+      describe "comparing objects" do
+        it "should be equal if the content, strength and base uri are the same" do
+          Break.new(strength: :strong, time: 1.second, content: "Hello there").should == Break.new(strength: :strong, time: 1.second, content: "Hello there")
+        end
+
+        describe "when the content is different" do
+          it "should not be equal" do
+            Break.new(content: "Hello").should_not == Break.new(content: "Hello there")
+          end
+        end
+
+        describe "when the strength is different" do
+          it "should not be equal" do
+            Break.new(strength: :strong).should_not == Break.new(strength: :weak)
+          end
+        end
+
+        describe "when the time is different" do
+          it "should not be equal" do
+            Break.new(time: 1.second).should_not == Break.new(time: 2.seconds)
+          end
+        end
+      end
     end # Break
   end # SSML
 end # RubySpeech

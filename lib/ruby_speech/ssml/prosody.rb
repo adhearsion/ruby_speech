@@ -39,6 +39,7 @@ module RubySpeech
       #
       def pitch
         value = read_attr :pitch
+        return unless value
         if value.include?('Hz')
           value
         elsif VALID_PITCHES.include?(value.to_sym)
@@ -82,6 +83,7 @@ module RubySpeech
       #
       def range
         value = read_attr :range
+        return unless value
         if value.include?('Hz')
           value
         elsif VALID_PITCHES.include?(value.to_sym)
@@ -107,6 +109,7 @@ module RubySpeech
       #
       def rate
         value = read_attr :rate
+        return unless value
         if VALID_RATES.include?(value.to_sym)
           value.to_sym
         else
@@ -170,6 +173,10 @@ module RubySpeech
       def <<(arg)
         raise InvalidChildError, "A Prosody can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
+      end
+
+      def eql?(o)
+        super o, :content, :pitch, :contour, :range, :rate, :duration, :volume
       end
     end # Prosody
   end # SSML

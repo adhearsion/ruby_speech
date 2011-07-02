@@ -184,6 +184,54 @@ module RubySpeech
         end
       end
 
+      describe "comparing objects" do
+        it "should be equal if the content, strength and base uri are the same" do
+          Prosody.new(pitch: :medium, contour: "something", range: '20Hz', rate: 2, duration: 10.seconds, volume: :loud, content: "Hello there").should == Prosody.new(pitch: :medium, contour: "something", range: '20Hz', rate: 2, duration: 10.seconds, volume: :loud, content: "Hello there")
+        end
+
+        describe "when the content is different" do
+          it "should not be equal" do
+            Prosody.new(content: "Hello").should_not == Prosody.new(content: "Hello there")
+          end
+        end
+
+        describe "when the pitch is different" do
+          it "should not be equal" do
+            Prosody.new(pitch: :medium).should_not == Prosody.new(pitch: :high)
+          end
+        end
+
+        describe "when the contour is different" do
+          it "should not be equal" do
+            Prosody.new(contour: 'foo').should_not == Prosody.new(contour: 'bar')
+          end
+        end
+
+        describe "when the range is different" do
+          it "should not be equal" do
+            Prosody.new(range: '20Hz').should_not == Prosody.new(range: '30Hz')
+          end
+        end
+
+        describe "when the rate is different" do
+          it "should not be equal" do
+            Prosody.new(rate: 2).should_not == Prosody.new(rate: 3)
+          end
+        end
+
+        describe "when the duration is different" do
+          it "should not be equal" do
+            Prosody.new(duration: 10.seconds).should_not == Prosody.new(duration: 20.seconds)
+          end
+        end
+
+        describe "when the volume is different" do
+          it "should not be equal" do
+            Prosody.new(volume: :loud).should_not == Prosody.new(volume: :soft)
+          end
+        end
+      end
+
       describe "<<" do
         it "should accept String" do
           lambda { subject << 'anything' }.should_not raise_error

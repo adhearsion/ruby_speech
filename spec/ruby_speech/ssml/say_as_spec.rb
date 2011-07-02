@@ -17,6 +17,36 @@ module RubySpeech
         end
       end
 
+      describe "comparing objects" do
+        it "should be equal if the content, interpret_as, format, age, variant, name are the same" do
+          SayAs.new(interpret_as: 'jp', format: 'foo', detail: 'bar', content: "hello").should == SayAs.new(interpret_as: 'jp', format: 'foo', detail: 'bar', content: "hello")
+        end
+
+        describe "when the content is different" do
+          it "should not be equal" do
+            SayAs.new(interpret_as: 'jp', content: "Hello").should_not == SayAs.new(interpret_as: 'jp', content: "Hello there")
+          end
+        end
+
+        describe "when the interpret_as is different" do
+          it "should not be equal" do
+            SayAs.new(interpret_as: "Hello").should_not == SayAs.new(interpret_as: "Hello there")
+          end
+        end
+
+        describe "when the format is different" do
+          it "should not be equal" do
+            SayAs.new(interpret_as: 'jp', format: 'foo').should_not == SayAs.new(interpret_as: 'jp', format: 'bar')
+          end
+        end
+
+        describe "when the detail is different" do
+          it "should not be equal" do
+            SayAs.new(interpret_as: 'jp', detail: 'foo').should_not == SayAs.new(interpret_as: 'jp', detail: 'bar')
+          end
+        end
+      end
+
       describe "<<" do
         it "should accept String" do
           lambda { subject << 'anything' }.should_not raise_error

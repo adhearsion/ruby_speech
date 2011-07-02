@@ -28,6 +28,24 @@ module RubySpeech
         end
       end
 
+      describe "comparing objects" do
+        it "should be equal if the content and level are the same" do
+          Emphasis.new(level: :strong, content: "Hello there").should == Emphasis.new(level: :strong, content: "Hello there")
+        end
+
+        describe "when the content is different" do
+          it "should not be equal" do
+            Emphasis.new(content: "Hello").should_not == Emphasis.new(content: "Hello there")
+          end
+        end
+
+        describe "when the level is different" do
+          it "should not be equal" do
+            Emphasis.new(level: :strong).should_not == Emphasis.new(level: :reduced)
+          end
+        end
+      end
+
       describe "<<" do
         it "should accept String" do
           lambda { subject << 'anything' }.should_not raise_error

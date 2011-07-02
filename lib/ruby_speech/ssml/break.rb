@@ -65,6 +65,10 @@ module RubySpeech
         raise InvalidChildError, "A Break cannot contain children"
         super
       end
+
+      def eql?(o)
+        super o, :content, :strength, :time
+      end
     end # Break
   end # SSML
 end # RubySpeech

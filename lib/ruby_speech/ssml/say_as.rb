@@ -104,6 +104,10 @@ module RubySpeech
         raise InvalidChildError, "A SayAs can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def eql?(o)
+        super o, :content, :interpret_as, :format, :detail
+      end
     end # SayAs
   end # SSML
 end # RubySpeech

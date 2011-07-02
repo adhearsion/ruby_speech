@@ -112,6 +112,10 @@ module RubySpeech
         raise InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def eql?(o)
+        super o, :content, :language, :gender, :age, :variant, :name
+      end
     end # Voice
   end # SSML
 end # RubySpeech

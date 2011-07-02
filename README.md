@@ -1,14 +1,10 @@
-RubySpeech
---------
+# RubySpeech
+RubySpeech is a library for constructing and parsing Text to Speech (TTS) and Automatic Speech Recognition (ASR) documents such as [SSML](http://www.w3.org/TR/speech-synthesis) and [GRXML](http://www.w3.org/TR/speech-grammar/). The primary use case is for construction of these documents to be processed by TTS and ASR engines.
 
-
-
-Installation
-============
+## Installation
     gem install ruby_speech
 
-Library
-=======
+## Library
 RubySpeech provides a DSL for constructing SSML documents like so:
 
 ```ruby
@@ -34,12 +30,33 @@ becomes:
 </speak>
 ```
 
-
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/develop/frames) for more
 
+## Features:
+### SSML
+* Document construction
+* `<voice/>`
+* `<prosody/>`
+* `<emphasis/>`
+* `<say-as/>`
+* `<break/>`
 
-Note on Patches/Pull Requests
------------------------------
+## TODO:
+### SSML
+#### Document Structure
+* `<p/>` and `<s/>`
+* `<phoneme/>`
+* `<sub/>`
+* `<lexicon/>`
+* `<meta/>` and `<metadata/>`
+
+#### Misc
+* `<audio/>`
+* `<mark/>`
+* `<desc/>`
+
+
+## Note on Patches/Pull Requests
 
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -48,7 +65,6 @@ Note on Patches/Pull Requests
   * If you want to have your own version, that is fine but bump version in a commit by itself so I can ignore when I pull
 * Send me a pull request. Bonus points for topic branches.
 
-Copyright
----------
+## Copyright
 
 Copyright (c) 2011 Ben Langfeld. MIT licence (see LICENSE for details).

@@ -31,7 +31,7 @@ becomes:
 </speak>
 ```
 
-Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/develop/frames) for more
+Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
 
 ## Features:
 ### SSML
@@ -56,6 +56,11 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<mark/>`
 * `<desc/>`
 
+
+## Links:
+* [Source](https://github.com/benlangfeld/ruby_speech)
+* [Documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames)
+* [Bug Tracker](https://github.com/benlangfeld/ruby_speech/issues)
 
 ## Note on Patches/Pull Requests
 

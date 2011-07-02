@@ -3,7 +3,7 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe SayAs do
-      subject { SayAs.new :interpret_as => 'one', :format => 'two', :detail => 'three' }
+      subject { SayAs.new 'one', format: 'two', detail: 'three' }
 
       its(:name) { should == 'say-as' }
 
@@ -11,38 +11,38 @@ module RubySpeech
       its(:format)       { should == 'two' }
       its(:detail)       { should == 'three' }
 
-      describe "without an :interpret_as option" do
+      describe "without interpret_as" do
         it "should raise an ArgumentError" do
-          expect { SayAs.new }.should raise_error(ArgumentError, "You must specify a value for interpret_as")
+          expect { SayAs.new }.should raise_error(ArgumentError)
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content, interpret_as, format, age, variant, name are the same" do
-          SayAs.new(interpret_as: 'jp', format: 'foo', detail: 'bar', content: "hello").should == SayAs.new(interpret_as: 'jp', format: 'foo', detail: 'bar', content: "hello")
+          SayAs.new('jp', format: 'foo', detail: 'bar', content: "hello").should == SayAs.new('jp', format: 'foo', detail: 'bar', content: "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            SayAs.new(interpret_as: 'jp', content: "Hello").should_not == SayAs.new(interpret_as: 'jp', content: "Hello there")
+            SayAs.new('jp', content: "Hello").should_not == SayAs.new('jp', content: "Hello there")
           end
         end
 
         describe "when the interpret_as is different" do
           it "should not be equal" do
-            SayAs.new(interpret_as: "Hello").should_not == SayAs.new(interpret_as: "Hello there")
+            SayAs.new("Hello").should_not == SayAs.new("Hello there")
           end
         end
 
         describe "when the format is different" do
           it "should not be equal" do
-            SayAs.new(interpret_as: 'jp', format: 'foo').should_not == SayAs.new(interpret_as: 'jp', format: 'bar')
+            SayAs.new('jp', format: 'foo').should_not == SayAs.new('jp', format: 'bar')
           end
         end
 
         describe "when the detail is different" do
           it "should not be equal" do
-            SayAs.new(interpret_as: 'jp', detail: 'foo').should_not == SayAs.new(interpret_as: 'jp', detail: 'bar')
+            SayAs.new('jp', detail: 'foo').should_not == SayAs.new('jp', detail: 'bar')
           end
         end
       end

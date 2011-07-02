@@ -5,8 +5,10 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-synthesis/#S3.1.1
     #
-    class Speak < Niceogiri::XML::Node
+    class Speak < Element
       include XML::Language
+
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML speak root element
@@ -15,15 +17,12 @@ module RubySpeech
       #
       # @return [Speak] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        super('speak') do |new_node|
-          new_node[:version] = '1.0'
-          new_node.namespace = 'http://www.w3.org/2001/10/synthesis'
-          new_node.language  = "en-US"
-
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
+      def self.new(atts = {}, &block)
+        super('speak', atts) do
+          self[:version] = '1.0'
+          self.namespace = 'http://www.w3.org/2001/10/synthesis'
+          self.language ||= "en-US"
+          instance_eval &block if block_given?
         end
       end
 
@@ -41,8 +40,17 @@ module RubySpeech
         write_attr 'xml:base', uri
       end
 
+      def <<(arg)
+        raise InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
+        super
+      end
+
+      def valid_child_type?(type)
+        VALID_CHILD_TYPES.include? type
+      end
+
       def eql?(o)
-        super o, :language, :base_uri, :content
+        super o, :language, :base_uri
       end
     end # Speak
   end # SSML

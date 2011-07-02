@@ -5,7 +5,8 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-synthesis/#S3.2.2
     #
-    class Emphasis < Niceogiri::XML::Node
+    class Emphasis < Element
+
       VALID_LEVELS = [:strong, :moderate, :none, :reduced].freeze
       VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
@@ -16,12 +17,8 @@ module RubySpeech
       #
       # @return [Emphasis] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        super('emphasis') do |new_node|
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
-        end
+      def self.new(atts = {}, &block)
+        super 'emphasis', atts, &block
       end
 
       ##
@@ -49,7 +46,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :content, :level
+        super o, :level
       end
     end # Emphasis
   end # SSML

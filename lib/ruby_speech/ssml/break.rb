@@ -5,7 +5,8 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-synthesis/#S3.2.3
     #
-    class Break < Niceogiri::XML::Node
+    class Break < Element
+
       VALID_STRENGTHS = [:none, :'x-weak', :weak, :medium, :strong, :'x-strong'].freeze
 
       ##
@@ -15,12 +16,8 @@ module RubySpeech
       #
       # @return [Break] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        super('break') do |new_node|
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
-        end
+      def self.new(atts = {}, &block)
+        super 'break', atts, &block
       end
 
       ##
@@ -67,7 +64,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :content, :strength, :time
+        super o, :strength, :time
       end
     end # Break
   end # SSML

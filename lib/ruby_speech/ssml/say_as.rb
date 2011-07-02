@@ -20,7 +20,8 @@ module RubySpeech
     #
     # Indicating the content type or format does not necessarily affect the way the information is pronounced. A synthesis processor should pronounce the contained text in a manner in which such content is normally produced for the language.
     #
-    class SayAs < Niceogiri::XML::Node
+    class SayAs < Element
+
       VALID_CHILD_TYPES = [String].freeze
 
       ##
@@ -30,13 +31,8 @@ module RubySpeech
       #
       # @return [Prosody] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        raise ArgumentError, "You must specify a value for interpret_as" unless atts[:interpret_as]
-        super('say-as') do |new_node|
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
-        end
+      def self.new(interpret_as, atts = {}, &block)
+        super 'say-as', atts.merge(interpret_as: interpret_as), &block
       end
 
       ##
@@ -106,7 +102,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :content, :interpret_as, :format, :detail
+        super o, :interpret_as, :format, :detail
       end
     end # SayAs
   end # SSML

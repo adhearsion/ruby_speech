@@ -50,6 +50,74 @@ module RubySpeech
           end
         end
       end
+
+      it "should allow creating child SSML elements" do
+        s = Speak.new
+        s.voice gender: :male, content: 'Hello'
+        expected_s = Speak.new
+        expected_s << Voice.new(gender: :male, content: 'Hello')
+        s.should == expected_s
+      end
+
+      describe "<<" do
+        it "should accept String" do
+          lambda { subject << 'anything' }.should_not raise_error
+        end
+
+        it "should accept Audio" do
+          pending
+          lambda { subject << Audio.new }.should_not raise_error
+        end
+
+        it "should accept Break" do
+          lambda { subject << Break.new }.should_not raise_error
+        end
+
+        it "should accept Emphasis" do
+          lambda { subject << Emphasis.new }.should_not raise_error
+        end
+
+        it "should accept Mark" do
+          pending
+          lambda { subject << Mark.new }.should_not raise_error
+        end
+
+        it "should accept P" do
+          pending
+          lambda { subject << P.new }.should_not raise_error
+        end
+
+        it "should accept Phoneme" do
+          pending
+          lambda { subject << Phoneme.new }.should_not raise_error
+        end
+
+        it "should accept Prosody" do
+          lambda { subject << Prosody.new }.should_not raise_error
+        end
+
+        it "should accept SayAs" do
+          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
+        end
+
+        it "should accept Sub" do
+          pending
+          lambda { subject << Sub.new }.should_not raise_error
+        end
+
+        it "should accept S" do
+          pending
+          lambda { subject << S.new }.should_not raise_error
+        end
+
+        it "should accept Voice" do
+          lambda { subject << Voice.new }.should_not raise_error
+        end
+
+        it "should raise InvalidChildError with non-acceptable objects" do
+          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+        end
+      end
     end # Speak
   end # SSML
 end # RubySpeech

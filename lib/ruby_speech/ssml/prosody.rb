@@ -11,7 +11,8 @@ module RubySpeech
     #
     # The default value of all prosodic attributes is no change. For example, omitting the rate attribute means that the rate is the same within the element as outside.
     #
-    class Prosody < Niceogiri::XML::Node
+    class Prosody < Element
+
       VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
       VALID_VOLUMES     = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
       VALID_RATES       = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
@@ -24,12 +25,8 @@ module RubySpeech
       #
       # @return [Prosody] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        super('prosody') do |new_node|
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
-        end
+      def self.new(atts = {}, &block)
+        super 'prosody', atts, &block
       end
 
       ##
@@ -176,7 +173,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :content, :pitch, :contour, :range, :rate, :duration, :volume
+        super o, :pitch, :contour, :range, :rate, :duration, :volume
       end
     end # Prosody
   end # SSML

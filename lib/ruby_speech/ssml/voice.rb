@@ -5,7 +5,7 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-synthesis/#S3.2.1
     #
-    class Voice < Niceogiri::XML::Node
+    class Voice < Element
       include XML::Language
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
@@ -18,12 +18,8 @@ module RubySpeech
       #
       # @return [Voice] an element for use in an SSML document
       #
-      def self.new(atts = {})
-        super('voice') do |new_node|
-          atts.each_pair do |k, v|
-            new_node.send :"#{k}=", v
-          end
-        end
+      def self.new(atts = {}, &block)
+        super 'voice', atts, &block
       end
 
       ##
@@ -108,13 +104,21 @@ module RubySpeech
         write_attr :name, n
       end
 
+      def valid_child_types
+        VALID_CHILD_TYPES
+      end
+
       def <<(arg)
         raise InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
 
+      def valid_child_type?(type)
+        VALID_CHILD_TYPES.include? type
+      end
+
       def eql?(o)
-        super o, :content, :language, :gender, :age, :variant, :name
+        super o, :language, :gender, :age, :variant, :name
       end
     end # Voice
   end # SSML

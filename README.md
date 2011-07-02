@@ -9,10 +9,33 @@ Installation
 
 Library
 =======
+RubySpeech provides a DSL for constructing SSML documents like so:
+
+```ruby
+require 'ruby_speech'
+
+RubySpeech::SSML.draw do
+  voice gender: :male, name: 'fred' do
+    text "Hi, I'm Fred. The time is currently "
+    say_as 'date', format: 'dmy' do
+      "01/02/1960"
+    end
+  end
+end
+```
+
+becomes:
+
+```xml
+<speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="en-US">
+  <voice gender="male" name="fred">
+    Hi, I'm Fred. The time is currently <say-as interpret-as="date" format="dmy">01/02/1960</say-as>
+  </voice>
+</speak>
+```
 
 
-
-Check out the [YARD documentation](http://rdoc.info/github/mojolingo/ruby_voice/master/frames) for more
+Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/develop/frames) for more
 
 
 Note on Patches/Pull Requests

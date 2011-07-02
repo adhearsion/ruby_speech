@@ -23,6 +23,7 @@ end
 becomes:
 
 ```xml
+<?xml version="1.0"?>
 <speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="en-US">
   <voice gender="male" name="fred">
     Hi, I'm Fred. The time is currently <say-as format="dmy" interpret-as="date">01/02/1960</say-as>

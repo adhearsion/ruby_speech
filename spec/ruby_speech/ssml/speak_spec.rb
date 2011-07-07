@@ -118,6 +118,18 @@ module RubySpeech
           lambda { subject << 1 }.should raise_error(InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
+
+      describe "#to_doc" do
+        let(:expected_doc) do
+          Nokogiri::XML::Document.new.tap do |doc|
+            doc << Speak.new
+          end
+        end
+
+        it "should create an XML document from the speak" do
+          Speak.new.to_doc.to_s.should == expected_doc.to_s
+        end
+      end
     end # Speak
   end # SSML
 end # RubySpeech

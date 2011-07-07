@@ -3,7 +3,6 @@ module RubySpeech
     extend ActiveSupport::Autoload
 
     autoload :Break
-    autoload :Document
     autoload :Element
     autoload :Emphasis
     autoload :Prosody
@@ -14,11 +13,9 @@ module RubySpeech
     InvalidChildError = Class.new StandardError
 
     def self.draw(&block)
-      Document.new.tap do |doc|
-        doc << Speak.new.tap do |speak|
-          block_return = speak.instance_eval(&block) if block_given?
-          speak << block_return if block_return.is_a?(String)
-        end
+      Speak.new.tap do |speak|
+        block_return = speak.instance_eval(&block) if block_given?
+        speak << block_return if block_return.is_a?(String)
       end
     end
   end # SSML

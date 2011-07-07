@@ -45,6 +45,12 @@ module RubySpeech
         super
       end
 
+      def to_doc
+        Nokogiri::XML::Document.new.tap do |doc|
+          doc << self
+        end
+      end
+
       def eql?(o)
         super o, :language, :base_uri
       end

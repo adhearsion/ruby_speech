@@ -10,7 +10,7 @@ RubySpeech provides a DSL for constructing SSML documents like so:
 ```ruby
 require 'ruby_speech'
 
-ssml_document = RubySpeech::SSML.draw do
+speak = RubySpeech::SSML.draw do
   voice gender: :male, name: 'fred' do
     string "Hi, I'm Fred. The time is currently "
     say_as 'date', format: 'dmy' do
@@ -18,10 +18,20 @@ ssml_document = RubySpeech::SSML.draw do
     end
   end
 end
-ssml\_document.to\_s
+speak.to\_s
 ```
 
 becomes:
+
+```xml
+<speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="en-US">
+  <voice gender="male" name="fred">
+    Hi, I'm Fred. The time is currently <say-as format="dmy" interpret-as="date">01/02/1960</say-as>
+  </voice>
+</speak>
+```
+
+Once your `Speak` is fully prepared and you're ready to send it off for processing, you must call `to_doc` on it to add the XML header:
 
 ```xml
 <?xml version="1.0"?>
@@ -31,6 +41,8 @@ becomes:
   </voice>
 </speak>
 ```
+
+You may also then need to call `to_s`.
 
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
 

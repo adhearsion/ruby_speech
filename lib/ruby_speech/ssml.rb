@@ -18,7 +18,7 @@ module RubySpeech
           block_return = speak.instance_eval(&block) if block_given?
           speak << block_return if block_return.is_a?(String)
         end
-      end.to_s
+      end
     end
   end # SSML
 end # RubySpeech

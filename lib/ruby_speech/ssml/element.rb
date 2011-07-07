@@ -2,8 +2,8 @@ module RubySpeech
   module SSML
     class Element < Niceogiri::XML::Node
       def self.new(element_name, atts = {}, &block)
-          atts.each_pair { |k, v| new_node.send :"#{k}=", v }
         super(element_name).tap do |new_node|
+          atts.each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.instance_eval &block if block_given?
           new_node << block_return if block_return.is_a?(String)
         end

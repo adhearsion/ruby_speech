@@ -29,33 +29,33 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language and base uri are the same" do
-          Speak.new(language: 'en-GB', base_uri: 'blah', content: "Hello there").should == Speak.new(language: 'en-GB', base_uri: 'blah', content: "Hello there")
+          Speak.new(:language => 'en-GB', :base_uri => 'blah', :content => "Hello there").should == Speak.new(:language => 'en-GB', :base_uri => 'blah', :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Speak.new(content: "Hello").should_not == Speak.new(content: "Hello there")
+            Speak.new(:content => "Hello").should_not == Speak.new(:content => "Hello there")
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Speak.new(language: 'en-US').should_not == Speak.new(language: 'en-GB')
+            Speak.new(:language => 'en-US').should_not == Speak.new(:language => 'en-GB')
           end
         end
 
         describe "when the base URI is different" do
           it "should not be equal" do
-            Speak.new(base_uri: 'foo').should_not == Speak.new(base_uri: 'bar')
+            Speak.new(:base_uri => 'foo').should_not == Speak.new(:base_uri => 'bar')
           end
         end
       end
 
       it "should allow creating child SSML elements" do
         s = Speak.new
-        s.voice gender: :male, content: 'Hello'
+        s.voice :gender => :male, :content => 'Hello'
         expected_s = Speak.new
-        expected_s << Voice.new(gender: :male, content: 'Hello')
+        expected_s << Voice.new(:gender => :male, :content => 'Hello')
         s.should == expected_s
       end
 
@@ -133,13 +133,13 @@ module RubySpeech
 
       it "should allow concatenation" do
         speak1 = Speak.new
-        speak1 << Voice.new(name: 'frank', content: "Hi, I'm Frank")
+        speak1 << Voice.new(:name => 'frank', :content => "Hi, I'm Frank")
         speak2 = Speak.new
-        speak2 << Voice.new(name: 'millie', content: "Hi, I'm Millie")
+        speak2 << Voice.new(:name => 'millie', :content => "Hi, I'm Millie")
 
         expected_concat = Speak.new
-        expected_concat << Voice.new(name: 'frank', content: "Hi, I'm Frank")
-        expected_concat << Voice.new(name: 'millie', content: "Hi, I'm Millie")
+        expected_concat << Voice.new(:name => 'frank', :content => "Hi, I'm Frank")
+        expected_concat << Voice.new(:name => 'millie', :content => "Hi, I'm Millie")
 
         (speak1 + speak2).to_s.should == expected_concat.to_s
       end

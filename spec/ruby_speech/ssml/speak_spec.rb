@@ -130,6 +130,19 @@ module RubySpeech
           Speak.new.to_doc.to_s.should == expected_doc.to_s
         end
       end
+
+      it "should allow concatenation" do
+        speak1 = Speak.new
+        speak1 << Voice.new(name: 'frank', content: "Hi, I'm Frank")
+        speak2 = Speak.new
+        speak2 << Voice.new(name: 'millie', content: "Hi, I'm Millie")
+
+        expected_concat = Speak.new
+        expected_concat << Voice.new(name: 'frank', content: "Hi, I'm Frank")
+        expected_concat << Voice.new(name: 'millie', content: "Hi, I'm Millie")
+
+        (speak1 + speak2).to_s.should == expected_concat.to_s
+      end
     end # Speak
   end # SSML
 end # RubySpeech

@@ -10,8 +10,9 @@ module RubySpeech
       end
 
       def method_missing(method_name, *args, &block)
-        const = SSML.const_get(method_name.to_s.titleize.gsub(' ', ''))
-        if const && self.valid_child_type?(const)
+        const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
+        const = SSML.const_get const_name
+        if const && self.class::VALID_CHILD_TYPES.include?(const)
           self << const.new(*args, &block)
         else
           super

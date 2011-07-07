@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = RubySpeech::VERSION
   s.authors     = ["Ben Langfeld"]
   s.email       = ["ben@langfeld.me"]
-  s.homepage    = "https://github.com/mojolingo/ruby_speech"
+  s.homepage    = "https://github.com/benlangfeld/ruby_speech"
   s.summary     = %q{A ruby library for TTS & ASR document preparation}
   s.description = %q{Prepare SSML and GRXML documents with ease}
 

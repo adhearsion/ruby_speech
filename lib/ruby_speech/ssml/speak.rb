@@ -8,7 +8,7 @@ module RubySpeech
     class Speak < Element
       include XML::Language
 
-      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML speak root element
@@ -43,6 +43,17 @@ module RubySpeech
       def <<(arg)
         raise InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
+      end
+
+      def to_doc
+        Nokogiri::XML::Document.new.tap do |doc|
+          doc << self
+        end
+      end
+
+      def +(other)
+        other.children.each { |child| self << child }
+        self
       end
 
       def eql?(o)

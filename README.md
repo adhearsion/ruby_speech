@@ -10,7 +10,7 @@ RubySpeech provides a DSL for constructing SSML documents like so:
 ```ruby
 require 'ruby_speech'
 
-RubySpeech::SSML.draw do
+ssml_document = RubySpeech::SSML.draw do
   voice gender: :male, name: 'fred' do
     string "Hi, I'm Fred. The time is currently "
     say_as 'date', format: 'dmy' do
@@ -18,6 +18,7 @@ RubySpeech::SSML.draw do
     end
   end
 end
+ssml\_document.to\_s
 ```
 
 becomes:

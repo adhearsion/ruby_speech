@@ -101,6 +101,10 @@ module RubySpeech
         super
       end
 
+      def valid_child_type?(type)
+        VALID_CHILD_TYPES.include? type
+      end
+
       def eql?(o)
         super o, :interpret_as, :format, :detail
       end

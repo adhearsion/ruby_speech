@@ -104,10 +104,6 @@ module RubySpeech
         write_attr :name, n
       end
 
-      def valid_child_types
-        VALID_CHILD_TYPES
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super

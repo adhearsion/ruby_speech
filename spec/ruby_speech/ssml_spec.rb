@@ -5,20 +5,20 @@ module RubySpeech
     describe "#draw" do
       it "should create an SSML document" do
         expected_doc = SSML::Speak.new
-        SSML.draw.to_s.should == expected_doc.to_s
+        SSML.draw.should == expected_doc
       end
 
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
           expected_doc = SSML::Speak.new(:content => "Hi, I'm Fred")
-          SSML.draw { "Hi, I'm Fred" }.to_s.should == expected_doc.to_s
+          SSML.draw { "Hi, I'm Fred" }.should == expected_doc
         end
       end
 
       describe "when the return value of the block is a string" do
         it "should not be inserted into the document" do
           expected_doc = SSML::Speak.new
-          SSML.draw { :foo }.to_s.should == expected_doc.to_s
+          SSML.draw { :foo }.should == expected_doc
         end
       end
 
@@ -26,7 +26,7 @@ module RubySpeech
         doc = SSML.draw { voice :gender => :male, :name => 'fred' }
         expected_doc = SSML::Speak.new
         expected_doc << SSML::Voice.new(:gender => :male, :name => 'fred')
-        doc.to_s.should == expected_doc.to_s
+        doc.should == expected_doc
       end
 
       it "should allow nested block return values" do
@@ -37,7 +37,7 @@ module RubySpeech
         end
         expected_doc = SSML::Speak.new
         expected_doc << SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred.")
-        doc.to_s.should == expected_doc.to_s
+        doc.should == expected_doc
       end
 
       it "should allow nested SSML elements" do
@@ -53,7 +53,7 @@ module RubySpeech
         voice << SSML::SayAs.new('date', :format => 'dmy', :content => "01/02/1960")
         expected_doc = SSML::Speak.new
         expected_doc << voice
-        doc.to_s.should == expected_doc.to_s
+        doc.should == expected_doc
       end
 
       it "should allow all permutations of possible nested SSML elements" do
@@ -120,7 +120,7 @@ module RubySpeech
         voice << SSML::Prosody.new(:rate => :fast, :content => "And yet so spritely!")
         voice << SSML::Voice.new(:age => 12, :content => "And I'm young Fred")
         expected_doc << voice
-        doc.to_s.should == expected_doc.to_s
+        doc.should == expected_doc
       end
     end
   end

@@ -56,6 +56,18 @@ module RubySpeech
         doc.should == expected_doc
       end
 
+      it "should properly escape string input" do
+        doc = RubySpeech::SSML.draw do
+          voice { string "I <3 nachos." }
+          voice { "I <3 nachos." }
+        end
+        expected_doc = SSML::Speak.new
+        2.times do
+          expected_doc << SSML::Voice.new(:content => "I <3 nachos.")
+        end
+        doc.should == expected_doc
+      end
+
       it "should allow all permutations of possible nested SSML elements" do
         doc = RubySpeech::SSML.draw do
           string "Hello world."

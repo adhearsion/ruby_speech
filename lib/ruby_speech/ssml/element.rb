@@ -5,7 +5,7 @@ module RubySpeech
         super(element_name) do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.instance_eval &block if block_given?
-          new_node << block_return if block_return.is_a?(String)
+          new_node << new_node.encode_special_chars(block_return) if block_return.is_a?(String)
         end
       end
 
@@ -13,7 +13,11 @@ module RubySpeech
         const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
         const = SSML.const_get const_name
         if const && self.class::VALID_CHILD_TYPES.include?(const)
-          self << const.new(*args, &block)
+          if const == String
+            self << encode_special_chars(args.first)
+          else
+            self << const.new(*args, &block)
+          end
         else
           super
         end

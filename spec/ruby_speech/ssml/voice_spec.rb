@@ -84,42 +84,42 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language, gender, age, variant, name are the same" do
-          Voice.new(language: 'jp', gender: :male, age: 25, variant: 2, name: "paul", content: "hello").should == Voice.new(language: 'jp', gender: :male, age: 25, variant: 2, name: "paul", content: "hello")
+          Voice.new(:language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello").should == Voice.new(:language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Voice.new(content: "Hello").should_not == Voice.new(content: "Hello there")
+            Voice.new(:content => "Hello").should_not == Voice.new(:content => "Hello there")
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Voice.new(language: "Hello").should_not == Voice.new(language: "Hello there")
+            Voice.new(:language => "Hello").should_not == Voice.new(:language => "Hello there")
           end
         end
 
         describe "when the gender is different" do
           it "should not be equal" do
-            Voice.new(gender: :male).should_not == Voice.new(gender: :female)
+            Voice.new(:gender => :male).should_not == Voice.new(:gender => :female)
           end
         end
 
         describe "when the age is different" do
           it "should not be equal" do
-            Voice.new(age: 20).should_not == Voice.new(age: 30)
+            Voice.new(:age => 20).should_not == Voice.new(:age => 30)
           end
         end
 
         describe "when the variant is different" do
           it "should not be equal" do
-            Voice.new(variant: 1).should_not == Voice.new(variant: 2)
+            Voice.new(:variant => 1).should_not == Voice.new(:variant => 2)
           end
         end
 
         describe "when the name is different" do
           it "should not be equal" do
-            Voice.new(name: "Hello").should_not == Voice.new(name: "Hello there")
+            Voice.new(:name => "Hello").should_not == Voice.new(:name => "Hello there")
           end
         end
       end

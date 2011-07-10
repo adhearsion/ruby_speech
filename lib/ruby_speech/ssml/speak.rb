@@ -18,12 +18,12 @@ module RubySpeech
       # @return [Speak] an element for use in an SSML document
       #
       def self.new(atts = {}, &block)
-        super('speak', atts) do
-          self[:version] = '1.0'
-          self.namespace = 'http://www.w3.org/2001/10/synthesis'
-          self.language ||= "en-US"
-          instance_eval &block if block_given?
-        end
+        new_node = super('speak', atts)
+        new_node[:version] = '1.0'
+        new_node.namespace = 'http://www.w3.org/2001/10/synthesis'
+        new_node.language ||= "en-US"
+        new_node.instance_eval &block if block_given?
+        new_node
       end
 
       ##

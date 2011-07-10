@@ -32,7 +32,7 @@ module RubySpeech
       # @return [Prosody] an element for use in an SSML document
       #
       def self.new(interpret_as, atts = {}, &block)
-        super 'say-as', atts.merge(interpret_as: interpret_as), &block
+        super 'say-as', atts.merge(:interpret_as => interpret_as), &block
       end
 
       ##

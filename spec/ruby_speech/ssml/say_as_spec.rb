@@ -3,7 +3,7 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe SayAs do
-      subject { SayAs.new 'one', format: 'two', detail: 'three' }
+      subject { SayAs.new 'one', :format => 'two', :detail => 'three' }
 
       its(:name) { should == 'say-as' }
 
@@ -19,12 +19,12 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, interpret_as, format, age, variant, name are the same" do
-          SayAs.new('jp', format: 'foo', detail: 'bar', content: "hello").should == SayAs.new('jp', format: 'foo', detail: 'bar', content: "hello")
+          SayAs.new('jp', :format => 'foo', :detail => 'bar', :content => "hello").should == SayAs.new('jp', :format => 'foo', :detail => 'bar', :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            SayAs.new('jp', content: "Hello").should_not == SayAs.new('jp', content: "Hello there")
+            SayAs.new('jp', :content => "Hello").should_not == SayAs.new('jp', :content => "Hello there")
           end
         end
 
@@ -36,13 +36,13 @@ module RubySpeech
 
         describe "when the format is different" do
           it "should not be equal" do
-            SayAs.new('jp', format: 'foo').should_not == SayAs.new('jp', format: 'bar')
+            SayAs.new('jp', :format => 'foo').should_not == SayAs.new('jp', :format => 'bar')
           end
         end
 
         describe "when the detail is different" do
           it "should not be equal" do
-            SayAs.new('jp', detail: 'foo').should_not == SayAs.new('jp', detail: 'bar')
+            SayAs.new('jp', :detail => 'foo').should_not == SayAs.new('jp', :detail => 'bar')
           end
         end
       end

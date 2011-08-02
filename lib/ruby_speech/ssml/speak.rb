@@ -52,8 +52,11 @@ module RubySpeech
       end
 
       def +(other)
-        other.children.each { |child| self << child }
-        self
+        self.class.new(:base_uri => base_uri).tap do |new_speak|
+          [self, other].each do |old_speak|
+            old_speak.children.each { |child| new_speak << child }
+          end
+        end
       end
 
       def eql?(o)

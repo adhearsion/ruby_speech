@@ -6,7 +6,7 @@ rvm:
   - ruby-head
 
 notifications:
-  irc: "irc.freenode.org#adhearsion"
+  irc: "irc.freenode.org#adhearsion-dev"
 
 branches:
   only:

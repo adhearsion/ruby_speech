@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<bundler>, ["~> 1.0.0"]
   s.add_development_dependency %q<rspec>, ["~> 2.3.0"]
   s.add_development_dependency %q<ci_reporter>, [">= 1.6.3"]
-  s.add_development_dependency %q<yard>, ["~> 0.6.0"]
+  s.add_development_dependency %q<yard>, ["~> 0.7.0"]
   s.add_development_dependency %q<rake>, [">= 0"]
   s.add_development_dependency %q<mocha>, [">= 0"]
   s.add_development_dependency %q<i18n>, [">= 0"]

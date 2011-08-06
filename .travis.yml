@@ -1,0 +1,14 @@
+rvm:
+  - 1.9.2
+  - rbx
+  - rbx-2.0
+  - jruby
+  - ruby-head
+
+notifications:
+  irc: "irc.freenode.org#adhearsion-dev"
+
+branches:
+  only:
+    - master
+    - develop

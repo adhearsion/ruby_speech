@@ -1,3 +1,7 @@
+# 0.1.4
+  Bugfix: Speak#+ now returns a brand new Speak rather than modifying the original object
+  Bugfix: Speak#+ now re-sets the namespace on child elements to ensure no default namespace prefix is added
+
 # 0.1.3
   Bugfix: Strings included via the DSL (both as a block return value and by calling #string) are now properly escaped
 

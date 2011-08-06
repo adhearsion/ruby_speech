@@ -141,7 +141,9 @@ module RubySpeech
         expected_concat << Voice.new(:name => 'frank', :content => "Hi, I'm Frank")
         expected_concat << Voice.new(:name => 'millie', :content => "Hi, I'm Millie")
 
-        (speak1 + speak2).should == expected_concat
+        concat = (speak1 + speak2)
+        concat.should == expected_concat
+        concat.to_s.should_not include('default')
       end
     end # Speak
   end # SSML

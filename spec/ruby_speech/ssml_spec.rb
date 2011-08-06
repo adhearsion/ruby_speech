@@ -68,22 +68,6 @@ module RubySpeech
         doc.should == expected_doc
       end
 
-      it "should not include the default prefix when concatenated" do
-        prompt1 = RubySpeech::SSML.draw do
-          voice :gender => :male do
-            'What is your favorite color?'
-          end
-        end
-
-        prompt2 = RubySpeech::SSML.draw do
-          voice :gender => :male do
-            'Say "Red", "Blue", or "Green"'
-          end
-        end
-
-        (prompt1 + prompt2).to_s.should_not include('default')
-      end
-
       it "should allow all permutations of possible nested SSML elements" do
         doc = RubySpeech::SSML.draw do
           string "Hello world."

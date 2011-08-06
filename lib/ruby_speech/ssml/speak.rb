@@ -8,7 +8,7 @@ module RubySpeech
     class Speak < Element
       include XML::Language
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, String, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML speak root element
@@ -54,6 +54,7 @@ module RubySpeech
       def +(other)
         self.class.new(:base_uri => base_uri).tap do |new_speak|
           new_speak.children = self.children + other.children
+          new_speak.children.each { |c| c.namespace = new_speak.namespace }
         end
       end
 

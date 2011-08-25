@@ -238,7 +238,6 @@ module RubySpeech
         end
 
         it "should accept Audio" do
-          pending
           lambda { subject << Audio.new }.should_not raise_error
         end
 

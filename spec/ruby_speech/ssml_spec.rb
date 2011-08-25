@@ -72,9 +72,19 @@ module RubySpeech
         doc = RubySpeech::SSML.draw do
           string "Hello world."
           ssml_break
+          audio :src => "hello" do
+            string "HELLO?"
+            ssml_break
+            audio :src => "hello"
+            emphasis
+            prosody
+            say_as 'date'
+            voice
+          end
           emphasis do
             string "HELLO?"
             ssml_break
+            audio :src => "hello"
             emphasis
             prosody
             say_as 'date'
@@ -83,6 +93,7 @@ module RubySpeech
           prosody :rate => :slow do
             string "H...E...L...L...O?"
             ssml_break
+            audio :src => "hello"
             emphasis
             prosody
             say_as 'date'
@@ -97,6 +108,7 @@ module RubySpeech
               "01/02/1960"
             end
             ssml_break
+            audio :src => "hello"
             emphasis do
               "I'm so old"
             end
@@ -110,8 +122,17 @@ module RubySpeech
         end
         expected_doc = SSML::Speak.new(:content => "Hello world.")
         expected_doc << SSML::Break.new
+        audio = SSML::Audio.new(:src => "hello", :content => "HELLO?")
+        audio << SSML::Break.new
+        audio << SSML::Audio.new(:src => "hello")
+        audio << SSML::Emphasis.new
+        audio << SSML::Prosody.new
+        audio << SSML::SayAs.new('date')
+        audio << SSML::Voice.new
+        expected_doc << audio
         emphasis = SSML::Emphasis.new(:content => "HELLO?")
         emphasis << SSML::Break.new
+        emphasis << SSML::Audio.new(:src => "hello")
         emphasis << SSML::Emphasis.new
         emphasis << SSML::Prosody.new
         emphasis << SSML::SayAs.new('date')
@@ -119,6 +140,7 @@ module RubySpeech
         expected_doc << emphasis
         prosody = SSML::Prosody.new(:rate => :slow, :content => "H...E...L...L...O?")
         prosody << SSML::Break.new
+        prosody << SSML::Audio.new(:src => "hello")
         prosody << SSML::Emphasis.new
         prosody << SSML::Prosody.new
         prosody << SSML::SayAs.new('date')
@@ -128,6 +150,7 @@ module RubySpeech
         voice = SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ")
         voice << SSML::SayAs.new('date', :format => 'dmy', :content => "01/02/1960")
         voice << SSML::Break.new
+        voice << SSML::Audio.new(:src => "hello")
         voice << SSML::Emphasis.new(:content => "I'm so old")
         voice << SSML::Prosody.new(:rate => :fast, :content => "And yet so spritely!")
         voice << SSML::Voice.new(:age => 12, :content => "And I'm young Fred")

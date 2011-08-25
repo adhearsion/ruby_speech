@@ -1,9 +1,16 @@
 module RubySpeech
   module SSML
     ##
-    # The break element is an empty element that controls the pausing or other prosodic boundaries between words. The use of the break element between any pair of words is optional. If the element is not present between words, the synthesis processor is expected to automatically determine a break based on the linguistic context. In practice, the break element is most often used to override the typical automatic behavior of a synthesis processor.
+    # The audio element supports the insertion of recorded audio files (see Appendix A for required formats) and the insertion of other audio formats in conjunction with synthesized speech output. The audio element may be empty. If the audio element is not empty then the contents should be the marked-up text to be spoken if the audio document is not available. The alternate content may include text, speech markup, desc elements, or other audio elements. The alternate content may also be used when rendering the document to non-audible output and for accessibility (see the desc element). The required attribute is src, which is the URI of a document with an appropriate MIME type.
     #
-    # http://www.w3.org/TR/speech-synthesis/#S3.2.3
+    # An audio element is successfully rendered:
+    #   * If the referenced audio source is played, or
+    #   * If the synthesis processor is unable to execute #1 but the alternative content is successfully rendered, or
+    #   * If the processor can detect that text-only output is required and the alternative content is successfully rendered.
+    #
+    # Deciding which conditions result in the alternative content being rendered is processor-dependent. If the audio element is not successfully rendered, a synthesis processor should continue processing and should notify the hosting environment. The processor may determine after beginning playback of an audio source that the audio cannot be played in its entirety. For example, encoding problems, network disruptions, etc. may occur. The processor may designate this either as successful or unsuccessful rendering, but it must document this behavior.
+    #
+    # http://www.w3.org/TR/speech-synthesis/#S3.3.1
     #
     class Audio < Element
 
@@ -21,18 +28,16 @@ module RubySpeech
       end
 
       ##
-      # This attribute is used to indicate the strength of the prosodic break in the speech output. The value "none" indicates that no prosodic break boundary should be outputted, which can be used to prevent a prosodic break which the processor would otherwise produce. The other values indicate monotonically non-decreasing (conceptually increasing) break strength between words. The stronger boundaries are typically accompanied by pauses. "x-weak" and "x-strong" are mnemonics for "extra weak" and "extra strong", respectively.
+      # The URI of a document with an appropriate MIME type
       #
-      # @return [Symbol]
+      # @return [String]
       #
       def src
         read_attr :src
       end
 
       ##
-      # @param [Symbol] the strength. Must be one of VALID_STRENGTHS
-      #
-      # @raises ArgumentError if s is not one of VALID_STRENGTHS
+      # @param [String] the source. Must be a valid URI
       #
       def src=(s)
         write_attr :src, s

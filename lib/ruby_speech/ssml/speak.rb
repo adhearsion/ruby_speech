@@ -8,7 +8,7 @@ module RubySpeech
     class Speak < Element
       include XML::Language
 
-      VALID_CHILD_TYPES = [String, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML speak root element

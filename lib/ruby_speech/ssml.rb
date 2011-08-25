@@ -2,6 +2,7 @@ module RubySpeech
   module SSML
     extend ActiveSupport::Autoload
 
+    autoload :Audio
     autoload :Break
     autoload :Element
     autoload :Emphasis

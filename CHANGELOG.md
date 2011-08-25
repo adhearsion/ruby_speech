@@ -1,3 +1,6 @@
+# 0.1.5
+  Feature: Now added support for SSML <audio/>
+
 # 0.1.4
   Bugfix: Speak#+ now returns a brand new Speak rather than modifying the original object
   Bugfix: Speak#+ now re-sets the namespace on child elements to ensure no default namespace prefix is added

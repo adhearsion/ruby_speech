@@ -54,6 +54,7 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<emphasis/>`
 * `<say-as/>`
 * `<break/>`
+* `<audio/>`
 
 ## TODO:
 ### SSML
@@ -65,7 +66,6 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<meta/>` and `<metadata/>`
 
 #### Misc
-* `<audio/>`
 * `<mark/>`
 * `<desc/>`
 

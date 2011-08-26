@@ -16,6 +16,24 @@ module RubySpeech
         its(:name)      { should == 'paul' }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:voice).should == Voice
+      end
+
+      describe "from a document" do
+        let(:document) { '<voice xml:lang="jp" gender="male" age="25" variant="2" name="paul"/>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Voice }
+
+        its(:language)  { should == 'jp' }
+        its(:gender)    { should == :male }
+        its(:age)       { should == 25 }
+        its(:variant)   { should == 2 }
+        its(:name)      { should == 'paul' }
+      end
+
       describe "#language" do
         before { subject.language = 'jp' }
 

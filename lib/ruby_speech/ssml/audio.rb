@@ -14,7 +14,9 @@ module RubySpeech
     #
     class Audio < Element
 
-      VALID_CHILD_TYPES = [String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      register :audio
+
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text,String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML audio element

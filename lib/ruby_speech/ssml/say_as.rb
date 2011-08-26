@@ -22,7 +22,9 @@ module RubySpeech
     #
     class SayAs < Element
 
-      VALID_CHILD_TYPES = [String].freeze
+      register :'say-as'
+
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String].freeze
 
       ##
       # Create a new SSML say-as element
@@ -31,8 +33,8 @@ module RubySpeech
       #
       # @return [Prosody] an element for use in an SSML document
       #
-      def self.new(interpret_as, atts = {}, &block)
-        super 'say-as', atts.merge(:interpret_as => interpret_as), &block
+      def self.new(atts = {}, &block)
+        super 'say-as', atts, &block
       end
 
       ##

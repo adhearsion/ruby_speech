@@ -44,13 +44,13 @@ module RubySpeech
         doc = RubySpeech::SSML.draw do
           voice :gender => :male, :name => 'fred' do
             string "Hi, I'm Fred. The time is currently "
-            say_as 'date', :format => 'dmy' do
+            say_as :interpret_as => 'date', :format => 'dmy' do
               "01/02/1960"
             end
           end
         end
         voice = SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ")
-        voice << SSML::SayAs.new('date', :format => 'dmy', :content => "01/02/1960")
+        voice << SSML::SayAs.new(:interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
         expected_doc = SSML::Speak.new
         expected_doc << voice
         doc.should == expected_doc
@@ -78,7 +78,7 @@ module RubySpeech
             audio :src => "hello"
             emphasis
             prosody
-            say_as 'date'
+            say_as :interpret_as => 'date'
             voice
           end
           emphasis do
@@ -87,7 +87,7 @@ module RubySpeech
             audio :src => "hello"
             emphasis
             prosody
-            say_as 'date'
+            say_as :interpret_as => 'date'
             voice
           end
           prosody :rate => :slow do
@@ -96,15 +96,15 @@ module RubySpeech
             audio :src => "hello"
             emphasis
             prosody
-            say_as 'date'
+            say_as :interpret_as => 'date'
             voice
           end
-          say_as 'date', :format => 'dmy' do
+          say_as :interpret_as => 'date', :format => 'dmy' do
             "01/02/1960"
           end
           voice :gender => :male, :name => 'fred' do
             string "Hi, I'm Fred. The time is currently "
-            say_as 'date', :format => 'dmy' do
+            say_as :interpret_as => 'date', :format => 'dmy' do
               "01/02/1960"
             end
             ssml_break
@@ -127,7 +127,7 @@ module RubySpeech
         audio << SSML::Audio.new(:src => "hello")
         audio << SSML::Emphasis.new
         audio << SSML::Prosody.new
-        audio << SSML::SayAs.new('date')
+        audio << SSML::SayAs.new(:interpret_as => 'date')
         audio << SSML::Voice.new
         expected_doc << audio
         emphasis = SSML::Emphasis.new(:content => "HELLO?")
@@ -135,7 +135,7 @@ module RubySpeech
         emphasis << SSML::Audio.new(:src => "hello")
         emphasis << SSML::Emphasis.new
         emphasis << SSML::Prosody.new
-        emphasis << SSML::SayAs.new('date')
+        emphasis << SSML::SayAs.new(:interpret_as => 'date')
         emphasis << SSML::Voice.new
         expected_doc << emphasis
         prosody = SSML::Prosody.new(:rate => :slow, :content => "H...E...L...L...O?")
@@ -143,12 +143,12 @@ module RubySpeech
         prosody << SSML::Audio.new(:src => "hello")
         prosody << SSML::Emphasis.new
         prosody << SSML::Prosody.new
-        prosody << SSML::SayAs.new('date')
+        prosody << SSML::SayAs.new(:interpret_as => 'date')
         prosody << SSML::Voice.new
         expected_doc << prosody
-        expected_doc << SSML::SayAs.new('date', :format => 'dmy', :content => "01/02/1960")
+        expected_doc << SSML::SayAs.new(:interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
         voice = SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ")
-        voice << SSML::SayAs.new('date', :format => 'dmy', :content => "01/02/1960")
+        voice << SSML::SayAs.new(:interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
         voice << SSML::Break.new
         voice << SSML::Audio.new(:src => "hello")
         voice << SSML::Emphasis.new(:content => "I'm so old")
@@ -156,6 +156,20 @@ module RubySpeech
         voice << SSML::Voice.new(:age => 12, :content => "And I'm young Fred")
         expected_doc << voice
         doc.should == expected_doc
+      end
+    end
+
+    describe "importing nested tags" do
+      let :document do
+        voice = SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ")
+        voice << SSML::SayAs.new(:interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
+        SSML::Speak.new.tap { |doc| doc << voice }.to_s
+      end
+
+      subject { SSML::Element.import parse_xml(document).root }
+
+      it "should work" do
+        lambda { subject }.should_not raise_error
       end
     end
   end

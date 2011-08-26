@@ -12,6 +12,21 @@ module RubySpeech
         its(:content) { should == 'Hello' }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:audio).should == Audio
+      end
+
+      describe "from a document" do
+        let(:document) { '<audio src="http://whatever.you-say-boss.com">Hello</audio>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Audio }
+
+        its(:src)     { should == 'http://whatever.you-say-boss.com' }
+        its(:content) { should == 'Hello' }
+      end
+
       describe "#src" do
         before { subject.src = 'http://whatever.you-say-boss.com' }
 

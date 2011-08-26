@@ -8,7 +8,9 @@ module RubySpeech
     class Speak < Element
       include XML::Language
 
-      VALID_CHILD_TYPES = [String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      register :speak
+
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML speak root element
@@ -20,7 +22,7 @@ module RubySpeech
       def self.new(atts = {}, &block)
         new_node = super('speak', atts)
         new_node[:version] = '1.0'
-        new_node.namespace = 'http://www.w3.org/2001/10/synthesis'
+        new_node.namespace = SSML_NAMESPACE
         new_node.language ||= "en-US"
         new_node.instance_eval &block if block_given?
         new_node

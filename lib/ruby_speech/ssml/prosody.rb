@@ -152,6 +152,7 @@ module RubySpeech
       #
       def volume
         value = read_attr :volume
+        return unless value
         if VALID_VOLUMES.include?(value.to_sym)
           value.to_sym
         else

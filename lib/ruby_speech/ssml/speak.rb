@@ -55,8 +55,9 @@ module RubySpeech
 
       def +(other)
         self.class.new(:base_uri => base_uri).tap do |new_speak|
-          new_speak.children = self.children + other.children
-          new_speak.children.each { |c| c.namespace = new_speak.namespace }
+          (self.children + other.children).each do |child|
+            new_speak << child
+          end
         end
       end
 

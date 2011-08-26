@@ -53,6 +53,10 @@ module RubySpeech
         end
       end
 
+      def children
+        super.reject { |c| c.is_a?(Nokogiri::XML::Text) }.map { |c| Element.import c }
+      end
+
       def method_missing(method_name, *args, &block)
         const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
         const = SSML.const_get const_name
@@ -68,7 +72,7 @@ module RubySpeech
       end
 
       def eql?(o, *args)
-        super o, :content, *args
+        super o, :content, :children, *args
       end
     end # Element
   end # SSML

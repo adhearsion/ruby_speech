@@ -49,6 +49,17 @@ module RubySpeech
             Speak.new(:base_uri => 'foo').should_not == Speak.new(:base_uri => 'bar')
           end
         end
+
+        describe "when the children are different" do
+          it "should not be equal" do
+            s1 = Speak.new
+            s1 << SayAs.new('date')
+            s2 = Speak.new
+            s2 << SayAs.new('time')
+
+            s1.should_not == s2
+          end
+        end
       end
 
       it "should allow creating child SSML elements" do

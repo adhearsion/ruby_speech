@@ -18,7 +18,7 @@ speak = RubySpeech::SSML.draw do
     end
   end
 end
-speak.to\_s
+speak.to_s
 ```
 
 becomes:

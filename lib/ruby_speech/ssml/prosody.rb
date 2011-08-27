@@ -13,10 +13,12 @@ module RubySpeech
     #
     class Prosody < Element
 
+      register :prosody
+
       VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
       VALID_VOLUMES     = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
       VALID_RATES       = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
-      VALID_CHILD_TYPES = [String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML prosody element
@@ -150,6 +152,7 @@ module RubySpeech
       #
       def volume
         value = read_attr :volume
+        return unless value
         if VALID_VOLUMES.include?(value.to_sym)
           value.to_sym
         else

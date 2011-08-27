@@ -11,6 +11,20 @@ module RubySpeech
         its(:level) { should == :strong }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:emphasis).should == Emphasis
+      end
+
+      describe "from a document" do
+        let(:document) { '<emphasis level="strong"/>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Emphasis }
+
+        its(:level) { should == :strong }
+      end
+
       describe "#level" do
         before { subject.level = :strong }
 

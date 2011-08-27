@@ -7,6 +7,8 @@ module RubySpeech
     #
     class Break < Element
 
+      register :break
+
       VALID_STRENGTHS = [:none, :'x-weak', :weak, :medium, :strong, :'x-strong'].freeze
 
       ##

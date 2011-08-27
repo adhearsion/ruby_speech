@@ -15,6 +15,21 @@ module RubySpeech
         its(:base_uri) { should == 'blah' }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:speak).should == Speak
+      end
+
+      describe "from a document" do
+        let(:document) { '<speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="jp" xml:base="blah"/>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Speak }
+
+        its(:language) { pending; should == 'jp' }
+        its(:base_uri) { should == 'blah' }
+      end
+
       describe "#language" do
         before { subject.language = 'jp' }
 
@@ -47,6 +62,17 @@ module RubySpeech
         describe "when the base URI is different" do
           it "should not be equal" do
             Speak.new(:base_uri => 'foo').should_not == Speak.new(:base_uri => 'bar')
+          end
+        end
+
+        describe "when the children are different" do
+          it "should not be equal" do
+            s1 = Speak.new
+            s1 << SayAs.new(:interpret_as => 'date')
+            s2 = Speak.new
+            s2 << SayAs.new(:interpret_as => 'time')
+
+            s1.should_not == s2
           end
         end
       end

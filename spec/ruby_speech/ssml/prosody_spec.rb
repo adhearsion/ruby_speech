@@ -16,6 +16,25 @@ module RubySpeech
         its(:volume)    { should == :loud }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:prosody).should == Prosody
+      end
+
+      describe "from a document" do
+        let(:document) { '<prosody pitch="medium" contour="something" range="20Hz" rate="2" duration="10" volume="loud"/>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Prosody }
+
+        its(:pitch)     { should == :medium }
+        its(:contour)   { should == 'something' }
+        its(:range)     { should == '20Hz' }
+        its(:rate)      { should == 2 }
+        its(:duration)  { should == 10.seconds }
+        its(:volume)    { should == :loud }
+      end
+
       describe "#pitch" do
         context "with a pre-defined value" do
           before { subject.pitch = :medium }

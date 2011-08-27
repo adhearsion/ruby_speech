@@ -12,6 +12,21 @@ module RubySpeech
         its(:time)      { should == 3.seconds }
       end
 
+      it 'registers itself' do
+        Element.class_from_registration(:break).should == Break
+      end
+
+      describe "from a document" do
+        let(:document) { '<break strength="strong" time="3"/>' }
+
+        subject { Element.import parse_xml(document).root }
+
+        it { should be_instance_of Break }
+
+        its(:strength)  { should == :strong }
+        its(:time)      { should == 3.seconds }
+      end
+
       describe "#strength" do
         before { subject.strength = :strong }
 

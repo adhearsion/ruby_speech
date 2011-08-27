@@ -1,3 +1,8 @@
+# 0.2.0
+  Feature: SSML elements can now be imported from a Nokogiri Node or a string
+  Feature: SSML elements now respond to #children with an array of SSML elements, rather than a Nokogiri NodeSet
+  Bugfix/Feature: Comparing SSML elements now compares children
+
 # 0.1.5
   Feature: Now added support for SSML <audio/>
 

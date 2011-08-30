@@ -160,9 +160,12 @@ module RubySpeech
     end
 
     describe "importing nested tags" do
+      let(:say_as) { SSML::SayAs.new :interpret_as => 'date', :format => 'dmy', :content => "01/02/1960" }
+      let(:string) { "Hello there" }
       let :voice do
         SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ").tap do |voice|
-          voice << SSML::SayAs.new(:interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
+          voice << string
+          voice << say_as
         end
       end
 
@@ -170,7 +173,9 @@ module RubySpeech
         SSML::Speak.new.tap { |doc| doc << voice }.to_s
       end
 
-      subject { SSML::Element.import parse_xml(document).root }
+      let(:import) { SSML::Element.import parse_xml(document).root }
+
+      subject { import }
 
       it "should work" do
         lambda { subject }.should_not raise_error
@@ -179,6 +184,12 @@ module RubySpeech
       it { should be_a SSML::Speak }
 
       its(:children) { should == [voice] }
+
+      describe "voice" do
+        subject { import.children.first }
+
+        its(:children) { should == [string, say_as] }
+      end
     end
   end
 end

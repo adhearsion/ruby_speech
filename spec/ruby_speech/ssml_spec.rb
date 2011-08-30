@@ -161,10 +161,9 @@ module RubySpeech
 
     describe "importing nested tags" do
       let(:say_as) { SSML::SayAs.new :interpret_as => 'date', :format => 'dmy', :content => "01/02/1960" }
-      let(:string) { "Hello there" }
+      let(:string) { "Hi, I'm Fred. The time is currently " }
       let :voice do
-        SSML::Voice.new(:gender => :male, :name => 'fred', :content => "Hi, I'm Fred. The time is currently ").tap do |voice|
-          voice << string
+        SSML::Voice.new(:gender => :male, :name => 'fred', :content => string).tap do |voice|
           voice << say_as
         end
       end

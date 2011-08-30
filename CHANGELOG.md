@@ -1,3 +1,6 @@
+# 0.2.1
+  Bugfix: SSML element's children now include any text content, and text content is copied when importing/concatenating documents
+
 # 0.2.0
   Feature: SSML elements can now be imported from a Nokogiri Node or a string
   Feature: SSML elements now respond to #children with an array of SSML elements, rather than a Nokogiri NodeSet

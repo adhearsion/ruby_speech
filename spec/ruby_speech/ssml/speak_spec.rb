@@ -160,10 +160,12 @@ module RubySpeech
         speak1 = Speak.new
         speak1 << Voice.new(:name => 'frank', :content => "Hi, I'm Frank")
         speak2 = Speak.new
+        speak2 << "Hello there"
         speak2 << Voice.new(:name => 'millie', :content => "Hi, I'm Millie")
 
         expected_concat = Speak.new
         expected_concat << Voice.new(:name => 'frank', :content => "Hi, I'm Frank")
+        expected_concat << "Hello there"
         expected_concat << Voice.new(:name => 'millie', :content => "Hi, I'm Millie")
 
         concat = (speak1 + speak2)

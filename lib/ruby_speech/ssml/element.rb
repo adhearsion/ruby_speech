@@ -37,8 +37,9 @@ module RubySpeech
       # @param [XML::Node] node the node to import
       # @return the appropriate object based on the node name and namespace
       def self.import(node)
+        return node.content if node.is_a?(Nokogiri::XML::Text)
         klass = class_from_registration(node.element_name)
-        event = if klass && klass != self
+        if klass && klass != self
           klass.import node
         else
           new.inherit node
@@ -66,7 +67,7 @@ module RubySpeech
       end
 
       def children
-        super.reject { |c| c.is_a?(Nokogiri::XML::Text) }.map { |c| Element.import c }
+        super.map { |c| Element.import c }
       end
 
       def method_missing(method_name, *args, &block)

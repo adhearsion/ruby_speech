@@ -2,39 +2,25 @@ require 'spec_helper'
 
 module RubySpeech
   module GRXML
-    describe Rule do
-      subject { Rule.new :id => 'one', :scope => 'public' }
+    describe OneOf do
+      subject { OneOf.new }
 
-      its(:name) { should == 'rule' }
-
-      its(:id) { should == 'one' }
-      its(:scope)       { should == 'public' }
+      its(:name) { should == 'one-of' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'rule').should == Rule
+        Element.class_from_registration(:'one-of').should == OneOf
       end
 
       describe "from a document" do
-        let(:document) { '<rule id="one" scope="public"> </rule>' }
+        let(:document) { '<one-of> <item>test</item> </one-of>' }
 
         subject { Element.import parse_xml(document).root }
 
-        it { should be_instance_of Rule }
-
-        its(:id) { should == 'one' }
-        its(:scope)       { should == 'public' }
+        it { should be_instance_of OneOf }
       end
 
-      describe "scope" do
-        it "should accept public or private" do
-          lambda { subject = Rule.new :id => 'one', :scope => 'public' }.should_not raise_error
-          lambda { subject = Rule.new :id => 'one', :scope => 'private' }.should_not raise_error
-        end
+      # TODO: ensure it has at least one item element
 
-        it "should raise ArgumentError with any other scope" do
-          lambda { subject = Rule.new :id => 'one', :scope => 'invalid_scope' }.should raise_error(ArgumentError, "A Rule's scope can only be 'public' or 'private'")
-        end
-      end
-    end # Rule
+    end # OneOf
   end # GRXML
 end # RubySpeech

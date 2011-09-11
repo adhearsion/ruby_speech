@@ -54,6 +54,7 @@ module RubySpeech
       #
       # The weight attribute takes a positive (floating point) number
       # NOTE: the standard says a format of "n" is valid (eg. an Integer)
+      # TODO: possibly support string and check to see if its a valid digit with regex...
       #
       # @param [Numeric] w
       #

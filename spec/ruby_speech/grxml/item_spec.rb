@@ -3,7 +3,7 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Item do
-      subject { Item.new :weight => '1.1', :repeat => '1' }
+      subject { Item.new :weight => 1.1, :repeat => '1' }
 
       its(:name) { should == 'item' }
 

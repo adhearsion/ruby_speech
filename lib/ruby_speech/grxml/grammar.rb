@@ -5,13 +5,14 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-grammar/#S4.3
     #
+    # TODO: Look into tag-format, lexicon (probably a sub element)
+    #
     class Grammar < Element
       include XML::Language
 
       register :grammar
 
-      #VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, DTMF].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule].freeze
 
       ##
       # Create a new GRXML grammar root element
@@ -78,8 +79,7 @@ module RubySpeech
       end
 
       def <<(arg)
-        #raise InvalidChildError, "A Grammar can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
-        raise InvalidChildError, "A Grammar can only accept DTMF as children" unless VALID_CHILD_TYPES.include? arg.class
+        raise InvalidChildError, "A Grammar can only accept Rule as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
 
@@ -98,7 +98,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :language, :base_uri
+        super o, :language, :base_uri, :mode, :root
       end
     end # Grammar
   end # GRXML

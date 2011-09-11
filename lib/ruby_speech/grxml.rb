@@ -4,7 +4,7 @@ module RubySpeech
 
     autoload :Element
     autoload :Grammar
-    #autoload :Dtfm
+    autoload :Rule
 
     InvalidChildError = Class.new StandardError
 

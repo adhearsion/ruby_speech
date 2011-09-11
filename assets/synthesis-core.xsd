@@ -20,7 +20,10 @@ It is provided "as is" without expressed or implied warranty.
 	<xsd:documentation>Importing dependent namespaces</xsd:documentation>
 	</xsd:annotation>
 	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" 
-	            schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	            schemaLocation="xml.xsd"/>
+
+            <!--<xsd:import namespace="http://www.w3.org/XML/1998/namespace" 
+              schemaLocation="http://www.w3.org/2001/xml.xsd"/>-->
 	<xsd:annotation>
 		<xsd:documentation>General Datatypes</xsd:documentation>
 	</xsd:annotation>

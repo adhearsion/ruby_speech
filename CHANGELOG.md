@@ -2,6 +2,7 @@
   * Bugfix: SSML element's children now include any text content, and text content is copied when importing/concatenating documents
 
 # 0.2.0
+  * API Change: SSML::SayAs.new (and the DSL method `say_as`) now take `:interpret_as` in the options hash, rather than a separate first argument. This is for consistency with the other element types.
   * Feature: SSML elements can now be imported from a Nokogiri Node or a string
   * Feature: SSML elements now respond to #children with an array of SSML elements, rather than a Nokogiri NodeSet
   * Bugfix/Feature: Comparing SSML elements now compares children

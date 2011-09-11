@@ -5,6 +5,10 @@ module RubySpeech
     autoload :Element
     autoload :Grammar
     autoload :Rule
+    autoload :Item
+    autoload :OneOf
+    autoload :Ruleref
+    autoload :Tag
 
     InvalidChildError = Class.new StandardError
 

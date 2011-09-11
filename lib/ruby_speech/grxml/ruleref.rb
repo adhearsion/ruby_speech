@@ -13,7 +13,7 @@ module RubySpeech
     # The uri attribute contains named identified named rule being referenced
     #
     #
-    class RuleRef < Element
+    class Ruleref < Element
 
       register :'ruleref'
 
@@ -22,7 +22,7 @@ module RubySpeech
       #
       # @param [Hash] atts Key-value pairs of options mapping to setter methods
       #
-      # @return [RuleRef] an element for use in an GRXML document
+      # @return [Ruleref] an element for use in an GRXML document
       #
       def self.new(atts = {}, &block)
         super 'ruleref', atts, &block
@@ -49,7 +49,7 @@ module RubySpeech
       end
 
       def <<(*args)
-        raise InvalidChildError, "A RuleRef cannot contain children"
+        raise InvalidChildError, "A Ruleref cannot contain children"
         super
       end
 

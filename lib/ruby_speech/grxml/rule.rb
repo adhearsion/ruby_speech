@@ -17,7 +17,7 @@ module RubySpeech
 
       register :'rule'
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, RuleRef, Tag].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, Ruleref, Tag].freeze
 
       ##
       # Create a new GRXML rule element
@@ -71,7 +71,7 @@ module RubySpeech
       end
 
       def <<(arg)
-        raise InvalidChildError, "A Rule can only accept OneOf, Item, RuleRef, or Tag as children" unless VALID_CHILD_TYPES.include? arg.class
+        raise InvalidChildError, "A Rule can only accept OneOf, Item, Ruleref, or Tag as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
 

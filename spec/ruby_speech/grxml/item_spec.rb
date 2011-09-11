@@ -3,38 +3,32 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Item do
-      subject { Item.new :id => 'one', :scope => 'public' }
+      subject { Item.new :weight => '1.1', :repeat => '1' }
 
-      its(:name) { should == 'rule' }
+      its(:name) { should == 'item' }
 
-      its(:id) { should == 'one' }
-      its(:scope)       { should == 'public' }
+      its(:weight) { should == 1.1 }
+      its(:repeat)       { should == '1' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'rule').should == Item
+        Element.class_from_registration(:'item').should == Item
       end
 
       describe "from a document" do
-        let(:document) { '<rule id="one" scope="public"> </rule>' }
+        let(:document) { '<item weight="1.1" repeat="1">one</item>' }
 
         subject { Element.import parse_xml(document).root }
 
         it { should be_instance_of Item }
 
-        its(:id) { should == 'one' }
-        its(:scope)       { should == 'public' }
+        its(:weight)       { should == 1.1 }
+        its(:repeat)       { should == '1' }
+        its(:content)      { should == 'one' }
       end
 
-      describe "scope" do
-        it "should accept public or private" do
-          lambda { subject = Item.new :id => 'one', :scope => 'public' }.should_not raise_error
-          lambda { subject = Item.new :id => 'one', :scope => 'private' }.should_not raise_error
-        end
-
-        it "should raise ArgumentError with any other scope" do
-          lambda { subject = Item.new :id => 'one', :scope => 'invalid_scope' }.should raise_error(ArgumentError, "A Item's scope can only be 'public' or 'private'")
-        end
-      end
+      # TODO: validate various values for weight
+      # TODO: validate various values for repeat
+      # TODO: validate various values for language
     end # Item
   end # GRXML
 end # RubySpeech

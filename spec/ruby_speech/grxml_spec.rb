@@ -7,9 +7,26 @@ module RubySpeech
         expected_doc = GRXML::Grammar.new
         GRXML.draw.should == expected_doc
       end
-    end
-  end
-end
+
+      it "should allow nested block return values" do
+        doc = RubySpeech::GRXML.draw do
+          #item { "1" }
+          grammar :mode => 'dtmf' do
+            rule :id => 'digit' do
+              item { "1" } 
+            end
+          end
+        end
+        expected_doc = GRXML::Grammar.new(:mode => 'dtmf')
+        expected_doc << GRXML::Rule.new(:id => 'digit')
+        expected_doc << GRXML::Item.new(:content => "1")
+        puts expected_doc.to_s
+        doc.should == expected_doc
+      end
+
+    end # draw
+  end # GRXML
+end # RubySpeech
 
 __END__
 doc = RubySpeech::GRXML.draw do

@@ -27,7 +27,7 @@ module RubySpeech
 
       register :'item'
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Ruleref, Tag].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Item, String, Ruleref, Tag].freeze
 
       ##
       # Create a new GRXML item element

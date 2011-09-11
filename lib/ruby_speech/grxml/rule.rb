@@ -4,7 +4,8 @@ module RubySpeech
     # 
     # A rule definition associates a legal rule expansion with a rulename. The rule definition is also responsible for defining the scope of the rule definition: whether it is local to the grammar in which it is defined or whether it may be referenced within other grammars.
     #
-    # http://www.w3.org/TR/speech-grammar/#S3
+    #   http://www.w3.org/TR/speech-grammar/#S3
+    #   http://www.w3.org/TR/speech-grammar/#S3.1
     #
     # The rule element has two attributes: id and scope. The id attribute is always required; the scope is optional.
     #

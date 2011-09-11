@@ -15,7 +15,7 @@ module RubySpeech
       end
 
       describe "from a document" do
-        let(:document) { '<rule id="one" scope="public"> </rule>' }
+        let(:document) { '<rule id="one" scope="public"> <item /> </rule>' }
 
         subject { Element.import parse_xml(document).root }
 

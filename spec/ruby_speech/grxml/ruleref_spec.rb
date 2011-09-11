@@ -2,39 +2,33 @@ require 'spec_helper'
 
 module RubySpeech
   module GRXML
-    describe Rule do
-      subject { Rule.new :id => 'one', :scope => 'public' }
+    describe Ruleref do
+      subject { Ruleref.new :uri => '#testrule' }
 
-      its(:name) { should == 'rule' }
+      its(:name) { should == 'ruleref' }
 
-      its(:id) { should == 'one' }
-      its(:scope)       { should == 'public' }
+      its(:uri) { should == '#testrule' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'rule').should == Rule
+        Element.class_from_registration(:'ruleref').should == Ruleref
       end
 
       describe "from a document" do
-        let(:document) { '<rule id="one" scope="public"> </rule>' }
+        let(:document) { '<ruleref uri="#one" />' }
 
         subject { Element.import parse_xml(document).root }
 
-        it { should be_instance_of Rule }
+        it { should be_instance_of Ruleref }
 
-        its(:id) { should == 'one' }
-        its(:scope)       { should == 'public' }
+        its(:uri) { should == '#one' }
       end
 
-      describe "scope" do
-        it "should accept public or private" do
-          lambda { subject = Rule.new :id => 'one', :scope => 'public' }.should_not raise_error
-          lambda { subject = Rule.new :id => 'one', :scope => 'private' }.should_not raise_error
-        end
+      #describe "special" do
+        # TODO: specify the valid values for the special attribute
+      #end
 
-        it "should raise ArgumentError with any other scope" do
-          lambda { subject = Rule.new :id => 'one', :scope => 'invalid_scope' }.should raise_error(ArgumentError, "A Rule's scope can only be 'public' or 'private'")
-        end
-      end
-    end # Rule
+      # TODO: check that only special or uri are specified
+      
+    end # Ruleref
   end # GRXML
 end # RubySpeech

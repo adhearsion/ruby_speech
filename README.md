@@ -44,6 +44,70 @@ Once your `Speak` is fully prepared and you're ready to send it off for processi
 
 You may also then need to call `to_s`.
 
+
+Contruct a GRXML (SGR) document like this:
+
+```ruby
+require 'rubygems'
+require 'ruby_speech'
+
+grammy = RubySpeech::GRXML.draw do
+    self.mode = 'dtmf'
+    self.root = 'digits'
+    rule id: 'digits' do
+      one_of do
+        0.upto(9) {|d| item { d.to_s } }
+      end
+    end
+
+    rule id: 'pin', scope: 'public' do
+      one_of do
+        item do
+          item repeat: '4' do
+            ruleref uri: '#digit'
+          end
+          "#"
+        end
+        item do
+          "* 9"
+        end
+      end
+    end
+
+end
+puts grammy.to_s
+```
+
+which becomes
+
+```xml
+<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" mode="dtmf" root="digits">
+  <rule id="digits">
+    <one-of>
+      <item>0</item>
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>6</item>
+      <item>7</item>
+      <item>8</item>
+      <item>9</item>
+    </one-of>
+  </rule>
+  <rule id="pin" scope="public">
+    <one-of>
+      <item><item repeat="4"><ruleref uri="#digit"/></item>#</item>
+      <item>* 9</item>
+    </one-of>
+  </rule>
+</grammar>
+```
+
+
+
+
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
 
 ## Features:

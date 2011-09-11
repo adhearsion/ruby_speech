@@ -43,6 +43,40 @@ module RubySpeech
         write_attr 'xml:base', uri
       end
 
+      ##
+      #
+      # The mode of a grammar indicates the type of input that the user agent should be detecting. The default mode is "voice" for speech recognition grammars. An alternative input mode is "dtmf" input".
+      #
+      # @return [String]
+      #
+      def mode
+        read_attr :'mode'
+      end
+
+      ##
+      # @param [String] ia
+      #
+      def mode=(ia)
+        write_attr :'mode', ia
+      end
+
+      ##
+      #
+      # The root ("rule") attribute indicates declares a single rule to be the root rle of the grammar.  This attribute is OPTIONAL. The rule declared must be defined within the scope of the grammar.  It specified rule can be scoped "public" or "private."
+      #
+      # @return [String]
+      #
+      def root
+        read_attr :'root'
+      end
+
+      ##
+      # @param [String] ia
+      #
+      def root=(ia)
+        write_attr :'root', ia
+      end
+
       def <<(arg)
         #raise InvalidChildError, "A Grammar can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         raise InvalidChildError, "A Grammar can only accept DTMF as children" unless VALID_CHILD_TYPES.include? arg.class

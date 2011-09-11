@@ -7,7 +7,7 @@
   * Bugfix/Feature: Comparing SSML elements now compares children
 
 # 0.1.5
-  * Feature: Now added support for SSML <audio/>
+  * Feature: Now added support for SSML `<audio/>`
 
 # 0.1.4
   * Bugfix: Speak#+ now returns a brand new Speak rather than modifying the original object

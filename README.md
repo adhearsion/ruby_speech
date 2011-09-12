@@ -13,7 +13,7 @@ require 'ruby_speech'
 speak = RubySpeech::SSML.draw do
   voice gender: :male, name: 'fred' do
     string "Hi, I'm Fred. The time is currently "
-    say_as 'date', format: 'dmy' do
+    say_as interpret_as: 'date', format: 'dmy' do
       "01/02/1960"
     end
   end

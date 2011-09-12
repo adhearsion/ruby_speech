@@ -56,6 +56,72 @@ module RubySpeech
         doc.should == expected_doc
       end
 
+      describe "embedding" do
+        it "SSML documents" do
+          doc1 = RubySpeech::SSML.draw do
+            string "Hi, I'm Fred. The time is currently "
+            say_as :interpret_as => 'date', :format => 'dmy' do
+              "01/02/1960"
+            end
+          end
+
+          doc2 = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              embed doc1
+            end
+          end
+
+          expected_doc = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              string "Hi, I'm Fred. The time is currently "
+              say_as :interpret_as => 'date', :format => 'dmy' do
+                "01/02/1960"
+              end
+            end
+          end
+
+          doc2.should == expected_doc
+        end
+
+        it "SSML elements" do
+          element = SSML::Emphasis.new(:content => "HELLO?")
+
+          doc = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              embed element
+            end
+          end
+
+          expected_doc = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              emphasis do
+                "HELLO?"
+              end
+            end
+          end
+
+          doc.should == expected_doc
+        end
+
+        it "strings" do
+          string = "How now, brown cow?"
+
+          doc = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              embed string
+            end
+          end
+
+          expected_doc = RubySpeech::SSML.draw do
+            voice :gender => :male, :name => 'fred' do
+              string "How now, brown cow?"
+            end
+          end
+
+          doc.should == expected_doc
+        end
+      end
+
       it "should properly escape string input" do
         doc = RubySpeech::SSML.draw do
           voice { string "I <3 nachos." }

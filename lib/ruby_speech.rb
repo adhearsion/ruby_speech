@@ -11,5 +11,6 @@ module RubySpeech
   autoload :Version
 
   autoload :SSML
+  autoload :GRXML
   autoload :XML
 end

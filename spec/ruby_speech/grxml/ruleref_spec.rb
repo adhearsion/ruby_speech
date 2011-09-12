@@ -5,12 +5,12 @@ module RubySpeech
     describe Ruleref do
       subject { Ruleref.new :uri => '#testrule' }
 
-      its(:name) { should == 'ruleref' }
+      its(:name)  { should == 'ruleref' }
 
-      its(:uri) { should == '#testrule' }
+      its(:uri)   { should == '#testrule' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'ruleref').should == Ruleref
+        Element.class_from_registration(:ruleref).should == Ruleref
       end
 
       describe "from a document" do
@@ -28,7 +28,7 @@ module RubySpeech
       #end
 
       # TODO: check that only special or uri are specified
-      
+
     end # Ruleref
   end # GRXML
 end # RubySpeech

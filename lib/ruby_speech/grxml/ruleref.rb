@@ -1,7 +1,7 @@
 module RubySpeech
   module GRXML
     ##
-    # 
+    #
     # The ruleref element is an empty element which points to another rule expansion in the grammar document.
     #
     #   http://www.w3.org/TR/speech-grammar/#S2.2
@@ -14,7 +14,7 @@ module RubySpeech
     #
     class Ruleref < Element
 
-      register :'ruleref'
+      register :ruleref
 
       ##
       # Create a new GRXML ruleref element
@@ -62,8 +62,6 @@ module RubySpeech
       def special=(sp)
         write_attr :special, sp
       end
-
-
 
       def <<(*args)
         raise InvalidChildError, "A Ruleref cannot contain children"

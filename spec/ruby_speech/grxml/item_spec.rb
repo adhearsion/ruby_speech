@@ -7,11 +7,11 @@ module RubySpeech
 
       its(:name) { should == 'item' }
 
-      its(:weight) { should == 1.1 }
-      its(:repeat)       { should == '1' }
+      its(:weight)  { should == 1.1 }
+      its(:repeat)  { should == '1' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'item').should == Item
+        Element.class_from_registration(:item).should == Item
       end
 
       describe "from a document" do
@@ -21,9 +21,9 @@ module RubySpeech
 
         it { should be_instance_of Item }
 
-        its(:weight)       { should == 1.1 }
-        its(:repeat)       { should == '1' }
-        its(:content)      { should == 'one' }
+        its(:weight)  { should == 1.1 }
+        its(:repeat)  { should == '1' }
+        its(:content) { should == 'one' }
       end
 
       # TODO: validate various values for weight

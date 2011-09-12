@@ -3,8 +3,6 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe OneOf do
-      subject { OneOf.new }
-
       its(:name) { should == 'one-of' }
 
       it 'registers itself' do

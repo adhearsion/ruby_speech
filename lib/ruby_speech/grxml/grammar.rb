@@ -51,14 +51,14 @@ module RubySpeech
       # @return [String]
       #
       def mode
-        read_attr :'mode'
+        read_attr :mode
       end
 
       ##
       # @param [String] ia
       #
       def mode=(ia)
-        write_attr :'mode', ia
+        write_attr :mode, ia
       end
 
       ##
@@ -68,14 +68,14 @@ module RubySpeech
       # @return [String]
       #
       def root
-        read_attr :'root'
+        read_attr :root
       end
 
       ##
       # @param [String] ia
       #
       def root=(ia)
-        write_attr :'root', ia
+        write_attr :root, ia
       end
 
       def <<(arg)

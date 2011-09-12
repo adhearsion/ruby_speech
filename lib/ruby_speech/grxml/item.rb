@@ -1,7 +1,7 @@
 module RubySpeech
   module GRXML
     ##
-    # 
+    #
     # The item element is one of the valid expansion elements for the SGR rule element
     #
     #   http://www.w3.org/TR/speech-grammar/#S2.4 --> XML Form
@@ -25,7 +25,7 @@ module RubySpeech
     #
     class Item < Element
 
-      register :'item'
+      register :item
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Item, String, Ruleref, Tag].freeze
 
@@ -59,7 +59,7 @@ module RubySpeech
       # @param [Numeric] w
       #
       def weight=(w)
-        raise ArgumentError, "A Item's weight attribute must be a positive floating point number" unless w.is_a?(Numeric)  && w >= 0 
+        raise ArgumentError, "A Item's weight attribute must be a positive floating point number" unless w.is_a?(Numeric)  && w >= 0
         write_attr :weight, w.to_s
       end
 

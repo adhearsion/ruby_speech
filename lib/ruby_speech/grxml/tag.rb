@@ -1,7 +1,7 @@
 module RubySpeech
   module GRXML
     ##
-    # 
+    #
     # The tag element is one of the valid expansion elements for the SGR rule element
     #
     #   http://www.w3.org/TR/speech-grammar/#S2.6
@@ -12,7 +12,7 @@ module RubySpeech
     #
     class Tag < Element
 
-      register :'tag'
+      register :tag
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String].freeze
 
@@ -30,10 +30,6 @@ module RubySpeech
       def <<(arg)
         raise InvalidChildError, "A Tag can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super
-      end
-
-      def eql?(o)
-        super o
       end
     end # Tag
   end # GRXML

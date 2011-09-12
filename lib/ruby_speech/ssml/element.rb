@@ -1,11 +1,11 @@
-require 'active_support/core_ext/class/inheritable_attributes'
+require 'active_support/core_ext/class/attribute'
 
 module RubySpeech
   module SSML
     class Element < Niceogiri::XML::Node
       @@registrations = {}
 
-      class_inheritable_accessor :registered_ns, :registered_name
+      class_attribute :registered_ns, :registered_name
 
       # Register a new stanza class to a name and/or namespace
       #

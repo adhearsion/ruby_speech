@@ -1,3 +1,34 @@
+# 0.2.2
+  * Feature: The SSML DSL now supports embedding SSML documents, elements or strings via the `embed` method. This behaves as you might expect:
+
+  ```ruby
+    doc1 = RubySpeech::SSML.draw do
+      string "Hi, I'm Fred. The time is currently "
+      say_as :interpret_as => 'date', :format => 'dmy' do
+        "01/02/1960"
+      end
+    end
+
+    doc2 = RubySpeech::SSML.draw do
+      voice :gender => :male, :name => 'fred' do
+        embed doc1
+      end
+    end
+
+    doc2.to_s
+  ```
+
+  ```xml
+    <speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="en-US">
+      <voice gender="male" name="fred">
+        Hi, I'm Fred. The time is currently
+        <say-as interpret-as="date" format="dmy">
+          01/02/1960
+        </say-as>
+      </voice>
+    </speak>
+  ```
+
 # 0.2.1
   * Bugfix: SSML element's children now include any text content, and text content is copied when importing/concatenating documents
 

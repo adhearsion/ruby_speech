@@ -14,8 +14,8 @@ module RubySpeech
 
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'
 
-    def self.draw(&block)
-      Grammar.new.tap do |grammar|
+    def self.draw(attributes={}, &block)
+      Grammar.new(attributes).tap do |grammar|
         block_return = grammar.instance_eval(&block) if block_given?
         grammar << block_return if block_return.is_a?(String)
       end

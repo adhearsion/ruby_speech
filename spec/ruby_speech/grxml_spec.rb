@@ -18,19 +18,6 @@ module RubySpeech
         end
       end
 
-      ### === WORKING ===
-      # NOTE: Blocks are acting strange... maybe related to the other 1.9.2 &block ssml bug?
-      # Doing a quick document create just to see append work...
-      # it "should allow other GRXML elements to be inserted in the document (NON-BLOCK version)" do
-      #   doc = GRXML::Grammar.new(:mode => :dtmf, :root => 'digits')
-      #   rule = GRXML::Rule.new(:id => "digits")
-      #   rule << "Hello Fred"
-      #   oneof = GRXML::OneOf.new
-      #   1.upto(3) {|d| oneof << GRXML::Item.new(:content => d.to_s) }
-      #   rule << oneof
-      #   doc << rule
-      # end
-
       it "should allow other GRXML elements to be inserted in the document" do
         doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
   

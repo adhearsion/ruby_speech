@@ -15,10 +15,12 @@ module RubySpeech
     #
     #
     class Rule < Element
+      include XML::Language
 
       register :rule
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, Ruleref, Tag].freeze
+      # TODO: Token???
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, OneOf, Item, Ruleref, Tag].freeze
 
       ##
       # Create a new GRXML rule element

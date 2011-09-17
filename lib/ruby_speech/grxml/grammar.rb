@@ -6,6 +6,7 @@ module RubySpeech
     # http://www.w3.org/TR/speech-grammar/#S4.3
     #
     # TODO: Look into tag-format, lexicon (probably a sub element)
+    # NOTE: A grammar without rules is allowed but cannot be used for processing input -- http://www.w3.org/Voice/2003/srgs-ir/
     #
     class Grammar < Element
       include XML::Language

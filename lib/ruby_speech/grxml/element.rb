@@ -70,6 +70,21 @@ module RubySpeech
         super.map { |c| Element.import c }
       end
 
+      def embed(other)
+        case other
+        when String
+          self << encode_special_chars(other)
+        when Grammar
+          other.children.each do |child|
+            self << child
+          end
+        when Element
+          self << other
+        else
+          raise ArgumentError, "Can only embed a String or an GRXML element"
+        end
+      end
+
       def method_missing(method_name, *args, &block)
         const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
         const = GRXML.const_get const_name

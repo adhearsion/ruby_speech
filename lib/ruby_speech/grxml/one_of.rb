@@ -30,7 +30,7 @@ module RubySpeech
       end
 
       def <<(arg)
-        raise InvalidChildError, "A Rule can only accept Item as children" unless VALID_CHILD_TYPES.include? arg.class
+        raise InvalidChildError, "A OneOf can only accept Item as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
     end # OneOf

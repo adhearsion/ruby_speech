@@ -6,7 +6,7 @@ module RubySpeech
     #
     #   http://www.w3.org/TR/speech-grammar/#S2.4 --> XML Form
     #
-    # The item element has three (optional) attributes: weight, repeat, and xml:lang (language identifier)
+    # The item element has four (optional) attributes: weight, repeat, repeat-prob, and xml:lang (language identifier)
     #
     #   http://www.w3.org/TR/speech-grammar/#S2.4.1
     #   http://www.w3.org/TR/speech-grammar/#S2.3
@@ -21,13 +21,15 @@ module RubySpeech
     #
     # Operators are provided that define a legal rule expansion as being another sub-expansion that is optional, that is repeated zero or more times, that is repeated one or more times, or that is repeated some range of times.
     #
+    # repeat probability (repeat-prob)  indicates the probability of successive repetition of the repeated expansion.  It is ignored if repeat is not specified
+    #
     # xml:lang declares declaration declares the language of the grammar section for the item element just as xml:lang in the <grammar> element declares for the entire document
     #
     class Item < Element
 
       register :item
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Item, String, Ruleref, Tag].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, String, Ruleref, Tag].freeze
 
       ##
       # Create a new GRXML item element
@@ -86,20 +88,20 @@ module RubySpeech
 
       ##
       #
-      # The language attribute
+      # The optional repeat-prob attribute
       #
-      # @return [String]
+      # @return [Float]
       #
-      def language
-        read_attr :language
+      def repeat_prob
+        read_attr :'repeat-prob', :to_f
       end
 
       ##
+      # @param [Numeric] ia
       #
-      # @param [String] lang
-      #
-      def language=(lang)
-        write_attr :language
+      def repeat_prob=(rp)
+        raise ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0" unless rp.is_a?(Numeric)  && rp >= 0 && rp <= 1.0
+        write_attr :'repeat-prob', rp.to_s
       end
 
       def <<(arg)

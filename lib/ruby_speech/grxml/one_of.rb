@@ -33,6 +33,10 @@ module RubySpeech
         raise InvalidChildError, "A OneOf can only accept Item as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def eql?(o)
+        super o, :language
+      end
     end # OneOf
   end # GRXML
 end # RubySpeech

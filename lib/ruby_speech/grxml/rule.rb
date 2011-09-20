@@ -41,7 +41,7 @@ module RubySpeech
       # @return [String]
       #
       def id
-        read_attr :id
+        read_attr :id, :to_sym
       end
 
       ##
@@ -58,7 +58,7 @@ module RubySpeech
       # @return [String]
       #
       def scope
-        read_attr :scope
+        read_attr :scope, :to_sym
       end
 
       ##

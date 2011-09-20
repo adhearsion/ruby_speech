@@ -81,6 +81,64 @@ module RubySpeech
             Grammar.new(:base_uri => 'foo').should_not == Grammar.new(:base_uri => 'bar')
           end
         end
+
+        describe "when the children are different" do
+          it "should not be equal" do
+            g1 = Grammar.new
+            g1 << Rule.new(:id => 'main1')
+            g2 = Grammar.new
+            g2 << Rule.new(:id => 'main2')
+
+            g1.should_not == g2
+          end
+        end
+      end
+
+      it "should allow creating child GRXML elements" do
+        g = Grammar.new
+        g.Rule :id => :main, :scope => 'public'
+        expected_g = Grammar.new
+        expected_g << Rule.new(:id => :main, :scope => 'public')
+        g.should == expected_g
+      end
+
+      describe "<<" do
+        it "should accept Rule" do
+          lambda { subject << Rule.new }.should_not raise_error
+        end
+
+        it "should raise InvalidChildError with non-acceptable objects" do
+          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Grammar can only accept Rule as children")
+        end
+      end
+
+      describe "#to_doc" do
+        let(:expected_doc) do
+          Nokogiri::XML::Document.new.tap do |doc|
+            doc << Grammar.new
+          end
+        end
+
+        it "should create an XML document from the grammar" do
+          Grammar.new.to_doc.to_s.should == expected_doc.to_s
+        end
+      end
+
+      describe "concat" do
+        it "should allow concatenation" do
+          grammar1 = Grammar.new
+          grammar1 << Rule.new(:id => 'frank', :scope => 'public', :content => "Hi Frank")
+          grammar2 = Grammar.new
+          grammar2 << Rule.new(:id => 'millie', :scope => 'public', :content => "Hi Millie")
+
+          expected_concat = Grammar.new
+          expected_concat << Rule.new(:id => 'frank', :scope => 'public', :content => "Hi Frank")
+          expected_concat << Rule.new(:id => 'millie', :scope => 'public', :content => "Hi Millie")
+
+          concat = (grammar1 + grammar2)
+          concat.should == expected_concat
+          concat.to_s.should_not include('default')
+        end
       end
     end # Grammar
   end # GRXML

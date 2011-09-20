@@ -3,6 +3,7 @@ require 'ruby_speech'
 require 'mocha'
 
 include RubySpeech::GRXML
+include RubySpeech::XML::Language
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 

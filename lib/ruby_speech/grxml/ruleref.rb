@@ -8,9 +8,11 @@ module RubySpeech
     #
     # Every rule definition has a local name that must be unique within the scope of the grammar in which it is defined. A rulename must match the "Name" Production of XML 1.0 [XML §2.3] and be a legal XML ID. Section 3.1 documents the rule definition mechanism and the legal naming of rules.
     #
-    # The ruleref has two attributes: uri and special. There can be one and only one of the uri or special attribute specified on any given ruleref element.
+    # The ruleref has three attributes: uri, special and type. There can be one and only one of the uri or special attribute specified on any given ruleref element.
     #
     # The uri attribute contains named identified named rule being referenced
+    #
+    # optional 'type' attribute specifies the media type for the uri
     #
     class Ruleref < Element
 
@@ -42,6 +44,10 @@ module RubySpeech
       # @raises ArgumentError if t is nota positive numeric value
       #
       def uri=(u)
+        unless self.special.nil?
+          raise ArgumentError, "A Ruleref can only take uri or special"
+        end
+
         write_attr :uri, u
       end
 
@@ -60,7 +66,16 @@ module RubySpeech
       # TODO: raise ArgumentError if not a valid special...
       #
       def special=(sp)
-        write_attr :special, sp
+        unless self.uri.nil?
+          raise ArgumentError, "A Ruleref can only take uri or special"
+        end
+
+        case sp.to_sym
+        when :NULL, :VOID, :GARBAGE
+          write_attr :special, sp.to_s
+        else
+          raise ArgumentError, "The Ruleref#special method only takes :NULL, :VOID, and :GARBAGE"
+        end
       end
 
       def <<(*args)

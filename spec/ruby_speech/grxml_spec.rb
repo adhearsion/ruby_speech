@@ -68,7 +68,7 @@ module RubySpeech
 
 
       # TODO: don't allow rule to be embedded in another rule
-      # TODO: maybe turn a rule embedded in anthoer rule into a ruleref
+      # TODO: maybe turn a rule embedded in anthoer rule into a ruleref??
       # TODO: Reject embedding (or default to voice) if dtmf and voice documents are merged
       describe "embedding" do
         it "GRXML documents" do

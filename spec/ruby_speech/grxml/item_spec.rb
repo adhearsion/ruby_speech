@@ -26,7 +26,6 @@ module RubySpeech
         its(:content) { should == 'one' }
       end
 
-      # TODO: validate various values for weight
       describe "#weight" do
         context "from a document" do
           describe "using .1" do 
@@ -54,31 +53,68 @@ module RubySpeech
             lambda { subject.weight = 1 }.should_not raise_error
             lambda { subject.weight = 1.0 }.should_not raise_error
             lambda { subject.weight = 0.1 }.should_not raise_error
-            lambda { subject.weight = '.1'.to_f }.should_not raise_error
+            lambda { subject.weight = '.1' }.should_not raise_error
+            lambda { subject.weight = '1.' }.should_not raise_error
           end
           it "with an invalid value" do
-            lambda { subject.weight = :one }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
+            lambda { subject.weight = 'one' }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
+            lambda { subject.weight = -1 }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
           end
         end
       end
 
-      # TODO: validate various values for repeat
-      #       http://www.w3.org/TR/speech-grammar/#S2.5
+      # Validate various values for repeat -- http://www.w3.org/TR/speech-grammar/#S2.5
       describe "#repeat" do
-        it "should allow 0 or more times"
-        it "should allow 1 or more times"
-        it "should allow range of times"
-      end
-
-      # TODO: handle repeat probability
-      #       http://www.w3.org/TR/speech-grammar/#S2.5.1
-      describe "#repeat-prob" do
-        context "handle values if repeat is specified" do
-          it "with a valid value"
-          it "with and invalid value"
+        context "exact" do
+          it "valid values (0 or a positive integer)" do
+            lambda { subject.repeat = 0 }.should_not raise_error
+            lambda { subject.repeat = 5 }.should_not raise_error
+            lambda { subject.repeat = '1' }.should_not raise_error
+          end
+          it "invalid values" do
+            lambda { subject.repeat = -1 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = 'one' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+          end
         end
 
-        it "should be ignored if no repeat attribute is specified"
+        context "ranges" do
+          it "valid ranges from m to n" do
+            lambda { subject.repeat = '1-5' }.should_not raise_error
+            lambda { subject.repeat = '0-5' }.should_not raise_error
+          end
+
+          it "illegal ranges from m to n" do
+            lambda { subject.repeat = '5-1' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = '-1-2' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = '1-2-3' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = '1-B' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+          end
+
+          it "valid ranges of m or more" do
+            lambda { subject.repeat = '3-' }.should_not raise_error
+            lambda { subject.repeat = '0-' }.should_not raise_error
+          end
+          it "illegal ranges for m or more" do
+            lambda { subject.repeat = '-1-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = 'B-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+          end
+        end
+      end
+
+      # repeat probability (repeat-prob) -- http://www.w3.org/TR/speech-grammar/#S2.5.1
+      describe "#repeat_prob" do
+        it "should handle all valid values" do
+          lambda { subject.repeat_prob = 0 }.should_not raise_error
+          lambda { subject.repeat_prob = 1 }.should_not raise_error
+          lambda { subject.repeat_prob = 1.0 }.should_not raise_error
+          lambda { subject.repeat_prob = '1.' }.should_not raise_error
+          lambda { subject.repeat_prob = '1.0' }.should_not raise_error
+          lambda { subject.repeat_prob = '.5' }.should_not raise_error
+        end
+        it "should raise an error for invalid values" do
+          lambda { subject.repeat_prob = -1 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
+          lambda { subject.repeat_prob = 1.5 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
+        end
       end
 
       describe "#language" do

@@ -14,7 +14,7 @@ module RubySpeech
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
-          lambda{ GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule as children")
+          lambda{ GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 

@@ -107,8 +107,12 @@ module RubySpeech
           lambda { subject << Rule.new }.should_not raise_error
         end
 
+        it "should accept Tag" do
+          lambda { subject << Tag.new }.should_not raise_error
+        end
+
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Grammar can only accept Rule as children")
+          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 

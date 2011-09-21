@@ -13,7 +13,7 @@ module RubySpeech
 
       register :grammar
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule, Tag].freeze
 
       ##
       # Create a new GRXML grammar root element
@@ -80,7 +80,7 @@ module RubySpeech
       end
 
       def <<(arg)
-        raise InvalidChildError, "A Grammar can only accept Rule as children" unless VALID_CHILD_TYPES.include? arg.class
+        raise InvalidChildError, "A Grammar can only accept Rule and Tag as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
 

@@ -5,8 +5,13 @@ module RubySpeech
     #
     # http://www.w3.org/TR/speech-grammar/#S4.3
     #
-    # TODO: Look into tag-format, lexicon (probably a sub element)
+    # Attributes: uri, language, root, tag-format
+    #
+    # tag-format declaration is an optional declaration of a tag-format identifier that indicates the content type of all tags contained within a grammar.
+    #
     # NOTE: A grammar without rules is allowed but cannot be used for processing input -- http://www.w3.org/Voice/2003/srgs-ir/
+    #
+    # TODO: Look into lexicon (probably a sub element)
     #
     class Grammar < Element
       include XML::Language
@@ -88,6 +93,21 @@ module RubySpeech
         Nokogiri::XML::Document.new.tap do |doc|
           doc << self
         end
+      end
+
+      ##
+      #
+      # @return [String]
+      #
+      def tag_format
+        read_attr :'tag-format'
+      end
+
+      ##
+      # @param [String] ia
+      #
+      def tag_format=(s)
+        write_attr :'tag-format', s
       end
 
       def +(other)

@@ -9,11 +9,12 @@ module RubySpeech
       its(:language)  { should == 'en-US' }
 
       describe "setting options in initializers" do
-        subject { Grammar.new :language => 'jp', :base_uri => 'blah', :root => "main_rule" }
+        subject { Grammar.new :language => 'jp', :base_uri => 'blah', :root => "main_rule", :tag_format => "semantics/1.0" }
 
         its(:language)  { should == 'jp' }
         its(:base_uri)  { should == 'blah' }
         its(:root)      { should == 'main_rule' }
+        its(:tag_format)      { should == 'semantics/1.0' }
       end
 
       describe "setting dtmf mode" do
@@ -125,6 +126,12 @@ module RubySpeech
 
         it "should create an XML document from the grammar" do
           Grammar.new.to_doc.to_s.should == expected_doc.to_s
+        end
+      end
+
+      describe "#tag_format" do
+        it "should allow setting tag-format identifier" do
+          lambda { subject.tag_format = "semantics/1.0" }.should_not raise_error
         end
       end
 

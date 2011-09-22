@@ -72,11 +72,11 @@ module RubySpeech
           end
         end
 
-        # describe "when the language is different" do
-        #   it "should not be equal" do
-        #     Rule.new(:language => "jp").should_not == Rule.new(:language => "esperanto")
-        #   end
-        # end
+        describe "when the language is different" do
+          it "should not be equal" do
+            Rule.new(:language => "jp").should_not == Rule.new(:language => "esperanto")
+          end
+        end
 
         describe "when the id is different" do
           it "should not be equal" do

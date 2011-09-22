@@ -78,7 +78,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :id, :scope
+        super o, :id, :scope, :language
       end
     end # Rule
   end # GRXML

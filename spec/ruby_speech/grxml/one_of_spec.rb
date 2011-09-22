@@ -17,9 +17,6 @@ module RubySpeech
         it { should be_instance_of OneOf }
       end
 
-      # TODO: ensure it has at least one item element.  Maybe this should be at
-      # the top level of grxml_spec?
-
       describe "#language" do
         before { subject.language = 'fr-CA' }
 

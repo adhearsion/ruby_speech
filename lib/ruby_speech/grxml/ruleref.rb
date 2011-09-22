@@ -44,10 +44,7 @@ module RubySpeech
       # @raises ArgumentError if t is nota positive numeric value
       #
       def uri=(u)
-        unless self.special.nil?
-          raise ArgumentError, "A Ruleref can only take uri or special"
-        end
-
+        raise ArgumentError, "A Ruleref can only take uri or special" if special
         write_attr :uri, u
       end
 
@@ -66,21 +63,13 @@ module RubySpeech
       # TODO: raise ArgumentError if not a valid special...
       #
       def special=(sp)
-        unless self.uri.nil?
-          raise ArgumentError, "A Ruleref can only take uri or special"
-        end
-
-        case sp.to_sym
-        when :NULL, :VOID, :GARBAGE
-          write_attr :special, sp.to_s
-        else
-          raise ArgumentError, "The Ruleref#special method only takes :NULL, :VOID, and :GARBAGE"
-        end
+        raise ArgumentError, "A Ruleref can only take uri or special" if uri
+        raise ArgumentError, "The Ruleref#special method only takes :NULL, :VOID, and :GARBAGE" unless %w{NULL VOID GARBAGE}.include? sp.to_s
+        write_attr :special, sp
       end
 
       def <<(*args)
         raise InvalidChildError, "A Ruleref cannot contain children"
-        super
       end
 
       def eql?(o)

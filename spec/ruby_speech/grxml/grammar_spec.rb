@@ -11,10 +11,10 @@ module RubySpeech
       describe "setting options in initializers" do
         subject { Grammar.new :language => 'jp', :base_uri => 'blah', :root => "main_rule", :tag_format => "semantics/1.0" }
 
-        its(:language)  { should == 'jp' }
-        its(:base_uri)  { should == 'blah' }
-        its(:root)      { should == 'main_rule' }
-        its(:tag_format)      { should == 'semantics/1.0' }
+        its(:language)    { should == 'jp' }
+        its(:base_uri)    { should == 'blah' }
+        its(:root)        { should == 'main_rule' }
+        its(:tag_format)  { should == 'semantics/1.0' }
       end
 
       describe "setting dtmf mode" do
@@ -146,7 +146,7 @@ module RubySpeech
           expected_concat << Rule.new(:id => 'frank', :scope => 'public', :content => "Hi Frank")
           expected_concat << Rule.new(:id => 'millie', :scope => 'public', :content => "Hi Millie")
 
-          concat = (grammar1 + grammar2)
+          concat = grammar1 + grammar2
           concat.should == expected_concat
           concat.to_s.should_not include('default')
         end

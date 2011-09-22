@@ -28,25 +28,27 @@ module RubySpeech
 
       describe "#weight" do
         context "from a document" do
-          describe "using .1" do 
+          subject { Element.import parse_xml(document).root }
+
+          describe "using .1" do
             let(:document) { '<item weight=".1" repeat="1">one</item>' }
-            subject { Element.import parse_xml(document).root }
             its(:weight)  { should == 0.1 }
           end
-          describe "using 1." do 
+
+          describe "using 1." do
             let(:document) { '<item weight="1." repeat="1">one</item>' }
-            subject { Element.import parse_xml(document).root }
             its(:weight)  { should == 1.0 }
           end
-          describe "using 1" do 
+
+          describe "using 1" do
             let(:document) { '<item weight="1" repeat="1">one</item>' }
-            subject { Element.import parse_xml(document).root }
             its(:weight)  { should == 1.0 }
           end
         end
 
         context "positive floating point numbers" do
           before { subject.weight = 1.1 }
+
           its(:weight) { should == 1.1 }
 
           it "with valid value" do
@@ -56,6 +58,7 @@ module RubySpeech
             lambda { subject.weight = '.1' }.should_not raise_error
             lambda { subject.weight = '1.' }.should_not raise_error
           end
+
           it "with an invalid value" do
             lambda { subject.weight = 'one' }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
             lambda { subject.weight = -1 }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
@@ -71,6 +74,7 @@ module RubySpeech
             lambda { subject.repeat = 5 }.should_not raise_error
             lambda { subject.repeat = '1' }.should_not raise_error
           end
+
           it "invalid values" do
             lambda { subject.repeat = -1 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
             lambda { subject.repeat = 'one' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
@@ -94,6 +98,7 @@ module RubySpeech
             lambda { subject.repeat = '3-' }.should_not raise_error
             lambda { subject.repeat = '0-' }.should_not raise_error
           end
+
           it "illegal ranges for m or more" do
             lambda { subject.repeat = '-1-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
             lambda { subject.repeat = 'B-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
@@ -111,6 +116,7 @@ module RubySpeech
           lambda { subject.repeat_prob = '1.0' }.should_not raise_error
           lambda { subject.repeat_prob = '.5' }.should_not raise_error
         end
+
         it "should raise an error for invalid values" do
           lambda { subject.repeat_prob = -1 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
           lambda { subject.repeat_prob = 1.5 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")

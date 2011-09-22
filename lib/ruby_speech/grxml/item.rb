@@ -62,7 +62,7 @@ module RubySpeech
       #
       def weight=(w)
         raise ArgumentError, "A Item's weight attribute must be a positive floating point number" unless w.to_s.match(/[^0-9\.]/) == nil and w.to_f >= 0
-        write_attr :weight, w.to_s
+        write_attr :weight, w
       end
 
       ##
@@ -83,27 +83,24 @@ module RubySpeech
       # @param [String] r
       #
       def repeat=(r)
-        r=r.to_s
-        errormsg = "A Item's repeat must be 0 or a positive integer" 
+        r = r.to_s
+        error = ArgumentError.new "A Item's repeat must be 0 or a positive integer"
 
-        badarg = true unless r.match(/[^0-9-]/) == nil and r.scan("-").size <= 1
-        raise ArgumentError, errormsg if badarg
+        raise error unless r.match(/[^0-9-]/) == nil and r.scan("-").size <= 1
 
-        di = r.index('-')
-        case di
+        raise error if case di = r.index('-')
         when nil
-          badarg=true if r.to_i < 0  # must be 0 or a positive number
+          r.to_i < 0  # must be 0 or a positive number
         when 0
-          badarg=true  # negative numbers are illegal
+          true  # negative numbers are illegal
         else
-          if di == r.length-1  # repeat 'm' or more times, m must be 0 or a positive number
-            badarg=true unless r[0,r.length-1].to_i >= 0
+          if di == r.length - 1  # repeat 'm' or more times, m must be 0 or a positive number
+            r[0, r.length - 1].to_i < 0
           else  # verify range m,n is valid
-            m,n = r.split('-')
-            badarg=true unless m.to_i >= 0 and n.to_i >= m.to_i
+            m, n = r.split('-').map &:to_i
+            m < 0 || n < m
           end
         end
-        raise ArgumentError, errormsg if badarg
         write_attr :repeat, r
       end
 
@@ -122,7 +119,7 @@ module RubySpeech
       #
       def repeat_prob=(rp)
         raise ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0" unless rp.to_s.match(/[^0-9\.]/) == nil and rp.to_f >= 0 and rp.to_f <= 1.0
-        write_attr :'repeat-prob', rp.to_s
+        write_attr :'repeat-prob', rp
       end
 
       def <<(arg)

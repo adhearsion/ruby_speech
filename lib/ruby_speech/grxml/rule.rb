@@ -68,8 +68,7 @@ module RubySpeech
       # @param [String] ia
       #
       def scope=(sc)
-        sc = sc.to_s
-        raise ArgumentError, "A Rule's scope can only be 'public' or 'private'" unless %w{public private}.include?(sc)
+        raise ArgumentError, "A Rule's scope can only be 'public' or 'private'" unless %w{public private}.include?(sc.to_s)
         write_attr :scope, sc
       end
 

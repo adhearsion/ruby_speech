@@ -36,13 +36,13 @@ module RubySpeech
 
         its(:id) { should == :main }
 
-        it "with out an id" do
+        context "without an id" do
+          before { subject.id = nil }
           pending
         end
 
-        # FIXME: this should probably go into the grammar spec
-        it "with an non-unique id" do
-          pending
+        context "with a non-unique id" do
+          pending 'this should probably go into the grammar spec'
         end
       end
 

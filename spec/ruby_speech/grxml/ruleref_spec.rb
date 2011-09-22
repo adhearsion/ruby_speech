@@ -6,7 +6,6 @@ module RubySpeech
       subject { Ruleref.new :uri => '#testrule' }
 
       its(:name)  { should == 'ruleref' }
-
       its(:uri)   { should == '#testrule' }
 
       it 'registers itself' do
@@ -25,6 +24,7 @@ module RubySpeech
 
       describe "#special" do
         subject { Ruleref.new }
+
         context "with reserved values" do
           it "with a valid value" do
             lambda { subject.special = :NULL }.should_not raise_error
@@ -38,7 +38,6 @@ module RubySpeech
       end
 
       describe "#uri" do
-        subject { Ruleref.new }
         it "allows implict, explicit and external references" do
           lambda { subject.uri = '#dtmf' }.should_not raise_error
           lambda { subject.uri = '../test.grxml' }.should_not raise_error
@@ -48,10 +47,9 @@ module RubySpeech
 
       describe "only uri or special can be specified" do
         it "should raise an error" do
-          lambda {subject << Ruleref.new(:uri => '#test', :special => :NULL)}.should raise_error(ArgumentError, "A Ruleref can only take uri or special")
+          lambda { subject << Ruleref.new(:uri => '#test', :special => :NULL) }.should raise_error(ArgumentError, "A Ruleref can only take uri or special")
         end
       end
-
     end # Ruleref
   end # GRXML
 end # RubySpeech

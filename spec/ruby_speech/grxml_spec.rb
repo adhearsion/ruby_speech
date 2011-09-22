@@ -3,24 +3,24 @@ require 'spec_helper'
 module RubySpeech
   describe GRXML do
     describe "#draw" do
-      it "should create an GRXML document" do
-        expected_doc = GRXML::Grammar.new
-        GRXML.draw.should == expected_doc
+      it "should create a GRXML document" do
+        GRXML.draw.should == GRXML::Grammar.new
       end
 
-      # TODO: check that a rule exists with the id equal to root if that attribute is set
-      it "should have a rule with id equal to the root attribute if set"
-      
+      it "should have a rule with id equal to the root attribute if set" do
+        pending 'check that a rule exists with the id equal to root if that attribute is set'
+      end
+
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
-          lambda{ GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
+          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 
       it "should allow other GRXML elements to be inserted in the document" do
         doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
-  
+
         expected_doc = GRXML::Grammar.new(:mode => :voice, :root => 'main')
         rule = GRXML::Rule.new(:id => "main")
         rule << "Hello Fred"
@@ -28,11 +28,9 @@ module RubySpeech
         doc.should == expected_doc
       end
 
-      # TODO: Reject empty rules --  http://www.w3.org/TR/2002/CR-speech-grammar-20020626/#S3.1
-      #       http://www.w3.org/Voice/2003/srgs-ir/test/rule-no-empty.grxml
       it "should raise error if given an empty rule" do
-        pending;
-        lambda{ GRXML.draw { rule :id => 'main' }}.should raise_error
+        pending 'Reject empty rules -- http://www.w3.org/TR/2002/CR-speech-grammar-20020626/#S3.1 http://www.w3.org/Voice/2003/srgs-ir/test/rule-no-empty.grxml'
+        lambda { GRXML.draw { rule :id => 'main' }}.should raise_error
       end
 
       it "should allow nested block return values" do
@@ -45,7 +43,7 @@ module RubySpeech
         expected_doc << GRXML::Rule.new(:scope => :public, :id => :main, :content => "Hello Fred")
         doc.should == expected_doc
       end
-    
+
       it "should allow nested GRXML elements" do
         doc = RubySpeech::GRXML.draw do
           rule :id => :main, :scope => 'public' do
@@ -66,44 +64,53 @@ module RubySpeech
         doc.should == expected_doc
       end
 
-
-      # TODO: don't allow rule to be embedded in another rule
       # TODO: maybe turn a rule embedded in anthoer rule into a ruleref??
-      # TODO: Reject embedding (or default to voice) if dtmf and voice documents are merged
       describe "embedding" do
-        it "GRXML documents" do
-          doc1 = RubySpeech::GRXML.draw(:mode => :dtmf, :root => 'digits') do
-            rule :id => :digits do
-              one_of do
-                item { "1" }
-                item { "2" }
+        context "GRXML documents" do
+          let :doc1 do
+            RubySpeech::GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => :digits do
+                one_of do
+                  item { "1" }
+                  item { "2" }
+                end
               end
             end
           end
 
-          # FIXME: Verify mode of grammar document... it currently takes the last one embedded
-          doc2 = RubySpeech::GRXML.draw do
-            embed doc1
-            rule :id => :main do
-              "Hello Fred"
-            end
-          end
-
-          expected_doc = RubySpeech::GRXML.draw do
-            rule :id => :digits do
-              one_of do
-               item :content => "1"
-               item :content => "2"
+          let :doc2 do
+            doc = doc1
+            RubySpeech::GRXML.draw do
+              embed doc
+              rule :id => :main do
+                "Hello Fred"
               end
             end
-            rule :id => :main, :content => 'Hello Fred'
           end
 
-          doc2.should == expected_doc
+          let :expected_doc do
+            RubySpeech::GRXML.draw do
+              rule :id => :digits do
+                one_of do
+                 item :content => "1"
+                 item :content => "2"
+                end
+              end
+              rule :id => :main, :content => 'Hello Fred'
+            end
+          end
+
+          it "should embed the document" do
+            doc2.should == expected_doc
+          end
+
+          context "of different modes (dtmf in voice or vice-versa)" do
+            it "should raise an exception"
+          end
         end
 
         it "GRXML elements" do
-          element = GRXML::Item.new(:content => "HELLO?")
+          element = GRXML::Item.new :content => "HELLO?"
 
           doc = RubySpeech::GRXML.draw do
             rule :id => :main, :scope => 'public' do
@@ -157,7 +164,6 @@ module RubySpeech
       # TODO: verfify rule is in document if named in a ruleref
       # TODO: ruleref must have named rule id
 
-      describe "permu"
       it "should allow all permutations of possible nested GRXML elements" do
         doc = RubySpeech::GRXML.draw do
           rule :id => "hello" do
@@ -186,7 +192,7 @@ module RubySpeech
         expected_doc = GRXML::Grammar.new
         rule = GRXML::Rule.new(:id => "hello", :content => "HELLO?")
         rule << GRXML::Item.new(:weight => 2.5)
-        oneof = GRXML::OneOf.new 
+        oneof = GRXML::OneOf.new
         1.upto(2) { |d| oneof << GRXML::Item.new(:content => d.to_s) }
         rule << oneof
         rule << GRXML::Ruleref.new(:uri => '#test')
@@ -236,7 +242,7 @@ module RubySpeech
         describe "rule" do
           subject { import.children.first }
           its(:children) { should == [string,item] }
-        end  
+        end
       end
     end # draw
   end # GRXML

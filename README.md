@@ -118,7 +118,7 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<audio/>`
 
 ### GRXML
-* Document construction (lexicon attribute has not been implemented)
+* Document construction
 * `<item/>`
 * `<one-of/>`
 * `<rule/>`
@@ -138,8 +138,11 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<mark/>`
 * `<desc/>`
 
-###GRXML
-* `<meta/>`
+### GRXML
+* `<meta/>` and `<metadata/>`
+* `<example/>`
+* `<lexicon/>`
+* `<token/>`
 
 
 ## Links:

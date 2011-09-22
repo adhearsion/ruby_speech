@@ -184,9 +184,10 @@ module RubySpeech
               "hello"
             end
             string "H...E...L...L...O?"
+            token { "test token" }
             tag { }
             item { "" }
-            one_of { item { "single" } }
+            one_of { item { "single item" } }
           end
         end
         expected_doc = GRXML::Grammar.new
@@ -205,10 +206,11 @@ module RubySpeech
         rule = GRXML::Rule.new(:id => "hello2")
         rule << GRXML::Item.new(:weight => 5.5, :content => "hello")
         rule << "H...E...L...L...O?"
+        rule << GRXML::Token.new(:content => "test token")
         rule << GRXML::Tag.new
         rule << GRXML::Item.new
         oneof = GRXML::OneOf.new
-        oneof << GRXML::Item.new(:content => "single")
+        oneof << GRXML::Item.new(:content => "single item")
         rule << oneof
         expected_doc << rule
         doc.should == expected_doc

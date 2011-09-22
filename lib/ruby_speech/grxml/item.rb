@@ -29,7 +29,7 @@ module RubySpeech
 
       register :item
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, String, Ruleref, Tag].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, String, Ruleref, Tag, Token].freeze
 
       ##
       # Create a new GRXML item element
@@ -123,7 +123,7 @@ module RubySpeech
       end
 
       def <<(arg)
-        raise InvalidChildError, "A Item can only accept String, Ruleref, Tag as children" unless VALID_CHILD_TYPES.include? arg.class
+        raise InvalidChildError, "A Item can only accept String, Ruleref, Tag or Token as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
 

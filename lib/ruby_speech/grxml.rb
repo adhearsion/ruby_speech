@@ -9,6 +9,7 @@ module RubySpeech
     autoload :OneOf
     autoload :Ruleref
     autoload :Tag
+    autoload :Token
 
     InvalidChildError = Class.new StandardError
 

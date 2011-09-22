@@ -111,6 +111,10 @@ module RubySpeech
         it "should accept Tag" do
           lambda { subject << Tag.new }.should_not raise_error
         end
+
+        it "should accept Token" do
+          lambda { subject << Token.new }.should_not raise_error
+        end
       end
 
       it "should raise ArgumentError with any other scope" do

@@ -124,6 +124,7 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<rule/>`
 * `<ruleref/>`
 * `<tag/>`
+* `<token/>`
 
 ## TODO:
 ### SSML
@@ -142,7 +143,6 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<meta/>` and `<metadata/>`
 * `<example/>`
 * `<lexicon/>`
-* `<token/>`
 
 
 ## Links:

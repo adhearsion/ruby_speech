@@ -1,3 +1,6 @@
+# 0.3.0
+  * Feature (Taylor Carpenter): Added support for GRXML documents with most elements implemented.
+
 # 0.2.2
   * Feature: The SSML DSL now supports embedding SSML documents, elements or strings via the `embed` method. This behaves as you might expect:
 

@@ -18,6 +18,7 @@ speak = RubySpeech::SSML.draw do
     end
   end
 end
+
 speak.to_s
 ```
 
@@ -48,34 +49,33 @@ You may also then need to call `to_s`.
 Contruct a GRXML (SGR) document like this:
 
 ```ruby
-require 'rubygems'
 require 'ruby_speech'
 
 grammy = RubySpeech::GRXML.draw do
-    self.mode = 'dtmf'
-    self.root = 'digits'
-    rule id: 'digits' do
-      one_of do
-        0.upto(9) {|d| item { d.to_s } }
+  self.mode = 'dtmf'
+  self.root = 'digits'
+  rule id: 'digits' do
+    one_of do
+      0.upto(9) {|d| item { d.to_s } }
+    end
+  end
+
+  rule id: 'pin', scope: 'public' do
+    one_of do
+      item do
+        item repeat: '4' do
+          ruleref uri: '#digit'
+        end
+        "#"
+      end
+      item do
+        "* 9"
       end
     end
-
-    rule id: 'pin', scope: 'public' do
-      one_of do
-        item do
-          item repeat: '4' do
-            ruleref uri: '#digit'
-          end
-          "#"
-        end
-        item do
-          "* 9"
-        end
-      end
-    end
-
+  end
 end
-puts grammy.to_s
+
+grammy.to_s
 ```
 
 which becomes
@@ -105,9 +105,6 @@ which becomes
 </grammar>
 ```
 
-
-
-
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
 
 ## Features:
@@ -119,6 +116,14 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<say-as/>`
 * `<break/>`
 * `<audio/>`
+
+### GRXML
+* Document construction (lexicon attribute has not been implemented)
+* `<item/>`
+* `<one-of/>`
+* `<rule/>`
+* `<ruleref/>`
+* `<tag/>`
 
 ## TODO:
 ### SSML
@@ -132,6 +137,9 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 #### Misc
 * `<mark/>`
 * `<desc/>`
+
+###GRXML
+* `<meta/>`
 
 
 ## Links:

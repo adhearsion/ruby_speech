@@ -1,7 +1,7 @@
 require 'active_support/core_ext/class/attribute'
 
 module RubySpeech
-  module SSML
+  module GRXML
     class Element < Niceogiri::XML::Node
       @@registrations = {}
 
@@ -17,7 +17,7 @@ module RubySpeech
       #
       def self.register(name)
         self.registered_name = name.to_s
-        self.registered_ns = SSML_NAMESPACE
+        self.registered_ns = GRXML_NAMESPACE
         @@registrations[[self.registered_name, self.registered_ns]] = self
       end
 
@@ -27,7 +27,7 @@ module RubySpeech
       #
       # @return [Class, nil] the class appropriate for the name
       def self.class_from_registration(name)
-        @@registrations[[name.to_s, SSML_NAMESPACE]]
+        @@registrations[[name.to_s, GRXML_NAMESPACE]]
       end
 
       # Import an XML::Node to the appropriate class
@@ -74,20 +74,20 @@ module RubySpeech
         case other
         when String
           self << encode_special_chars(other)
-        when Speak
+        when Grammar
           other.children.each do |child|
             self << child
           end
         when Element
           self << other
         else
-          raise ArgumentError, "Can only embed a String or an SSML element"
+          raise ArgumentError, "Can only embed a String or an GRXML element"
         end
       end
 
       def method_missing(method_name, *args, &block)
         const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-        const = SSML.const_get const_name
+        const = GRXML.const_get const_name
         if const && self.class::VALID_CHILD_TYPES.include?(const)
           if const == String
             self << encode_special_chars(args.first)
@@ -103,5 +103,5 @@ module RubySpeech
         super o, :content, :children, *args
       end
     end # Element
-  end # SSML
+  end # GRXML
 end # RubySpeech

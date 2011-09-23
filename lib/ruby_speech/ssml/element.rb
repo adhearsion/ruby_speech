@@ -59,13 +59,13 @@ module RubySpeech
       end
 
       def self.new(element_name, atts = {}, &block)
-        blk_proc = Proc.new do |new_node|
+        blk_proc = lambda do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.instance_eval &block if block_given?
           new_node << new_node.encode_special_chars(block_return) if block_return.is_a?(String)
         end
 
-        case RUBY_VERSION.split(/\\\\./)[0,2].join.to_i
+        case RUBY_VERSION.split('.')[0,2].join.to_i
         when 18
           super(element_name).tap do |n|
             blk_proc[n]

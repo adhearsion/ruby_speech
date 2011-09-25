@@ -46,7 +46,7 @@ Once your `Speak` is fully prepared and you're ready to send it off for processi
 You may also then need to call `to_s`.
 
 
-Contruct a GRXML (SGR) document like this:
+Contruct a GRXML (SRGS) document like this:
 
 ```ruby
 require 'ruby_speech'

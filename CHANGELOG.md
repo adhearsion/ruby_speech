@@ -1,3 +1,6 @@
+# 0.3.1
+  * Get the whole test suite passing on Ruby 1.8.7 and JRuby (thanks to Taylor Carpenter!)
+
 # 0.3.0
   * Feature (Taylor Carpenter): Added support for GRXML documents with most elements implemented.
 

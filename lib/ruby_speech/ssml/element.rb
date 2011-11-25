@@ -46,18 +46,6 @@ module RubySpeech
         end
       end
 
-      # Inherit the attributes and children of an XML::Node
-      #
-      # @param [XML::Node] node the node to inherit
-      # @return [self]
-      def inherit(node)
-        inherit_attrs node.attributes
-        node.children.each do |c|
-          self << c.dup
-        end
-        self
-      end
-
       def self.new(element_name, atts = {}, &block)
         blk_proc = lambda do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }

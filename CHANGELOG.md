@@ -1,3 +1,6 @@
+# 0.3.2
+  * Fix inheriting an `SSML::Speak`'s language. Previously an imported `<speak/>` would end up with a `lang` attribute in addition to `xml:lang`, and `xml:lang` would have the default value (`en-US`). This required a Niceogiri dependency update.
+
 # 0.3.1
   * Get the whole test suite passing on Ruby 1.8.7 and JRuby (thanks to Taylor Carpenter!)
 

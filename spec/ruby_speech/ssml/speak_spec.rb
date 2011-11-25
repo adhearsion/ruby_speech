@@ -26,7 +26,7 @@ module RubySpeech
 
         it { should be_instance_of Speak }
 
-        its(:language) { pending; should == 'jp' }
+        its(:language) { should == 'jp' }
         its(:base_uri) { should == 'blah' }
       end
 

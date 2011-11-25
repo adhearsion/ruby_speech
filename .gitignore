@@ -1,3 +1,4 @@
+.DS_Store
 *.gem
 .bundle
 Gemfile.lock
@@ -6,3 +7,4 @@ spec/reports
 .yardoc
 doc
 .*.swp
+vendor

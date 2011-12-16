@@ -238,7 +238,7 @@ module RubySpeech
         SSML::Speak.new.tap { |doc| doc << voice }.to_s
       end
 
-      let(:import) { SSML::Element.import parse_xml(document).root }
+      let(:import) { SSML.import document }
 
       subject { import }
 

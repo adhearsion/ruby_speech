@@ -1,3 +1,7 @@
+# 0.3.3
+  * Allow `SSML::Element.import` and `GRXML::Element.import` to take a string as well as a Nokogiri::XML::Node
+  * Allow importing GRXML/SSML documents via their respective modules (eg `RubySpeech::GRXML.import '<grammar ... />'`)
+
 # 0.3.2
   * Fix inheriting an `SSML::Speak`'s language. Previously an imported `<speak/>` would end up with a `lang` attribute in addition to `xml:lang`, and `xml:lang` would have the default value (`en-US`). This required a Niceogiri dependency update.
 

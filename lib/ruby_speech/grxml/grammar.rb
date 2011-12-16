@@ -32,7 +32,7 @@ module RubySpeech
         new_node[:version] = '1.0'
         new_node.namespace = GRXML_NAMESPACE
         new_node.language ||= "en-US"
-        new_node.instance_eval &block if block_given?
+        new_node.eval_dsl_block &block
         new_node
       end
 

@@ -19,7 +19,7 @@ module RubySpeech
 
     def self.draw(&block)
       Speak.new.tap do |speak|
-        block_return = speak.instance_eval(&block) if block_given?
+        block_return = speak.eval_dsl_block &block
         speak << block_return if block_return.is_a?(String)
       end
     end

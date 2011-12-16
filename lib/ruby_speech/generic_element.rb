@@ -54,7 +54,7 @@ module RubySpeech
       def new(element_name, atts = {}, &block)
         blk_proc = lambda do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }
-          block_return = new_node.instance_eval &block if block_given?
+          block_return = new_node.eval_dsl_block &block
           new_node << new_node.encode_special_chars(block_return) if block_return.is_a?(String)
         end
 
@@ -69,6 +69,12 @@ module RubySpeech
           end
         end
       end
+    end
+
+    def eval_dsl_block(&block)
+      return unless block_given?
+      @block_binding = eval "self", block.binding
+      instance_eval &block
     end
 
     def children
@@ -92,13 +98,17 @@ module RubySpeech
 
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-      const = self.class.module.const_get const_name
-      if const && self.class::VALID_CHILD_TYPES.include?(const)
-        if const == String
-          self << encode_special_chars(args.first)
-        else
-          self << const.new(*args, &block)
+      if self.class.module.const_defined? const_name
+        const = self.class.module.const_get const_name
+        if self.class::VALID_CHILD_TYPES.include?(const)
+          if const == String
+            self << encode_special_chars(args.first)
+          else
+            self << const.new(*args, &block)
+          end
         end
+      elsif @block_binding# && @block_binding.respond_to?(method_name)
+        @block_binding.send method_name, *args, &block
       else
         super
       end

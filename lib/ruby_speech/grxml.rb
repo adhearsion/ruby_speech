@@ -19,7 +19,7 @@ module RubySpeech
 
     def self.draw(attributes = {}, &block)
       Grammar.new(attributes).tap do |grammar|
-        block_return = grammar.instance_eval(&block) if block_given?
+        block_return = grammar.eval_dsl_block &block
         grammar << block_return if block_return.is_a?(String)
       end
     end

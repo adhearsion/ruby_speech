@@ -28,6 +28,21 @@ module RubySpeech
         doc.should == expected_doc
       end
 
+      it "should allow accessing methods defined outside the block" do
+        def foo
+          'bar'
+        end
+
+        doc = GRXML.draw do
+          rule :id => foo
+        end
+
+        expected_doc = GRXML::Grammar.new
+        rule = GRXML::Rule.new(:id => foo)
+        expected_doc << rule
+        doc.should == expected_doc
+      end
+
       it "should raise error if given an empty rule" do
         pending 'Reject empty rules -- http://www.w3.org/TR/2002/CR-speech-grammar-20020626/#S3.1 http://www.w3.org/Voice/2003/srgs-ir/test/rule-no-empty.grxml'
         lambda { GRXML.draw { rule :id => 'main' }}.should raise_error

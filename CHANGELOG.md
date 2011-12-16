@@ -1,3 +1,8 @@
+# 0.3.4
+  * Eager-autoload all elements so that importing will work with elements that havn't been used yet directly
+  * Allow using the DSL with method calls out of the block
+  * Fix inspection/comparison of some elements that don't have a language attribute
+
 # 0.3.3
   * Allow `SSML::Element.import` and `GRXML::Element.import` to take a string as well as a Nokogiri::XML::Node
   * Allow importing GRXML/SSML documents via their respective modules (eg `RubySpeech::GRXML.import '<grammar ... />'`)

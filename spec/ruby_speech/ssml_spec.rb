@@ -56,6 +56,19 @@ module RubySpeech
         doc.should == expected_doc
       end
 
+      it "should allow accessing methods defined outside the block" do
+        def foo
+          'bar'
+        end
+
+        doc = SSML.draw do
+          string foo
+        end
+
+        expected_doc = SSML::Speak.new :content => foo
+        doc.should == expected_doc
+      end
+
       describe "embedding" do
         it "SSML documents" do
           doc1 = RubySpeech::SSML.draw do

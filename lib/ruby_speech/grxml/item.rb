@@ -128,7 +128,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        super o, :weight, :repeat, :language
+        super o, :weight, :repeat
       end
     end # Item
   end # GRXML

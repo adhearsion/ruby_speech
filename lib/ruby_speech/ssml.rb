@@ -2,14 +2,16 @@ module RubySpeech
   module SSML
     extend ActiveSupport::Autoload
 
-    autoload :Audio
-    autoload :Break
-    autoload :Element
-    autoload :Emphasis
-    autoload :Prosody
-    autoload :SayAs
-    autoload :Speak
-    autoload :Voice
+    eager_autoload do
+      autoload :Audio
+      autoload :Break
+      autoload :Element
+      autoload :Emphasis
+      autoload :Prosody
+      autoload :SayAs
+      autoload :Speak
+      autoload :Voice
+    end
 
     InvalidChildError = Class.new StandardError
 
@@ -17,7 +19,7 @@ module RubySpeech
 
     def self.draw(&block)
       Speak.new.tap do |speak|
-        block_return = speak.instance_eval(&block) if block_given?
+        block_return = speak.eval_dsl_block &block
         speak << block_return if block_return.is_a?(String)
       end
     end
@@ -27,3 +29,5 @@ module RubySpeech
     end
   end # SSML
 end # RubySpeech
+
+ActiveSupport::Autoload.eager_autoload!

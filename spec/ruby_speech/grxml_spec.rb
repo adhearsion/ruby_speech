@@ -229,7 +229,7 @@ module RubySpeech
           GRXML::Grammar.new.tap { |doc| doc << rule }.to_s
         end
 
-        let(:import) { GRXML::Element.import document }
+        let(:import) { GRXML.import document }
 
         subject { import }
 

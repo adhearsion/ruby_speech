@@ -41,6 +41,7 @@ module RubySpeech
       # @param [XML::Node] node the node to import
       # @return the appropriate object based on the node name and namespace
       def import(node)
+        node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node)
         return node.content if node.is_a?(Nokogiri::XML::Text)
         klass = class_from_registration(node.element_name)
         if klass && klass != self

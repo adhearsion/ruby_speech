@@ -21,5 +21,9 @@ module RubySpeech
         grammar << block_return if block_return.is_a?(String)
       end
     end
+
+    def self.import(other)
+      Element.import other
+    end
   end # GRXML
 end # RubySpeech

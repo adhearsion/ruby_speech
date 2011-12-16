@@ -2,14 +2,16 @@ module RubySpeech
   module SSML
     extend ActiveSupport::Autoload
 
-    autoload :Audio
-    autoload :Break
-    autoload :Element
-    autoload :Emphasis
-    autoload :Prosody
-    autoload :SayAs
-    autoload :Speak
-    autoload :Voice
+    eager_autoload do
+      autoload :Audio
+      autoload :Break
+      autoload :Element
+      autoload :Emphasis
+      autoload :Prosody
+      autoload :SayAs
+      autoload :Speak
+      autoload :Voice
+    end
 
     InvalidChildError = Class.new StandardError
 
@@ -27,3 +29,5 @@ module RubySpeech
     end
   end # SSML
 end # RubySpeech
+
+ActiveSupport::Autoload.eager_autoload!

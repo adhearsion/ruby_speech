@@ -2,14 +2,16 @@ module RubySpeech
   module GRXML
     extend ActiveSupport::Autoload
 
-    autoload :Element
-    autoload :Grammar
-    autoload :Rule
-    autoload :Item
-    autoload :OneOf
-    autoload :Ruleref
-    autoload :Tag
-    autoload :Token
+    eager_autoload do
+      autoload :Element
+      autoload :Grammar
+      autoload :Rule
+      autoload :Item
+      autoload :OneOf
+      autoload :Ruleref
+      autoload :Tag
+      autoload :Token
+    end
 
     InvalidChildError = Class.new StandardError
 
@@ -27,3 +29,5 @@ module RubySpeech
     end
   end # GRXML
 end # RubySpeech
+
+ActiveSupport::Autoload.eager_autoload!

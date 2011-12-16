@@ -10,8 +10,12 @@ module RubySpeech
 
   autoload :Version
 
-  autoload :GenericElement
-  autoload :SSML
-  autoload :GRXML
-  autoload :XML
+  eager_autoload do
+    autoload :GenericElement
+    autoload :SSML
+    autoload :GRXML
+    autoload :XML
+  end
 end
+
+ActiveSupport::Autoload.eager_autoload!

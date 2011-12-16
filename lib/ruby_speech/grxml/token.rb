@@ -29,10 +29,6 @@ module RubySpeech
         raise InvalidChildError, "A Token can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
-
-      def eql?(o)
-        super o, :language
-      end
     end # Token
   end # GRXML
 end # RubySpeech

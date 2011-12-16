@@ -10,6 +10,7 @@ module RubySpeech
 
   autoload :Version
 
+  autoload :GenericElement
   autoload :SSML
   autoload :GRXML
   autoload :XML

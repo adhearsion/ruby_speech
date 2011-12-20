@@ -151,6 +151,16 @@ module RubySpeech
           concat.to_s.should_not include('default')
         end
       end
+
+      it "should allow finding its root rule" do
+        grammar = GRXML::Grammar.new :root => 'foo'
+        bar = GRXML::Rule.new :id => 'bar'
+        grammar << bar
+        foo = GRXML::Rule.new :id => 'foo'
+        grammar << foo
+
+        grammar.root_rule.should == foo
+      end
     end # Grammar
   end # GRXML
 end # RubySpeech

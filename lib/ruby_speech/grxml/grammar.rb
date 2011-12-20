@@ -110,6 +110,10 @@ module RubySpeech
         write_attr :'tag-format', s
       end
 
+      def root_rule
+        children(:rule, :id => root).first
+      end
+
       def +(other)
         self.class.new(:base_uri => base_uri).tap do |new_grammar|
           (self.children + other.children).each do |child|

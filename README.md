@@ -51,9 +51,7 @@ Contruct a GRXML (SRGS) document like this:
 ```ruby
 require 'ruby_speech'
 
-grammy = RubySpeech::GRXML.draw do
-  self.mode = 'dtmf'
-  self.root = 'digits'
+grammy = RubySpeech::GRXML.draw :mode => 'dtmf', :root => 'digits' do
   rule id: 'digits' do
     one_of do
       0.upto(9) {|d| item { d.to_s } }

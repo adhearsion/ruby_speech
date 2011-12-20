@@ -77,8 +77,22 @@ module RubySpeech
       instance_eval &block
     end
 
-    def children
-      super.map { |c| self.class.import c }
+    def children(type = nil, attributes = nil)
+      if type
+        expression = type.to_s
+
+        expression << '[' << attributes.inject([]) do |h, (key, value)|
+          h << "@#{key}='#{value}'"
+        end.join(',') << ']' if attributes
+
+        if namespace_href
+          find "ns:#{expression}", :ns => namespace_href
+        else
+          find expression
+        end
+      else
+        super()
+      end.map { |c| self.class.import c }
     end
 
     def embed(other)

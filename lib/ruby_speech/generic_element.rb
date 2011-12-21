@@ -112,7 +112,7 @@ module RubySpeech
 
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-      if self.class.module.const_defined? const_name
+      if const_name == 'String' || self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
         if self.class::VALID_CHILD_TYPES.include?(const)
           if const == String

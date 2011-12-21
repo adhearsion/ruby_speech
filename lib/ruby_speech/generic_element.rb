@@ -121,7 +121,7 @@ module RubySpeech
             self << const.new(*args, &block)
           end
         end
-      elsif @block_binding# && @block_binding.respond_to?(method_name)
+      elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else
         super

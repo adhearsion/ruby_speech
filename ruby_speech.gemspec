@@ -28,5 +28,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<rake>, [">= 0"]
   s.add_development_dependency %q<mocha>, [">= 0"]
   s.add_development_dependency %q<i18n>, [">= 0"]
+  s.add_development_dependency %q<guard>, ["~> 0.8.0"]
   s.add_development_dependency %q<guard-rspec>, [">= 0"]
+  if RUBY_PLATFORM =~ /darwin/
+    s.add_development_dependency 'growl_notify'
+    s.add_development_dependency 'rb-fsevent'
+  elsif RUBY_PLATFORM =~ /linux/
+    s.add_development_dependency 'rb-inotify'
+  end
 end

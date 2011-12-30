@@ -1,4 +1,6 @@
 # develop
+
+# 0.4.0 - 2011-12-30
   * Feature: Add the ability to look up child elements by name/attributes easily
   * Feature: Allow easy access to a GRXML grammar's root rule element
   * Feature: Allow inlining a Grammar's rulerefs

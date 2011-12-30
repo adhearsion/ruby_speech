@@ -106,7 +106,7 @@ module RubySpeech
       when self.class.module::Element
         self << other
       else
-        raise ArgumentError, "Can only embed a String or an SSML element"
+        raise ArgumentError, "Can only embed a String or a #{self.class.module} element, not a #{other}"
       end
     end
 

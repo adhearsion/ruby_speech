@@ -161,6 +161,50 @@ module RubySpeech
 
         grammar.root_rule.should == foo
       end
+
+      it "should allow inlining rule references" do
+        grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
+          rule id: 'digits' do
+            one_of do
+              0.upto(9) { |d| item { d.to_s } }
+            end
+          end
+
+          rule id: 'pin', scope: 'public' do
+            one_of do
+              item do
+                item repeat: '4' do
+                  ruleref uri: '#digits'
+                end
+                "#"
+              end
+              item do
+                "* 9"
+              end
+            end
+          end
+        end
+
+        expected_grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
+          rule id: 'pin', scope: 'public' do
+            one_of do
+              item do
+                item repeat: '4' do
+                  one_of do
+                    0.upto(9) { |d| item { d.to_s } }
+                  end
+                end
+                "#"
+              end
+              item do
+                "* 9"
+              end
+            end
+          end
+        end
+
+        grammar.inline.should == expected_grammar
+      end
     end # Grammar
   end # GRXML
 end # RubySpeech

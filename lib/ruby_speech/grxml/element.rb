@@ -15,6 +15,8 @@ module RubySpeech
         GRXML
       end
 
+      alias_method :nokogiri_children, :children
+
       include GenericElement
     end # Element
   end # GRXML

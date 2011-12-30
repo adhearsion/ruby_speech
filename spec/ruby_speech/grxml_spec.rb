@@ -275,6 +275,34 @@ module RubySpeech
 
         item.children(:item, :weight => 0.5).should == [item1]
       end
+
+      describe "manually created documents" do
+        it "should be able to traverse up the tree" do
+          item = GRXML::Item.new
+          item1 = GRXML::Item.new :weight => 0.5
+          item2 = GRXML::Item.new :weight => 0.5
+          item1 << item2
+          item << item1
+
+          item2.parent.should == item1
+          item1.parent.should == item
+        end
+      end
+
+      describe "DSL created documents" do
+        it "should be able to traverse up the tree" do
+          grammar = GRXML.draw do
+            rule :id => 'one' do
+              item
+            end
+          end
+
+          two = grammar.children.first.children.first
+          two.should be_a GRXML::Item
+          two.parent.should be_a GRXML::Rule
+          two.parent.id.should == 'one'
+        end
+      end
     end # draw
   end # GRXML
 end # RubySpeech

@@ -98,7 +98,7 @@ module RubySpeech
     def embed(other)
       case other
       when String
-        self << encode_special_chars(other)
+        string other
       when self.class.root_element
         other.children.each do |child|
           self << child
@@ -110,17 +110,15 @@ module RubySpeech
       end
     end
 
+    def string(other)
+      self << encode_special_chars(other)
+    end
+
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-      if const_name == 'String' || self.class.module.const_defined?(const_name)
+      if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
-        if self.class::VALID_CHILD_TYPES.include?(const)
-          if const == String
-            self << encode_special_chars(args.first)
-          else
-            self << const.new(*args, &block)
-          end
-        end
+        self << const.new(*args, &block)
       elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else

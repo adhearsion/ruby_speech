@@ -110,6 +110,22 @@ module RubySpeech
         write_attr :'tag-format', s
       end
 
+      def root_rule
+        children(:rule, :id => root).first
+      end
+
+      def inline
+        find("//ns:ruleref", :ns => namespace_href).each do |ref|
+          rule = children(:rule, :id => ref[:uri].sub(/^#/, '')).first
+          ref.swap rule.nokogiri_children
+        end
+
+        non_root_rules = xpath "./ns:rule[@id!='#{root}']", :ns => namespace_href
+        non_root_rules.remove
+
+        self
+      end
+
       def +(other)
         self.class.new(:base_uri => base_uri).tap do |new_grammar|
           (self.children + other.children).each do |child|

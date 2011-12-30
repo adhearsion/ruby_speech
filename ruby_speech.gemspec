@@ -28,4 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<rake>, [">= 0"]
   s.add_development_dependency %q<mocha>, [">= 0"]
   s.add_development_dependency %q<i18n>, [">= 0"]
+  s.add_development_dependency %q<guard>, [">= 0.9.0"]
+  s.add_development_dependency %q<guard-rspec>, [">= 0"]
+  s.add_development_dependency %q<ruby_gntp>, [">= 0"]
 end

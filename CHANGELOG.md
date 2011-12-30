@@ -1,3 +1,12 @@
+# develop
+
+# 0.4.0 - 2011-12-30
+  * Feature: Add the ability to look up child elements by name/attributes easily
+  * Feature: Allow easy access to a GRXML grammar's root rule element
+  * Feature: Allow inlining a Grammar's rulerefs
+  * Bugfix: Ruby 1.8 and JRuby don't do a tree-search for const_defined?
+  * Bugfix: Don't try to pass a method call up to the DSL block binding if it doesn't respond to the method either
+
 # 0.3.4
   * Eager-autoload all elements so that importing will work with elements that havn't been used yet directly
   * Allow using the DSL with method calls out of the block

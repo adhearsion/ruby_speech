@@ -261,6 +261,20 @@ module RubySpeech
           its(:children) { should == [string,item] }
         end
       end
+
+      it "should allow finding direct children of a particular type, matching certain attributes" do
+        item = GRXML::Item.new
+        item1 = GRXML::Item.new :weight => 0.5
+        item11 = GRXML::Item.new :weight => 0.5
+        item1 << item11
+        item << item1
+        item2 = GRXML::Item.new :weight => 0.7
+        item << item2
+        tag = GRXML::Tag.new
+        item << tag
+
+        item.children(:item, :weight => 0.5).should == [item1]
+      end
     end # draw
   end # GRXML
 end # RubySpeech

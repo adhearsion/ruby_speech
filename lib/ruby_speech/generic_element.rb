@@ -77,14 +77,28 @@ module RubySpeech
       instance_eval &block
     end
 
-    def children
-      super.map { |c| self.class.import c }
+    def children(type = nil, attributes = nil)
+      if type
+        expression = type.to_s
+
+        expression << '[' << attributes.inject([]) do |h, (key, value)|
+          h << "@#{key}='#{value}'"
+        end.join(',') << ']' if attributes
+
+        if namespace_href
+          find "ns:#{expression}", :ns => namespace_href
+        else
+          find expression
+        end
+      else
+        super()
+      end.map { |c| self.class.import c }
     end
 
     def embed(other)
       case other
       when String
-        self << encode_special_chars(other)
+        string other
       when self.class.root_element
         other.children.each do |child|
           self << child
@@ -96,18 +110,16 @@ module RubySpeech
       end
     end
 
+    def string(other)
+      self << encode_special_chars(other)
+    end
+
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-      if self.class.module.const_defined? const_name
+      if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
-        if self.class::VALID_CHILD_TYPES.include?(const)
-          if const == String
-            self << encode_special_chars(args.first)
-          else
-            self << const.new(*args, &block)
-          end
-        end
-      elsif @block_binding# && @block_binding.respond_to?(method_name)
+        self << const.new(*args, &block)
+      elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else
         super

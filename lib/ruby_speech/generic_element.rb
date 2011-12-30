@@ -115,10 +115,10 @@ module RubySpeech
       if const_name == 'String' || self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
         if self.class::VALID_CHILD_TYPES.include?(const)
-          if const == String
-            self << encode_special_chars(args.first)
+          self << if const == String
+            encode_special_chars args.first
           else
-            self << const.new(*args, &block)
+            const.new *args, &block
           end
         end
       elsif @block_binding && @block_binding.respond_to?(method_name)

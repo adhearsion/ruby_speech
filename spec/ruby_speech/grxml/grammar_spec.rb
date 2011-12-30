@@ -218,8 +218,79 @@ module RubySpeech
         end
       end
 
-      describe "#tokens" do
-        context "with unquoted tokens"
+      describe "#tokenize!" do
+        def single_rule_grammar(content = [])
+          GRXML.draw :root => 'm', :mode => :speech do
+            rule :id => 'm' do
+              Array(content).each { |e| embed e }
+            end
+          end
+        end
+
+        subject { single_rule_grammar content }
+
+        let(:tokenized_version) do
+          expected_tokens = Array(tokens).map do |s|
+            Token.new.tap { |t| t << s }
+          end
+          single_rule_grammar expected_tokens
+        end
+
+        before { subject.tokenize! }
+
+        context "with a single unquoted token" do
+          let(:content) { 'hello' }
+          let(:tokens)  { 'hello' }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single unquoted token (non-alphabetic)" do
+          let(:content) { '2' }
+          let(:tokens)  { ['2'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single quoted token (including whitespace)" do
+          let(:content) { '"San Francisco"' }
+          let(:tokens)  { ['San Francisco'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single quoted token (no whitespace)" do
+          let(:content) { '"hello"' }
+          let(:tokens)  { ['hello'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with two tokens delimited by white space" do
+          let(:content) { 'bon voyage' }
+          let(:tokens)  { ['bon', 'voyage'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with four tokens delimited by white space" do
+          let(:content) { 'this is a test' }
+          let(:tokens)  { ['this', 'is', 'a', 'test'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
       end
     end # Grammar
   end # GRXML

@@ -130,6 +130,25 @@ module RubySpeech
         self
       end
 
+      def tokenize!
+        traverse do |element|
+          next unless element.is_a? Nokogiri::XML::Text
+
+          tokens = split_tokens(element).map do |string|
+            Token.new.tap { |token| token << string }
+          end
+
+          element.swap Nokogiri::XML::NodeSet.new(Nokogiri::XML::Document.new, tokens)
+        end
+      end
+
+      def split_tokens(element)
+        element.to_s.split(/(\".*\")/).reject(&:empty?).map do |string|
+          match = string.match /^\"(.*)\"$/
+          match ? match[1] : string.split(' ')
+        end.flatten
+      end
+
       def +(other)
         self.class.new(:base_uri => base_uri).tap do |new_grammar|
           (self.children + other.children).each do |child|

@@ -132,6 +132,11 @@ module RubySpeech
       GRXML.import to_xml
     end
 
+    def traverse(&block)
+      nokogiri_children.each { |j| j.traverse &block }
+      block.call self
+    end
+
     def eql?(o, *args)
       super o, :content, :children, *args
     end

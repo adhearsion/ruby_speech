@@ -128,6 +128,10 @@ module RubySpeech
       end
     end
 
+    def clone
+      GRXML.import to_xml
+    end
+
     def eql?(o, *args)
       super o, :content, :children, *args
     end

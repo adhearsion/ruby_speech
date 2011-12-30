@@ -162,48 +162,60 @@ module RubySpeech
         grammar.root_rule.should == foo
       end
 
-      it "should allow inlining rule references" do
-        grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
-          rule :id => 'digits' do
-            one_of do
-              0.upto(9) { |d| item { d.to_s } }
-            end
-          end
-
-          rule :id => 'pin', :scope => 'public' do
-            one_of do
-              item do
-                item :repeat => '4' do
-                  ruleref :uri => '#digits'
-                end
-                "#"
-              end
-              item do
-                "* 9"
+      describe "inlining rule references" do
+        let :grammar do
+          GRXML.draw :root => 'pin', :mode => :dtmf do
+            rule :id => 'digits' do
+              one_of do
+                0.upto(9) { |d| item { d.to_s } }
               end
             end
-          end
-        end
 
-        expected_grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
-          rule :id => 'pin', :scope => 'public' do
-            one_of do
-              item do
-                item :repeat => '4' do
-                  one_of do
-                    0.upto(9) { |d| item { d.to_s } }
+            rule :id => 'pin', :scope => 'public' do
+              one_of do
+                item do
+                  item :repeat => '4' do
+                    ruleref :uri => '#digits'
                   end
+                  "#"
                 end
-                "#"
-              end
-              item do
-                "* 9"
+                item do
+                  "* 9"
+                end
               end
             end
           end
         end
 
-        grammar.inline.should == expected_grammar
+        let :inline_grammar do
+          GRXML.draw :root => 'pin', :mode => :dtmf do
+            rule :id => 'pin', :scope => 'public' do
+              one_of do
+                item do
+                  item :repeat => '4' do
+                    one_of do
+                      0.upto(9) { |d| item { d.to_s } }
+                    end
+                  end
+                  "#"
+                end
+                item do
+                  "* 9"
+                end
+              end
+            end
+          end
+        end
+
+        it "should be possible in a non-destructive manner" do
+          grammar.inline.should == inline_grammar
+          grammar.should_not == inline_grammar
+        end
+
+        it "should be possible in a destructive manner" do
+          grammar.inline!.should == inline_grammar
+          grammar.should == inline_grammar
+        end
       end
 
       describe "#tokens" do

@@ -115,6 +115,10 @@ module RubySpeech
       end
 
       def inline
+        clone.inline!
+      end
+
+      def inline!
         find("//ns:ruleref", :ns => namespace_href).each do |ref|
           rule = children(:rule, :id => ref[:uri].sub(/^#/, '')).first
           ref.swap rule.nokogiri_children

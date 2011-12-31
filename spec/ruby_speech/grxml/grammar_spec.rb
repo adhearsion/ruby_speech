@@ -316,6 +316,28 @@ module RubySpeech
           end
         end
       end
+
+      describe "#normalize_whitespace" do
+        it "should normalize whitespace in all of the tokens contained within it" do
+          grammar = GRXML.draw do
+            rule do
+              token { ' Welcome to ' }
+              token { ' San  Francisco ' }
+            end
+          end
+
+          normalized_grammar = GRXML.draw do
+            rule do
+              token { 'Welcome to' }
+              token { 'San Francisco' }
+            end
+          end
+
+          grammar.should_not == normalized_grammar
+          grammar.normalize_whitespace
+          grammar.should == normalized_grammar
+        end
+      end
     end # Grammar
   end # GRXML
 end # RubySpeech

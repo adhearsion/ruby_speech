@@ -110,6 +110,18 @@ module RubySpeech
         end.flatten
       end
 
+      def normalize_whitespace
+        traverse do |element|
+          next if element === self
+
+          imported_element = self.class.import element
+          next unless imported_element.respond_to? :normalize_whitespace
+
+          imported_element.normalize_whitespace
+          element.swap imported_element
+        end
+      end
+
       def <<(arg)
         raise InvalidChildError, "A Grammar can only accept Rule and Tag as children" unless VALID_CHILD_TYPES.include? arg.class
         super

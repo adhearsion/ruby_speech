@@ -14,17 +14,6 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String].freeze
 
-      ##
-      # Create a new GRXML token element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Token] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'token', atts, &block
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Token can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super

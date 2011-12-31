@@ -14,17 +14,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Text, String].freeze
 
       ##
-      # Create a new SSML sub element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Sub] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'sub', atts, &block
-      end
-
-      ##
       # Indicates the string to be spoken instead of the enclosed string
       #
       # @return [String]

@@ -28,7 +28,7 @@ module RubySpeech
       # @return [Grammar] an element for use in an GRXML document
       #
       def self.new(atts = {}, &block)
-        new_node = super('grammar', atts)
+        new_node = super(atts)
         new_node[:version] = '1.0'
         new_node.namespace = GRXML_NAMESPACE
         new_node.language ||= "en-US"

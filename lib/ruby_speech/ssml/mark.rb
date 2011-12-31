@@ -15,17 +15,6 @@ module RubySpeech
       register :mark
 
       ##
-      # Create a new SSML mark element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Mark] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'mark', atts, &block
-      end
-
-      ##
       # This attribute is a token by which to reference the mark
       #
       # @return [String]

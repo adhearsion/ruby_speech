@@ -22,17 +22,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, OneOf, Item, Ruleref, Tag, Token].freeze
 
       ##
-      # Create a new GRXML rule element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Rule] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'rule', atts, &block
-      end
-
-      ##
       #
       # The id attribute is the unique name to identify the rule
       #

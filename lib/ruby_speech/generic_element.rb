@@ -51,7 +51,7 @@ module RubySpeech
         end
       end
 
-      def new(element_name, atts = {}, &block)
+      def new(atts = {}, &block)
         blk_proc = lambda do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
@@ -60,11 +60,11 @@ module RubySpeech
 
         case RUBY_VERSION.split('.')[0,2].join.to_i
         when 18
-          super(element_name).tap do |n|
+          super(self.registered_name).tap do |n|
             blk_proc[n]
           end
         else
-          super(element_name) do |n|
+          super(self.registered_name) do |n|
             blk_proc[n]
           end
         end

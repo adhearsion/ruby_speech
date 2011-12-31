@@ -20,7 +20,7 @@ module RubySpeech
       # @return [Speak] an element for use in an SSML document
       #
       def self.new(atts = {}, &block)
-        new_node = super('speak', atts)
+        new_node = super(atts)
         new_node[:version] = '1.0'
         new_node.namespace = SSML_NAMESPACE
         new_node.language ||= "en-US"

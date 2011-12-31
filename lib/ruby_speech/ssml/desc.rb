@@ -11,17 +11,6 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Text, String].freeze
 
-      ##
-      # Create a new SSML emphasis element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Emphasis] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'desc', atts, &block
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Desc can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super

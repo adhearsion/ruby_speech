@@ -12,17 +12,6 @@ module RubySpeech
       VALID_STRENGTHS = [:none, :'x-weak', :weak, :medium, :strong, :'x-strong'].freeze
 
       ##
-      # Create a new SSML break element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Break] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'break', atts, &block
-      end
-
-      ##
       # This attribute is used to indicate the strength of the prosodic break in the speech output. The value "none" indicates that no prosodic break boundary should be outputted, which can be used to prevent a prosodic break which the processor would otherwise produce. The other values indicate monotonically non-decreasing (conceptually increasing) break strength between words. The stronger boundaries are typically accompanied by pauses. "x-weak" and "x-strong" are mnemonics for "extra weak" and "extra strong", respectively.
       #
       # @return [Symbol]

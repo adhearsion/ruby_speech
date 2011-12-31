@@ -14,17 +14,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
-      # Create a new SSML voice element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Voice] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'voice', atts, &block
-      end
-
-      ##
       # Indicates the preferred gender of the voice to speak the contained text. Enumerated values are: "male", "female", "neutral".
       #
       # @return [Symbol]

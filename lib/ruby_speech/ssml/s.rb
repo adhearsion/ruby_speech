@@ -12,17 +12,6 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Prosody, SayAs, Sub, Voice].freeze
 
-      ##
-      # Create a new SSML s element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [S] an S for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 's', atts, &block
-      end
-
       def <<(arg)
         raise InvalidChildError, "An S can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super

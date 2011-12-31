@@ -19,7 +19,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<audio src="http://whatever.you-say-boss.com">Hello</audio>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Audio }
 

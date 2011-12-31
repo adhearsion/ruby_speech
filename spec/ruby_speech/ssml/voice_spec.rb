@@ -23,7 +23,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<voice xml:lang="jp" gender="male" age="25" variant="2" name="paul"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Voice }
 

@@ -12,7 +12,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<token>hello</token>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Token }
 

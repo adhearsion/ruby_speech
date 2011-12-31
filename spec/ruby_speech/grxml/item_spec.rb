@@ -17,7 +17,7 @@ module RubySpeech
       describe "everything from a document" do
         let(:document) { '<item weight="1.1" repeat="1">one</item>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Item }
 
@@ -28,7 +28,7 @@ module RubySpeech
 
       describe "#weight" do
         context "from a document" do
-          subject { Element.import parse_xml(document).root }
+          subject { Element.import document }
 
           describe "using .1" do
             let(:document) { '<item weight=".1" repeat="1">one</item>' }

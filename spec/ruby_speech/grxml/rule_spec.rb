@@ -17,7 +17,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<rule id="one" scope="public"> <item /> </rule>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Rule }
 

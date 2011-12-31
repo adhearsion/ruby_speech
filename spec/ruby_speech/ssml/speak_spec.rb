@@ -22,7 +22,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<speak xmlns="http://www.w3.org/2001/10/synthesis" version="1.0" xml:lang="jp" xml:base="blah"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Speak }
 

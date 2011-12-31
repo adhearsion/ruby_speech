@@ -18,7 +18,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<say-as interpret-as="one" format="two" detail="three"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of SayAs }
 

@@ -18,7 +18,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<s>foo</s>' }
 
-        subject { S.import document }
+        subject { Element.import document }
 
         it { should be_instance_of S }
         its(:content) { should == 'foo' }

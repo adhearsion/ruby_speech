@@ -23,7 +23,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<prosody pitch="medium" contour="something" range="20Hz" rate="2" duration="10" volume="loud"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Prosody }
 

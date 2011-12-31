@@ -71,6 +71,17 @@ module RubySpeech
       end
     end
 
+    attr_writer :parent
+
+    def parent
+      @parent || super
+    end
+
+    def inherit(node)
+      self.parent = node.parent
+      super
+    end
+
     def eval_dsl_block(&block)
       return unless block_given?
       @block_binding = eval "self", block.binding

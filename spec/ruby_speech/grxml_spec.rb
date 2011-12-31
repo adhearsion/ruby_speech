@@ -276,33 +276,40 @@ module RubySpeech
         item.children(:item, :weight => 0.5).should == [item1]
       end
 
-      describe "manually created documents" do
-        it "should be able to traverse up the tree" do
-          item = GRXML::Item.new
-          item1 = GRXML::Item.new :weight => 0.5
-          item2 = GRXML::Item.new :weight => 0.5
-          item1 << item2
-          item << item1
-
-          item2.parent.should == item1
-          item1.parent.should == item
-        end
-      end
-
-      describe "DSL created documents" do
-        it "should be able to traverse up the tree" do
-          grammar = GRXML.draw do
-            rule :id => 'one' do
-              item
+      it "should be able to traverse up the tree" do
+        grammar = GRXML.draw do
+          rule :id => 'one' do
+            item do
+              'foobar'
             end
           end
-
-          two = grammar.children.first.children.first
-          two.should be_a GRXML::Item
-          two.parent.should be_a GRXML::Rule
-          two.parent.id.should == 'one'
         end
+
+        rule = grammar.children.first
+        rule.parent.should == grammar
+
+        item = rule.children.first
+        item.parent.should == rule
+
+        text = item.nokogiri_children.first
+        text.parent.should == item
       end
     end # draw
+
+    describe "manually created documents" do
+      it "should be able to traverse up the tree" do
+        grammar = GRXML::Grammar.new
+        rule    = GRXML::Rule.new :id => 'one'
+        item    = GRXML::Item.new
+        text    = Nokogiri::XML::Text.new 'foobar', grammar.document
+        item    << text
+        rule    << item
+        grammar << rule
+
+        text.parent.should == item
+        item.parent.should == rule
+        rule.parent.should == grammar
+      end
+    end
   end # GRXML
 end # RubySpeech

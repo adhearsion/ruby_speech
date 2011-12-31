@@ -43,7 +43,7 @@ module RubySpeech
       def import(node)
         node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node)
         return node.content if node.is_a?(Nokogiri::XML::Text)
-        klass = class_from_registration(node.element_name)
+        klass = class_from_registration node.element_name
         if klass && klass != self
           klass.import node
         else

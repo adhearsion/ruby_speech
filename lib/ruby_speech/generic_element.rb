@@ -4,7 +4,8 @@ module RubySpeech
   module GenericElement
 
     def self.included(klass)
-      klass.class_attribute :registered_ns, :registered_name
+      klass.class_attribute :registered_ns, :registered_name, :defaults
+      klass.defaults = { :version => '1.0', :language => "en-US" }
       klass.extend ClassMethods
     end
 
@@ -51,20 +52,20 @@ module RubySpeech
         end
       end
 
-      def new(element_name, atts = {}, &block)
+      def new(atts = {}, &block)
         blk_proc = lambda do |new_node|
-          atts.each_pair { |k, v| new_node.send :"#{k}=", v }
+          (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
           new_node << block_return if block_return.is_a?(String)
         end
 
         case RUBY_VERSION.split('.')[0,2].join.to_i
         when 18
-          super(element_name).tap do |n|
+          super(self.registered_name, nil, self.namespace).tap do |n|
             blk_proc[n]
           end
         else
-          super(element_name) do |n|
+          super(self.registered_name, nil, self.namespace) do |n|
             blk_proc[n]
           end
         end
@@ -80,6 +81,42 @@ module RubySpeech
     def inherit(node)
       self.parent = node.parent
       super
+    end
+
+    def version
+      read_attr :version
+    end
+
+    def version=(other)
+      write_attr :version, other
+    end
+
+    ##
+    # @return [String] the base URI to which relative URLs are resolved
+    #
+    def base_uri
+      read_attr :base
+    end
+
+    ##
+    # @param [String] uri the base URI to which relative URLs are resolved
+    #
+    def base_uri=(uri)
+      write_attr 'xml:base', uri
+    end
+
+    def to_doc
+      Nokogiri::XML::Document.new.tap do |doc|
+        doc << self
+      end
+    end
+
+    def +(other)
+      self.class.new(:base_uri => base_uri).tap do |new_element|
+        (self.children + other.children).each do |child|
+          new_element << child
+        end
+      end
     end
 
     def eval_dsl_block(&block)

@@ -1,4 +1,10 @@
 # develop
+  * Feature: Add a whole bunch more SSML elements:
+  ** p & s
+  ** mark
+  ** desc
+  ** sub
+  ** phoneme
 
 # 0.4.0 - 2011-12-30
   * Feature: Add the ability to look up child elements by name/attributes easily

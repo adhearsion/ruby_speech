@@ -38,7 +38,7 @@ module RubySpeech
                                                      http://www.w3.org/TR/speech-grammar/grammar.xsd"
                                  xmlns="http://www.w3.org/2001/06/grammar" />' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Grammar }
 

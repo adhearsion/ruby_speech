@@ -114,6 +114,13 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<say-as/>`
 * `<break/>`
 * `<audio/>`
+* `<p/>` and `<s/>`
+* `<phoneme/>`
+* `<sub/>`
+
+#### Misc
+* `<mark/>`
+* `<desc/>`
 
 ### GRXML
 * Document construction
@@ -126,16 +133,8 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 
 ## TODO:
 ### SSML
-#### Document Structure
-* `<p/>` and `<s/>`
-* `<phoneme/>`
-* `<sub/>`
 * `<lexicon/>`
 * `<meta/>` and `<metadata/>`
-
-#### Misc
-* `<mark/>`
-* `<desc/>`
 
 ### GRXML
 * `<meta/>` and `<metadata/>`

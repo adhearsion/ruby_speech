@@ -27,17 +27,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String].freeze
 
       ##
-      # Create a new SSML say-as element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Prosody] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'say-as', atts, &block
-      end
-
-      ##
       #
       # The interpret-as attribute indicates the content type of the contained text construct. Specifying the content type helps the synthesis processor to distinguish and interpret text constructs that may be rendered in different ways depending on what type of information is intended.
       #

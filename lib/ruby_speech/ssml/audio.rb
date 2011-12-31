@@ -16,18 +16,7 @@ module RubySpeech
 
       register :audio
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text,String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
-
-      ##
-      # Create a new SSML audio element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Break] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'audio', atts, &block
-      end
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Desc, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
       # The URI of a document with an appropriate MIME type

@@ -23,7 +23,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<voice xml:lang="jp" gender="male" age="25" variant="2" name="paul"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Voice }
 
@@ -160,17 +160,14 @@ module RubySpeech
         end
 
         it "should accept Mark" do
-          pending
           lambda { subject << Mark.new }.should_not raise_error
         end
 
         it "should accept P" do
-          pending
           lambda { subject << P.new }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          pending
           lambda { subject << Phoneme.new }.should_not raise_error
         end
 
@@ -183,12 +180,10 @@ module RubySpeech
         end
 
         it "should accept Sub" do
-          pending
           lambda { subject << Sub.new }.should_not raise_error
         end
 
         it "should accept S" do
-          pending
           lambda { subject << S.new }.should_not raise_error
         end
 

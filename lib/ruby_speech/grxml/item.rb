@@ -32,17 +32,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, String, Ruleref, Tag, Token].freeze
 
       ##
-      # Create a new GRXML item element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Item] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'item', atts, &block
-      end
-
-      ##
       #
       # The optional weight attribute
       #

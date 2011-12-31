@@ -14,6 +14,7 @@ module RubySpeech
       autoload :S
       autoload :SayAs
       autoload :Speak
+      autoload :Sub
       autoload :Voice
     end
 

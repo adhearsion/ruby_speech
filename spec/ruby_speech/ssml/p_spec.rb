@@ -77,7 +77,6 @@ module RubySpeech
         end
 
         it "should accept Sub" do
-          pending
           lambda { subject << Sub.new }.should_not raise_error
         end
 

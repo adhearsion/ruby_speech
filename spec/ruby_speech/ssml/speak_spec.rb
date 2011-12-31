@@ -108,7 +108,6 @@ module RubySpeech
         end
 
         it "should accept P" do
-          pending
           lambda { subject << P.new }.should_not raise_error
         end
 
@@ -131,7 +130,6 @@ module RubySpeech
         end
 
         it "should accept S" do
-          pending
           lambda { subject << S.new }.should_not raise_error
         end
 

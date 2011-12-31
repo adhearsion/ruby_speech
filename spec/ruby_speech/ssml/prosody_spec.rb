@@ -273,6 +273,10 @@ module RubySpeech
           lambda { subject << Mark.new }.should_not raise_error
         end
 
+        it "should accept P" do
+          lambda { subject << P.new }.should_not raise_error
+        end
+
         it "should accept Phoneme" do
           pending
           lambda { subject << Phoneme.new }.should_not raise_error
@@ -280,6 +284,10 @@ module RubySpeech
 
         it "should accept Prosody" do
           lambda { subject << Prosody.new }.should_not raise_error
+        end
+
+        it "should accept S" do
+          lambda { subject << S.new }.should_not raise_error
         end
 
         it "should accept SayAs" do

@@ -55,7 +55,7 @@ module RubySpeech
         blk_proc = lambda do |new_node|
           atts.each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
-          new_node << new_node.encode_special_chars(block_return) if block_return.is_a?(String)
+          new_node << block_return if block_return.is_a?(String)
         end
 
         case RUBY_VERSION.split('.')[0,2].join.to_i
@@ -111,14 +111,19 @@ module RubySpeech
     end
 
     def string(other)
-      self << encode_special_chars(other)
+      self << other
+    end
+
+    def <<(other)
+      other = encode_special_chars other if other.is_a? String
+      super other
     end
 
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
       if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
-        self << const.new(*args, &block)
+        embed const.new(*args, &block)
       elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else

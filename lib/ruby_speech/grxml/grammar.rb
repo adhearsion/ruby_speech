@@ -134,6 +134,8 @@ module RubySpeech
         traverse do |element|
           next unless element.is_a? Nokogiri::XML::Text
 
+          next if self.class.import(element.parent).is_a? Token
+
           tokens = split_tokens(element).map do |string|
             Token.new.tap { |token| token << string }
           end

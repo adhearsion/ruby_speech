@@ -291,6 +291,30 @@ module RubySpeech
             should == tokenized_version
           end
         end
+
+        context "with a single XML token" do
+          let(:content) { [Token.new.tap { |t| t << 'San Francisco' }] }
+          let(:tokens)  { ['San Francisco'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a mixture of token types" do
+          let(:content) do
+            [
+              'Welcome to "San Francisco"',
+              Token.new.tap { |t| t << 'Have Fun!' }
+            ]
+          end
+
+          let(:tokens) { ['Welcome', 'to', 'San Francisco', 'Have Fun!'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
       end
     end # Grammar
   end # GRXML

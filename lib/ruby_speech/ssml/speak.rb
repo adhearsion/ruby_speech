@@ -13,22 +13,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
-      # Create a new SSML speak root element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Speak] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        new_node = super(atts)
-        new_node[:version] = '1.0'
-        new_node.namespace = SSML_NAMESPACE
-        new_node.language ||= "en-US"
-        new_node.eval_dsl_block &block
-        new_node
-      end
-
-      ##
       # @return [String] the base URI to which relative URLs are resolved
       #
       def base_uri

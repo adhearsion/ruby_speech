@@ -15,10 +15,17 @@ module RubySpeech
         end
       end
 
-      describe "when the return value of the block is a string" do
+      describe "when the return value of the block is not a string" do
         it "should not be inserted into the document" do
           expected_doc = SSML::Speak.new
           SSML.draw { :foo }.should == expected_doc
+        end
+      end
+
+      describe "when inserting a string" do
+        it "should work" do
+          expected_doc = SSML::Speak.new(:content => "Hi, I'm Fred")
+          SSML.draw { string "Hi, I'm Fred" }.should == expected_doc
         end
       end
 

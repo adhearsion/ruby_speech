@@ -80,6 +80,34 @@ module RubySpeech
       write_attr :version, other
     end
 
+    ##
+    # @return [String] the base URI to which relative URLs are resolved
+    #
+    def base_uri
+      read_attr :base
+    end
+
+    ##
+    # @param [String] uri the base URI to which relative URLs are resolved
+    #
+    def base_uri=(uri)
+      write_attr 'xml:base', uri
+    end
+
+    def to_doc
+      Nokogiri::XML::Document.new.tap do |doc|
+        doc << self
+      end
+    end
+
+    def +(other)
+      self.class.new(:base_uri => base_uri).tap do |new_element|
+        (self.children + other.children).each do |child|
+          new_element << child
+        end
+      end
+    end
+
     def eval_dsl_block(&block)
       return unless block_given?
       @block_binding = eval "self", block.binding

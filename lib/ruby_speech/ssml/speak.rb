@@ -12,37 +12,9 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
-      ##
-      # @return [String] the base URI to which relative URLs are resolved
-      #
-      def base_uri
-        read_attr :base
-      end
-
-      ##
-      # @param [String] uri the base URI to which relative URLs are resolved
-      #
-      def base_uri=(uri)
-        write_attr 'xml:base', uri
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children" unless VALID_CHILD_TYPES.include? arg.class
         super
-      end
-
-      def to_doc
-        Nokogiri::XML::Document.new.tap do |doc|
-          doc << self
-        end
-      end
-
-      def +(other)
-        self.class.new(:base_uri => base_uri).tap do |new_speak|
-          (self.children + other.children).each do |child|
-            new_speak << child
-          end
-        end
       end
 
       def eql?(o)

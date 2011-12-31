@@ -54,6 +54,10 @@ module RubySpeech
           lambda { subject << Break.new }.should_not raise_error
         end
 
+        it "should accept Desc" do
+          lambda { subject << Desc.new }.should_not raise_error
+        end
+
         it "should accept Emphasis" do
           lambda { subject << Emphasis.new }.should_not raise_error
         end

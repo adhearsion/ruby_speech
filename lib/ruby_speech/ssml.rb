@@ -5,6 +5,7 @@ module RubySpeech
     eager_autoload do
       autoload :Audio
       autoload :Break
+      autoload :Desc
       autoload :Element
       autoload :Emphasis
       autoload :Mark

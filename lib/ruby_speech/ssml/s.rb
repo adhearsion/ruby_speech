@@ -10,7 +10,7 @@ module RubySpeech
 
       register :s
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Prosody, SayAs, Sub, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice].freeze
 
       def <<(arg)
         raise InvalidChildError, "An S can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children" unless VALID_CHILD_TYPES.include? arg.class

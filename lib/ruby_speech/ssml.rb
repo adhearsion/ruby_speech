@@ -10,6 +10,7 @@ module RubySpeech
       autoload :Emphasis
       autoload :Mark
       autoload :P
+      autoload :Phoneme
       autoload :Prosody
       autoload :S
       autoload :SayAs

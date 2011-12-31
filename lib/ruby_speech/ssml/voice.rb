@@ -11,7 +11,7 @@ module RubySpeech
       register :voice
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Prosody, S, SayAs, Sub, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
       # Indicates the preferred gender of the voice to speak the contained text. Enumerated values are: "male", "female", "neutral".

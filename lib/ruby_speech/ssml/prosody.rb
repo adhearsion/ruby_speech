@@ -18,7 +18,7 @@ module RubySpeech
       VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
       VALID_VOLUMES     = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
       VALID_RATES       = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Prosody, S, SayAs, Sub, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
       # The baseline pitch for the contained text. Although the exact meaning of "baseline pitch" will vary across synthesis processors, increasing/decreasing this value will typically increase/decrease the approximate pitch of the output. Legal values are: a number followed by "Hz", a relative change or "x-low", "low", "medium", "high", "x-high", or "default". Labels "x-low" through "x-high" represent a sequence of monotonically non-decreasing pitch levels.

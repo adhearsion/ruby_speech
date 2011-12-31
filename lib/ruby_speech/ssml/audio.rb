@@ -16,7 +16,7 @@ module RubySpeech
 
       register :audio
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Desc, Emphasis, Mark, P, Prosody, S, SayAs, Sub, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Desc, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
       # The URI of a document with an appropriate MIME type

@@ -10,7 +10,7 @@ module RubySpeech
       register :emphasis
 
       VALID_LEVELS = [:strong, :moderate, :none, :reduced].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Prosody, SayAs, Sub, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice].freeze
 
       ##
       # Indicates the strength of emphasis to be applied. Defined values are "strong", "moderate", "none" and "reduced". The default level is "moderate". The meaning of "strong" and "moderate" emphasis is interpreted according to the language being spoken (languages indicate emphasis using a possible combination of pitch change, timing changes, loudness and other acoustic differences). The "reduced" level is effectively the opposite of emphasizing a word. For example, when the phrase "going to" is reduced it may be spoken as "gonna". The "none" level is used to prevent the synthesis processor from emphasizing words that it might typically emphasize. The values "none", "moderate", and "strong" are monotonically non-decreasing in strength.

@@ -64,7 +64,6 @@ module RubySpeech
         end
 
         it "should accept Phoneme" do
-          pending
           lambda { subject << Phoneme.new }.should_not raise_error
         end
 

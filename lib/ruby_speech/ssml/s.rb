@@ -10,7 +10,7 @@ module RubySpeech
 
       register :s
 
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, Prosody, SayAs, Voice].freeze
 
       ##
       # Create a new SSML s element

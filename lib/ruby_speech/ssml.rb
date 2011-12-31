@@ -7,6 +7,7 @@ module RubySpeech
       autoload :Break
       autoload :Element
       autoload :Emphasis
+      autoload :Mark
       autoload :P
       autoload :Prosody
       autoload :S

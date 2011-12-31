@@ -11,7 +11,7 @@ module RubySpeech
       register :voice
 
       VALID_GENDERS = [:male, :female, :neutral].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, P, Prosody, S, SayAs, Voice].freeze
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Prosody, S, SayAs, Voice].freeze
 
       ##
       # Create a new SSML voice element

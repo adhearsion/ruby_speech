@@ -160,7 +160,6 @@ module RubySpeech
         end
 
         it "should accept Mark" do
-          pending
           lambda { subject << Mark.new }.should_not raise_error
         end
 

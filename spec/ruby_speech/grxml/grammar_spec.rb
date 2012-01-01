@@ -18,8 +18,8 @@ module RubySpeech
       end
 
       describe "setting dtmf mode" do
-        subject     { Grammar.new :mode => 'dtmf' }
-        its(:mode)  { should == :dtmf }
+        subject       { Grammar.new :mode => 'dtmf' }
+        its(:mode)    { should == :dtmf }
         its(:dtmf?)   { should be true }
         its(:voice?)  { should be false }
       end

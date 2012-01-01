@@ -171,6 +171,11 @@ module RubySpeech
       def eql?(o)
         super o, :language, :base_uri, :mode, :root
       end
+
+      def embed(other)
+        raise InvalidChildError, "Embedded grammars must have the same mode" if other.is_a?(self.class) && other.mode != mode
+        super
+      end
     end # Grammar
   end # GRXML
 end # RubySpeech

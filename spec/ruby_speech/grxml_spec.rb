@@ -103,7 +103,7 @@ module RubySpeech
 
           let :doc2 do
             doc = doc1
-            RubySpeech::GRXML.draw do
+            RubySpeech::GRXML.draw :mode => :dtmf do
               embed doc
               rule :id => :main do
                 "Hello Fred"
@@ -112,7 +112,7 @@ module RubySpeech
           end
 
           let :expected_doc do
-            RubySpeech::GRXML.draw do
+            RubySpeech::GRXML.draw :mode => :dtmf do
               rule :id => :digits do
                 one_of do
                  item :content => "1"
@@ -128,7 +128,23 @@ module RubySpeech
           end
 
           context "of different modes (dtmf in voice or vice-versa)" do
-            it "should raise an exception"
+            let :voice_doc do
+              GRXML.draw :mode => :voice do
+                embed dtmf_doc
+              end
+            end
+
+            let :dtmf_doc do
+              GRXML.draw :mode => :dtmf do
+                rule do
+                  '6'
+                end
+              end
+            end
+
+            it "should raise an exception" do
+              lambda { voice_doc }.should raise_error(InvalidChildError, "Embedded grammars must have the same mode")
+            end
           end
         end
 

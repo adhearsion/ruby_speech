@@ -25,6 +25,16 @@ module RubySpeech
         its(:language) { should == 'jp' }
       end
 
+      describe "#normalize_whitespace" do
+        it "should remove leading & trailing whitespace and collapse multiple spaces down to 1" do
+          element = Element.import '<token> Welcome to  San Francisco </token>'
+
+          element.normalize_whitespace
+
+          element.content.should == 'Welcome to San Francisco'
+        end
+      end
+
       describe "comparing objects" do
         it "should be equal if the content is the same" do
           Token.new(:content => "hello").should == Token.new(:content => "hello")

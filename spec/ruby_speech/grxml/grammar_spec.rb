@@ -18,13 +18,17 @@ module RubySpeech
       end
 
       describe "setting dtmf mode" do
-        subject     { Grammar.new :mode => 'dtmf' }
-        its(:mode)  { should == 'dtmf' }
+        subject       { Grammar.new :mode => 'dtmf' }
+        its(:mode)    { should == :dtmf }
+        its(:dtmf?)   { should be true }
+        its(:voice?)  { should be false }
       end
 
       describe "setting voice mode" do
-        subject     { Grammar.new :mode => 'voice' }
-        its(:mode)  { should == 'voice' }
+        subject       { Grammar.new :mode => 'voice' }
+        its(:mode)    { should == :voice }
+        its(:voice?)  { should be true }
+        its(:dtmf?)   { should be false }
       end
 
       it 'registers itself' do
@@ -42,9 +46,9 @@ module RubySpeech
 
         it { should be_instance_of Grammar }
 
-        its(:language)  { pending; should == 'jp' }
+        its(:language)  { should == 'jp' }
         its(:base_uri)  { should == 'blah' }
-        its(:mode)      { should == 'dtmf' }
+        its(:mode)      { should == :dtmf }
         its(:root)      { should == 'main_rule' }
       end
 
@@ -162,52 +166,477 @@ module RubySpeech
         grammar.root_rule.should == foo
       end
 
-      it "should allow inlining rule references" do
-        grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
-          rule :id => 'digits' do
-            one_of do
-              0.upto(9) { |d| item { d.to_s } }
-            end
-          end
-
-          rule :id => 'pin', :scope => 'public' do
-            one_of do
-              item do
-                item :repeat => '4' do
-                  ruleref :uri => '#digits'
-                end
-                "#"
-              end
-              item do
-                "* 9"
+      describe "inlining rule references" do
+        let :grammar do
+          GRXML.draw :root => 'pin', :mode => :dtmf do
+            rule :id => 'digits' do
+              one_of do
+                0.upto(9) { |d| item { d.to_s } }
               end
             end
-          end
-        end
 
-        expected_grammar = GRXML.draw :root => 'pin', :mode => :dtmf do
-          rule :id => 'pin', :scope => 'public' do
-            one_of do
-              item do
-                item :repeat => '4' do
-                  one_of do
-                    0.upto(9) { |d| item { d.to_s } }
+            rule :id => 'pin', :scope => 'public' do
+              one_of do
+                item do
+                  item :repeat => '4' do
+                    ruleref :uri => '#digits'
                   end
+                  "#"
                 end
-                "#"
-              end
-              item do
-                "* 9"
+                item do
+                  "* 9"
+                end
               end
             end
           end
         end
 
-        grammar.inline.should == expected_grammar
+        let :inline_grammar do
+          GRXML.draw :root => 'pin', :mode => :dtmf do
+            rule :id => 'pin', :scope => 'public' do
+              one_of do
+                item do
+                  item :repeat => '4' do
+                    one_of do
+                      0.upto(9) { |d| item { d.to_s } }
+                    end
+                  end
+                  "#"
+                end
+                item do
+                  "* 9"
+                end
+              end
+            end
+          end
+        end
+
+        it "should be possible in a non-destructive manner" do
+          grammar.inline.should == inline_grammar
+          grammar.should_not == inline_grammar
+        end
+
+        it "should be possible in a destructive manner" do
+          grammar.inline!.should == inline_grammar
+          grammar.should == inline_grammar
+        end
       end
 
-      describe "#tokens" do
-        context "with unquoted tokens"
+      describe "#tokenize!" do
+        def single_rule_grammar(content = [])
+          GRXML.draw :root => 'm', :mode => :speech do
+            rule :id => 'm' do
+              Array(content).each { |e| embed e }
+            end
+          end
+        end
+
+        subject { single_rule_grammar content }
+
+        let(:tokenized_version) do
+          expected_tokens = Array(tokens).map do |s|
+            Token.new.tap { |t| t << s }
+          end
+          single_rule_grammar expected_tokens
+        end
+
+        before { subject.tokenize! }
+
+        context "with a single unquoted token" do
+          let(:content) { 'hello' }
+          let(:tokens)  { 'hello' }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single unquoted token (non-alphabetic)" do
+          let(:content) { '2' }
+          let(:tokens)  { ['2'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single quoted token (including whitespace)" do
+          let(:content) { '"San Francisco"' }
+          let(:tokens)  { ['San Francisco'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single quoted token (no whitespace)" do
+          let(:content) { '"hello"' }
+          let(:tokens)  { ['hello'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with two tokens delimited by white space" do
+          let(:content) { 'bon voyage' }
+          let(:tokens)  { ['bon', 'voyage'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with four tokens delimited by white space" do
+          let(:content) { 'this is a test' }
+          let(:tokens)  { ['this', 'is', 'a', 'test'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a single XML token" do
+          let(:content) { [Token.new.tap { |t| t << 'San Francisco' }] }
+          let(:tokens)  { ['San Francisco'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+
+        context "with a mixture of token types" do
+          let(:content) do
+            [
+              'Welcome to "San Francisco"',
+              Token.new.tap { |t| t << 'Have Fun!' }
+            ]
+          end
+
+          let(:tokens) { ['Welcome', 'to', 'San Francisco', 'Have Fun!'] }
+
+          it "should tokenize correctly" do
+            should == tokenized_version
+          end
+        end
+      end
+
+      describe "#normalize_whitespace" do
+        it "should normalize whitespace in all of the tokens contained within it" do
+          grammar = GRXML.draw do
+            rule do
+              token { ' Welcome to ' }
+              token { ' San  Francisco ' }
+            end
+          end
+
+          normalized_grammar = GRXML.draw do
+            rule do
+              token { 'Welcome to' }
+              token { 'San Francisco' }
+            end
+          end
+
+          grammar.should_not == normalized_grammar
+          grammar.normalize_whitespace
+          grammar.should == normalized_grammar
+        end
+      end
+
+      describe "matching against an input string" do
+        before do
+          subject.inline!
+          subject.tokenize!
+          subject.normalize_whitespace
+        end
+
+        context "with a grammar that takes a single specific digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digit' do
+              rule :id => 'digit' do
+                '6'
+              end
+            end
+          end
+
+          it "should match '6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '6',
+                                              :interpretation => '6'
+            subject.match('6').should == expected_match
+          end
+
+          %w{1 2 3 4 5 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '5 6'
+              end
+            end
+          end
+
+          it "should match '56'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '56',
+                                              :interpretation => '56'
+            subject.match('56').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 65 57 46 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes star and a digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '* 6'
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes hash and a digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '# 6'
+              end
+            end
+          end
+
+          it "should match '#6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '#6',
+                                              :interpretation => '#6'
+            subject.match('#6').should == expected_match
+          end
+
+          %w{* *6 #7 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits, via a ruleref, and whitespace normalization" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                ruleref :uri => '#star'
+                '" 6 "'
+              end
+
+              rule :id => 'star' do
+                '" * "'
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits with the second being an alternative" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                string '*'
+                one_of do
+                  item { '6' }
+                  item { '7' }
+                end
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          it "should match '*7'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*7',
+                                              :interpretation => '*7'
+            subject.match('*7').should == expected_match
+          end
+
+          %w{* *8 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a specific digit, followed by a specific digit repeated an exact number of times" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                string '1'
+                item :repeat => 2 do
+                  '6'
+                end
+              end
+            end
+          end
+
+          it "should match '166'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '166',
+                                              :interpretation => '166'
+            subject.match('166').should == expected_match
+          end
+
+          %w{1 16 1666 16666 17}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a specific digit, followed by a specific digit repeated within a range" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                string '1'
+                item :repeat => 0..3 do
+                  '6'
+                end
+              end
+            end
+          end
+
+          %w{1 16 166 1666}.each do |input|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => input
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{6 16666 17}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a specific digit, followed by a specific digit repeated a minimum number of times" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                string '1'
+                item :repeat => '2-' do
+                  '6'
+                end
+              end
+            end
+          end
+
+          %w{166 1666 16666}.each do |input|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => input
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{1 16 17}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence" do
+          subject do
+            RubySpeech::GRXML.draw :mode => :dtmf, :root => 'pin' do
+              rule id: 'digit' do
+                one_of do
+                  ('0'..'9').map { |d| item { d } }
+                end
+              end
+
+              rule id: 'pin', scope: 'public' do
+                one_of do
+                  item do
+                    item repeat: '4' do
+                      ruleref uri: '#digit'
+                    end
+                    "#"
+                  end
+                  item do
+                    "\* 9"
+                  end
+                end
+              end
+            end
+          end
+
+          %w{*9 1234# 5678# 1111#}.each do |input|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => input
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{111}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
       end
     end # Grammar
   end # GRXML

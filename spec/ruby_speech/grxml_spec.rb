@@ -7,8 +7,16 @@ module RubySpeech
         GRXML.draw.should == GRXML::Grammar.new
       end
 
-      it "should have a rule with id equal to the root attribute if set" do
-        pending 'check that a rule exists with the id equal to root if that attribute is set'
+      context "with a root rule name specified but not found" do
+        it "should raise an error" do
+          lambda do
+            GRXML.draw :root => 'foo' do
+              rule :id => 'bar' do
+                '6'
+              end
+            end
+          end.should raise_error(InvalidChildError, "A GRXML document must have a rule matching the root rule name")
+        end
       end
 
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
@@ -95,7 +103,7 @@ module RubySpeech
 
           let :doc2 do
             doc = doc1
-            RubySpeech::GRXML.draw do
+            RubySpeech::GRXML.draw :mode => :dtmf do
               embed doc
               rule :id => :main do
                 "Hello Fred"
@@ -104,7 +112,7 @@ module RubySpeech
           end
 
           let :expected_doc do
-            RubySpeech::GRXML.draw do
+            RubySpeech::GRXML.draw :mode => :dtmf do
               rule :id => :digits do
                 one_of do
                  item :content => "1"
@@ -120,7 +128,23 @@ module RubySpeech
           end
 
           context "of different modes (dtmf in voice or vice-versa)" do
-            it "should raise an exception"
+            let :voice_doc do
+              GRXML.draw :mode => :voice do
+                embed dtmf_doc
+              end
+            end
+
+            let :dtmf_doc do
+              GRXML.draw :mode => :dtmf do
+                rule do
+                  '6'
+                end
+              end
+            end
+
+            it "should raise an exception" do
+              lambda { voice_doc }.should raise_error(InvalidChildError, "Embedded grammars must have the same mode")
+            end
           end
         end
 
@@ -275,6 +299,41 @@ module RubySpeech
 
         item.children(:item, :weight => 0.5).should == [item1]
       end
+
+      it "should be able to traverse up the tree" do
+        grammar = GRXML.draw do
+          rule :id => 'one' do
+            item do
+              'foobar'
+            end
+          end
+        end
+
+        rule = grammar.children.first
+        rule.parent.should == grammar
+
+        item = rule.children.first
+        item.parent.should == rule
+
+        text = item.nokogiri_children.first
+        text.parent.should == item
+      end
     end # draw
+
+    describe "manually created documents" do
+      it "should be able to traverse up the tree" do
+        grammar = GRXML::Grammar.new
+        rule    = GRXML::Rule.new :id => 'one'
+        item    = GRXML::Item.new
+        text    = Nokogiri::XML::Text.new 'foobar', grammar.document
+        item    << text
+        rule    << item
+        grammar << rule
+
+        text.parent.should == item
+        item.parent.should == rule
+        rule.parent.should == grammar
+      end
+    end
   end # GRXML
 end # RubySpeech

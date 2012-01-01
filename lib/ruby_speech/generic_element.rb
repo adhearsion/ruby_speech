@@ -5,7 +5,6 @@ module RubySpeech
 
     def self.included(klass)
       klass.class_attribute :registered_ns, :registered_name, :defaults
-      klass.defaults = { :version => '1.0', :language => "en-US" }
       klass.extend ClassMethods
     end
 

@@ -18,6 +18,8 @@ module RubySpeech
 
       register :grammar
 
+      self.defaults = { :version => '1.0', :language => "en-US" }
+
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule, Tag].freeze
 
       ##

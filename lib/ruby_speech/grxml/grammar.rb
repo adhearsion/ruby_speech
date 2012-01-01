@@ -152,7 +152,7 @@ module RubySpeech
       ##
       # Checks the grammar for a match against an input string
       #
-      # @param [String] the input string to check for a match with the grammar
+      # @param [String] other the input string to check for a match with the grammar
       #
       # @return [NoMatch, Match] depending on the result of a match attempt. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
       #

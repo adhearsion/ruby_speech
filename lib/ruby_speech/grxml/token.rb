@@ -24,7 +24,7 @@ module RubySpeech
       end
 
       def regexp_content
-        content.gsub '*', '\*'
+        Regexp.escape content
       end
     end # Token
   end # GRXML

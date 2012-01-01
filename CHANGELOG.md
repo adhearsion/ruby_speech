@@ -5,6 +5,13 @@
   ** desc
   ** sub
   ** phoneme
+  * Feature: Added the ability to inline grammar rule references in both destructive and non-destructive modes
+  * Feature: Added the ability to tokenize a grammar, turning all tokens into unambiguous `<token/>` elements
+  * Feature: Added the ability to whitespace normalize a grammar
+  * Feature: Added the ability to match an input string against a Grammar
+  * Feature: Constructing a GRXML grammar with a root rule specified but not provided will raise an exception
+  * Feature: Embedding a GRXML grammar of a mode different from the host will raise an exception
+  * Bugfix: Fix upward traversal through a document via #parent
 
 # 0.4.0 - 2011-12-30
   * Feature: Add the ability to look up child elements by name/attributes easily

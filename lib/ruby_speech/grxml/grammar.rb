@@ -71,10 +71,20 @@ module RubySpeech
         write_attr :'tag-format', s
       end
 
+      ##
+      # @return [Rule] The root rule node for the document
+      #
       def root_rule
         children(:rule, :id => root).first
       end
 
+      ##
+      # Checks for a root rule matching the value of the root tag
+      #
+      # @raises [InvalidChildError] if there is not a rule present in the document with the correct ID
+      #
+      # @return [Grammar] self
+      #
       def assert_has_matching_root_rule
         raise InvalidChildError, "A GRXML document must have a rule matching the root rule name" unless has_matching_root_rule?
         self
@@ -84,10 +94,19 @@ module RubySpeech
         !root || root_rule
       end
 
+      ##
+      # @return [Grammar] an inlined copy of self
+      #
       def inline
         clone.inline!
       end
 
+      ##
+      # Replaces rulerefs in the document with a copy of the original rule.
+      # Removes all top level rules except the root rule
+      #
+      # @return self
+      #
       def inline!
         find("//ns:ruleref", :ns => namespace_href).each do |ref|
           rule = children(:rule, :id => ref[:uri].sub(/^#/, '')).first
@@ -100,6 +119,10 @@ module RubySpeech
         self
       end
 
+      ##
+      # Replaces textual content of the document with token elements containing such content.
+      # This homogenises all tokens in the document to a consistent format for processing.
+      #
       def tokenize!
         traverse do |element|
           next unless element.is_a? Nokogiri::XML::Text
@@ -121,6 +144,10 @@ module RubySpeech
         end.flatten
       end
 
+      ##
+      # Normalizes whitespace within tokens in the document according to the rules in the SRGS spec (http://www.w3.org/TR/speech-grammar/#S2.1)
+      # Leading and trailing whitespace is removed, and multiple spaces within the string are collapsed down to single spaces.
+      #
       def normalize_whitespace
         traverse do |element|
           next if element === self
@@ -133,6 +160,13 @@ module RubySpeech
         end
       end
 
+      ##
+      # Checks the grammar for a match against an input string
+      #
+      # @param [String] the input string to check for a match with the grammar
+      #
+      # @return [NoMatch, Match] depending on the result of a match attempt. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
+      #
       def match(other)
         regex = to_regexp
         return NoMatch.new if regex == //
@@ -145,6 +179,11 @@ module RubySpeech
                   :interpretation => interpret_utterance(other)
       end
 
+      ##
+      # Converts the grammar into a regular expression for matching
+      #
+      # @return [Regexp] a regular expression which is equivalent to the grammar
+      #
       def to_regexp
         /^#{regexp_content.join}$/
       end

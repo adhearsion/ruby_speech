@@ -23,7 +23,7 @@ module RubySpeech
         super
       end
 
-      def regexp_content
+      def regexp_content # :nodoc:
         "(#{children.map(&:regexp_content).join '|'})"
       end
     end # OneOf

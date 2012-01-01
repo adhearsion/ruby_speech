@@ -23,7 +23,7 @@ module RubySpeech
         self.content = content.strip.squeeze ' '
       end
 
-      def regexp_content
+      def regexp_content # :nodoc:
         Regexp.escape content
       end
     end # Token

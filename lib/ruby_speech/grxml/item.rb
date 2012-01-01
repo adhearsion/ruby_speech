@@ -121,7 +121,7 @@ module RubySpeech
         super o, :weight, :repeat
       end
 
-      def regexp_content
+      def regexp_content # :nodoc:
         return super unless repeat
 
         if repeat.include?('-')

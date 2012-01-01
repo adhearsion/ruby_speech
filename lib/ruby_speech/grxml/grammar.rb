@@ -156,6 +156,49 @@ module RubySpeech
       #
       # @return [NoMatch, Match] depending on the result of a match attempt. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
       #
+      # @example A grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence
+      #     ```ruby
+      #       grammar = RubySpeech::GRXML.draw :mode => :dtmf, :root => 'pin' do
+      #         rule :id => 'digit' do
+      #           one_of do
+      #             ('0'..'9').map { |d| item { d } }
+      #           end
+      #         end
+      #
+      #         rule :id => 'pin', :scope => 'public' do
+      #           one_of do
+      #             item do
+      #               item :repeat => '4' do
+      #                 ruleref :uri => '#digit'
+      #               end
+      #               "#"
+      #             end
+      #             item do
+      #               "\* 9"
+      #             end
+      #           end
+      #         end
+      #       end
+      #
+      #       >> subject.match '*9'
+      #       => #<RubySpeech::GRXML::Match:0x00000100ae5d98
+      #             @mode = :dtmf,
+      #             @confidence = 1,
+      #             @utterance = "*9",
+      #             @interpretation = "*9"
+      #           >
+      #       >> subject.match '1234#'
+      #       => #<RubySpeech::GRXML::Match:0x00000100b7e020
+      #             @mode = :dtmf,
+      #             @confidence = 1,
+      #             @utterance = "1234#",
+      #             @interpretation = "1234#"
+      #           >
+      #       >> subject.match '111'
+      #       => #<RubySpeech::GRXML::NoMatch:0x00000101371660>
+      #
+      #     ```
+      #
       def match(other)
         regex = to_regexp
         return NoMatch.new if regex == //

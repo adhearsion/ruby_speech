@@ -20,7 +20,7 @@ module RubySpeech
       include GenericElement
 
       def regexp_content
-        children.map { |e| "(#{e.regexp_content})" }
+        children.map(&:regexp_content).join
       end
     end # Element
   end # GRXML

@@ -150,7 +150,7 @@ module RubySpeech
       end
 
       def regexp_content
-        root_rule.children.map { |e| "(#{e.regexp_content})" }
+        root_rule.children.map &:regexp_content
       end
 
       def dtmf?

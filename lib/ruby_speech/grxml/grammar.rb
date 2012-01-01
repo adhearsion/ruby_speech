@@ -90,10 +90,6 @@ module RubySpeech
         self
       end
 
-      def has_matching_root_rule?
-        !root || root_rule
-      end
-
       ##
       # @return [Grammar] an inlined copy of self
       #
@@ -135,13 +131,6 @@ module RubySpeech
 
           element.swap Nokogiri::XML::NodeSet.new(Nokogiri::XML::Document.new, tokens)
         end
-      end
-
-      def split_tokens(element)
-        element.to_s.split(/(\".*\")/).reject(&:empty?).map do |string|
-          match = string.match /^\"(.*)\"$/
-          match ? match[1] : string.split(' ')
-        end.flatten
       end
 
       ##
@@ -200,10 +189,6 @@ module RubySpeech
         mode == :voice
       end
 
-      def interpret_utterance(utterance)
-        utterance
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Grammar can only accept Rule and Tag as children" unless VALID_CHILD_TYPES.include? arg.class
         super
@@ -216,6 +201,23 @@ module RubySpeech
       def embed(other)
         raise InvalidChildError, "Embedded grammars must have the same mode" if other.is_a?(self.class) && other.mode != mode
         super
+      end
+
+      private
+
+      def has_matching_root_rule?
+        !root || root_rule
+      end
+
+      def interpret_utterance(utterance)
+        utterance
+      end
+
+      def split_tokens(element)
+        element.to_s.split(/(\".*\")/).reject(&:empty?).map do |string|
+          match = string.match /^\"(.*)\"$/
+          match ? match[1] : string.split(' ')
+        end.flatten
       end
     end # Grammar
   end # GRXML

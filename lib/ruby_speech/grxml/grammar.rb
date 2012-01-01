@@ -123,9 +123,9 @@ module RubySpeech
       end
 
       def match(other)
-        regex = to_regex
+        regex = to_regexp
         return NoMatch.new if regex == //
-        match = to_regex.match other
+        match = regex.match other
         return NoMatch.new unless match
 
         Match.new :mode           => mode,
@@ -134,7 +134,7 @@ module RubySpeech
                   :interpretation => interpret_utterance(other)
       end
 
-      def to_regex
+      def to_regexp
         /^#{regexp_content.join}$/
       end
 

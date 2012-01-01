@@ -27,7 +27,7 @@ module RubySpeech
       # @return [String]
       #
       def mode
-        read_attr :mode
+        read_attr :mode, :to_sym
       end
 
       ##
@@ -120,6 +120,38 @@ module RubySpeech
           imported_element.normalize_whitespace
           element.swap imported_element
         end
+      end
+
+      def match(other)
+        regex = to_regex
+        return NoMatch.new if regex == //
+        match = to_regex.match other
+        return NoMatch.new unless match
+
+        Match.new :mode           => mode,
+                  :confidence     => dtmf? ? 1 : 0,
+                  :utterance      => other,
+                  :interpretation => interpret_utterance(other)
+      end
+
+      def to_regex
+        /^#{regexp_content.join}$/
+      end
+
+      def regexp_content
+        root_rule.children.map { |e| "(#{e.regexp_content})" }
+      end
+
+      def dtmf?
+        mode == :dtmf
+      end
+
+      def voice?
+        mode == :voice
+      end
+
+      def interpret_utterance(utterance)
+        utterance
       end
 
       def <<(arg)

@@ -22,6 +22,10 @@ module RubySpeech
         raise InvalidChildError, "A OneOf can only accept Item as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def regexp_content
+        children.join '|'
+      end
     end # OneOf
   end # GRXML
 end # RubySpeech

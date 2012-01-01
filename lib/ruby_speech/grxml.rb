@@ -13,6 +13,9 @@ module RubySpeech
       autoload :Token
     end
 
+    autoload :Match
+    autoload :NoMatch
+
     InvalidChildError = Class.new StandardError
 
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'

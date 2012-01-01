@@ -19,12 +19,16 @@ module RubySpeech
 
       describe "setting dtmf mode" do
         subject     { Grammar.new :mode => 'dtmf' }
-        its(:mode)  { should == 'dtmf' }
+        its(:mode)  { should == :dtmf }
+        its(:dtmf?)   { should be true }
+        its(:voice?)  { should be false }
       end
 
       describe "setting voice mode" do
-        subject     { Grammar.new :mode => 'voice' }
-        its(:mode)  { should == 'voice' }
+        subject       { Grammar.new :mode => 'voice' }
+        its(:mode)    { should == :voice }
+        its(:voice?)  { should be true }
+        its(:dtmf?)   { should be false }
       end
 
       it 'registers itself' do
@@ -44,7 +48,7 @@ module RubySpeech
 
         its(:language)  { pending; should == 'jp' }
         its(:base_uri)  { should == 'blah' }
-        its(:mode)      { should == 'dtmf' }
+        its(:mode)      { should == :dtmf }
         its(:root)      { should == 'main_rule' }
       end
 
@@ -336,6 +340,175 @@ module RubySpeech
           grammar.should_not == normalized_grammar
           grammar.normalize_whitespace
           grammar.should == normalized_grammar
+        end
+      end
+
+      describe "matching against an input string" do
+        before do
+          subject.inline!
+          subject.tokenize!
+          subject.normalize_whitespace
+        end
+
+        context "with a grammar that takes a single specific digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digit' do
+              rule :id => 'digit' do
+                '6'
+              end
+            end
+          end
+
+          it "should match '6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '6',
+                                              :interpretation => '6'
+            subject.match('6').should == expected_match
+          end
+
+          %w{1 2 3 4 5 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '5 6'
+              end
+            end
+          end
+
+          it "should match '56'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '56',
+                                              :interpretation => '56'
+            subject.match('56').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 65 57 46 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes star and a digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '* 6'
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes hash and a digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                '# 6'
+              end
+            end
+          end
+
+          it "should match '#6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '#6',
+                                              :interpretation => '#6'
+            subject.match('#6').should == expected_match
+          end
+
+          %w{* *6 #7 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits, via a ruleref, and whitespace normalization" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                ruleref :uri => '#star'
+                '" 6 "'
+              end
+
+              rule :id => 'star' do
+                '" * "'
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          %w{* *7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes two specific digits with the second being an alternative" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                string '*'
+                one_of do
+                  item { '6' }
+                  item { '7' }
+                end
+              end
+            end
+          end
+
+          it "should match '*6'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*6',
+                                              :interpretation => '*6'
+            subject.match('*6').should == expected_match
+          end
+
+          it "should match '*7'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '*7',
+                                              :interpretation => '*7'
+            subject.match('*7').should == expected_match
+          end
+
+          %w{* *8 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
         end
       end
     end # Grammar

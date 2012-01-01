@@ -22,6 +22,10 @@ module RubySpeech
       def normalize_whitespace
         self.content = content.strip.squeeze ' '
       end
+
+      def regexp_content
+        content.gsub '*', '\*'
+      end
     end # Token
   end # GRXML
 end # RubySpeech

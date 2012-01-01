@@ -18,6 +18,10 @@ module RubySpeech
       alias_method :nokogiri_children, :children
 
       include GenericElement
+
+      def regexp_content
+        children.map { |e| "(#{e.regexp_content})" }
+      end
     end # Element
   end # GRXML
 end # RubySpeech

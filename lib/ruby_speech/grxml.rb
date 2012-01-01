@@ -24,7 +24,7 @@ module RubySpeech
       Grammar.new(attributes).tap do |grammar|
         block_return = grammar.eval_dsl_block &block
         grammar << block_return if block_return.is_a?(String)
-      end
+      end.assert_has_matching_root_rule
     end
 
     def self.import(other)

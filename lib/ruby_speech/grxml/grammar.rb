@@ -73,6 +73,15 @@ module RubySpeech
         children(:rule, :id => root).first
       end
 
+      def assert_has_matching_root_rule
+        raise InvalidChildError, "A GRXML document must have a rule matching the root rule name" unless has_matching_root_rule?
+        self
+      end
+
+      def has_matching_root_rule?
+        !root || root_rule
+      end
+
       def inline
         clone.inline!
       end

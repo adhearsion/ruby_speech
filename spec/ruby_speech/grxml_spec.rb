@@ -7,8 +7,16 @@ module RubySpeech
         GRXML.draw.should == GRXML::Grammar.new
       end
 
-      it "should have a rule with id equal to the root attribute if set" do
-        pending 'check that a rule exists with the id equal to root if that attribute is set'
+      context "with a root rule name specified but not found" do
+        it "should raise an error" do
+          lambda do
+            GRXML.draw :root => 'foo' do
+              rule :id => 'bar' do
+                '6'
+              end
+            end
+          end.should raise_error(InvalidChildError, "A GRXML document must have a rule matching the root rule name")
+        end
       end
 
       # TODO: Maybe GRXML#draw should create a Rule to pass the string

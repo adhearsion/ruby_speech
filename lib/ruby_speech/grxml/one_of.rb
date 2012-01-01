@@ -24,7 +24,7 @@ module RubySpeech
       end
 
       def regexp_content
-        children.join '|'
+        "(#{children.map(&:regexp_content).join '|'})"
       end
     end # OneOf
   end # GRXML

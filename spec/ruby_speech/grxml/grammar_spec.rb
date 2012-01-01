@@ -595,6 +595,48 @@ module RubySpeech
             end
           end
         end
+
+        context "with a grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence" do
+          subject do
+            RubySpeech::GRXML.draw :mode => :dtmf, :root => 'pin' do
+              rule id: 'digit' do
+                one_of do
+                  ('0'..'9').map { |d| item { d } }
+                end
+              end
+
+              rule id: 'pin', scope: 'public' do
+                one_of do
+                  item do
+                    item repeat: '4' do
+                      ruleref uri: '#digit'
+                    end
+                    "#"
+                  end
+                  item do
+                    "\* 9"
+                  end
+                end
+              end
+            end
+          end
+
+          %w{*9 1234# 5678# 1111#}.each do |input|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => input
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{111}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
       end
     end # Grammar
   end # GRXML

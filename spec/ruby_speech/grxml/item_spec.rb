@@ -85,6 +85,7 @@ module RubySpeech
           it "valid ranges from m to n" do
             lambda { subject.repeat = '1-5' }.should_not raise_error
             lambda { subject.repeat = '0-5' }.should_not raise_error
+            lambda { subject.repeat = 0..5 }.should_not raise_error
           end
 
           it "illegal ranges from m to n" do
@@ -92,6 +93,8 @@ module RubySpeech
             lambda { subject.repeat = '-1-2' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
             lambda { subject.repeat = '1-2-3' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
             lambda { subject.repeat = '1-B' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = -1..2 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            lambda { subject.repeat = 1..-2 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
           end
 
           it "valid ranges of m or more" do

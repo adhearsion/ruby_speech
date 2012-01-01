@@ -599,17 +599,17 @@ module RubySpeech
         context "with a grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence" do
           subject do
             RubySpeech::GRXML.draw :mode => :dtmf, :root => 'pin' do
-              rule id: 'digit' do
+              rule :id => 'digit' do
                 one_of do
                   ('0'..'9').map { |d| item { d } }
                 end
               end
 
-              rule id: 'pin', scope: 'public' do
+              rule :id => 'pin', :scope => 'public' do
                 one_of do
                   item do
-                    item repeat: '4' do
-                      ruleref uri: '#digit'
+                    item :repeat => '4' do
+                      ruleref :uri => '#digit'
                     end
                     "#"
                   end

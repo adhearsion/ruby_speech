@@ -51,10 +51,10 @@ Contruct a GRXML (SRGS) document like this:
 ```ruby
 require 'ruby_speech'
 
-grammy = RubySpeech::GRXML.draw :mode => 'dtmf', :root => 'digits' do
-  rule id: 'digits' do
+grammy = RubySpeech::GRXML.draw mode: :dtmf, root: 'pin' do
+  rule id: 'digit' do
     one_of do
-      0.upto(9) {|d| item { d.to_s } }
+      ('0'..'9').map { |d| item { d } }
     end
   end
 
@@ -79,8 +79,8 @@ grammy.to_s
 which becomes
 
 ```xml
-<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" mode="dtmf" root="digits">
-  <rule id="digits">
+<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" mode="dtmf" root="pin">
+  <rule id="digit">
     <one-of>
       <item>0</item>
       <item>1</item>

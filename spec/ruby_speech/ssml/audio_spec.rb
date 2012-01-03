@@ -19,7 +19,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<audio src="http://whatever.you-say-boss.com">Hello</audio>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Audio }
 
@@ -54,22 +54,23 @@ module RubySpeech
           lambda { subject << Break.new }.should_not raise_error
         end
 
+        it "should accept Desc" do
+          lambda { subject << Desc.new }.should_not raise_error
+        end
+
         it "should accept Emphasis" do
           lambda { subject << Emphasis.new }.should_not raise_error
         end
 
         it "should accept Mark" do
-          pending
           lambda { subject << Mark.new }.should_not raise_error
         end
 
         it "should accept P" do
-          pending
           lambda { subject << P.new }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          pending
           lambda { subject << Phoneme.new }.should_not raise_error
         end
 
@@ -82,12 +83,10 @@ module RubySpeech
         end
 
         it "should accept Sub" do
-          pending
           lambda { subject << Sub.new }.should_not raise_error
         end
 
         it "should accept S" do
-          pending
           lambda { subject << S.new }.should_not raise_error
         end
 

@@ -18,20 +18,13 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Item].freeze
 
-      ##
-      # Create a new GRXML one-of element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [OneOf] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'one-of', atts, &block
-      end
-
       def <<(arg)
         raise InvalidChildError, "A OneOf can only accept Item as children" unless VALID_CHILD_TYPES.include? arg.class
         super
+      end
+
+      def regexp_content # :nodoc:
+        "(#{children.map(&:regexp_content).join '|'})"
       end
     end # OneOf
   end # GRXML

@@ -16,17 +16,6 @@ module RubySpeech
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String].freeze
 
-      ##
-      # Create a new GRXML tag element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Tag] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'tag', atts, &block
-      end
-
       def <<(arg)
         raise InvalidChildError, "A Tag can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super

@@ -2,60 +2,42 @@ require 'spec_helper'
 
 module RubySpeech
   module SSML
-    describe Emphasis do
-      its(:name) { should == 'emphasis' }
+    describe S do
+      its(:name) { should == 's' }
 
       describe "setting options in initializers" do
-        subject { Emphasis.new :level => :strong }
+        subject { S.new :language => 'jp' }
 
-        its(:level) { should == :strong }
+        its(:language) { should == 'jp' }
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:emphasis).should == Emphasis
+        Element.class_from_registration(:s).should == S
       end
 
       describe "from a document" do
-        let(:document) { '<emphasis level="strong"/>' }
+        let(:document) { '<s>foo</s>' }
 
         subject { Element.import document }
 
-        it { should be_instance_of Emphasis }
-
-        its(:level) { should == :strong }
-      end
-
-      describe "#level" do
-        before { subject.level = :strong }
-
-        its(:level) { should == :strong }
-
-        it "with a valid level" do
-          lambda { subject.level = :strong }.should_not raise_error
-          lambda { subject.level = :moderate }.should_not raise_error
-          lambda { subject.level = :none }.should_not raise_error
-          lambda { subject.level = :reduced }.should_not raise_error
-        end
-
-        it "with an invalid level" do
-          lambda { subject.level = :something }.should raise_error(ArgumentError, "You must specify a valid level (:strong, :moderate, :none, :reduced)")
-        end
+        it { should be_instance_of S }
+        its(:content) { should == 'foo' }
       end
 
       describe "comparing objects" do
-        it "should be equal if the content and level are the same" do
-          Emphasis.new(:level => :strong, :content => "Hello there").should == Emphasis.new(:level => :strong, :content => "Hello there")
+        it "should be equal if the content and language are the same" do
+          S.new(:language => 'jp', :content => "Hello there").should == S.new(:language => 'jp', :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Emphasis.new(:content => "Hello").should_not == Emphasis.new(:content => "Hello there")
+            S.new(:content => "Hello").should_not == S.new(:content => "Hello there")
           end
         end
 
-        describe "when the level is different" do
+        describe "when the language is different" do
           it "should not be equal" do
-            Emphasis.new(:level => :strong).should_not == Emphasis.new(:level => :reduced)
+            S.new(:language => 'jp').should_not == S.new(:language => 'en')
           end
         end
       end
@@ -102,9 +84,9 @@ module RubySpeech
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "An Emphasis can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children")
+          lambda { subject << 1 }.should raise_error(InvalidChildError, "An S can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children")
         end
       end
-    end # Emphasis
+    end # S
   end # SSML
 end # RubySpeech

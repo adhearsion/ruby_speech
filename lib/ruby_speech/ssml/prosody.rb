@@ -18,18 +18,7 @@ module RubySpeech
       VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze
       VALID_VOLUMES     = [:silent, :'x-soft', :soft, :medium, :loud, :'x-loud', :default].freeze
       VALID_RATES       = [:'x-slow', :slow, :medium, :fast, :'x-fast', :default].freeze
-      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Prosody, SayAs, Voice].freeze
-
-      ##
-      # Create a new SSML prosody element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Prosody] an element for use in an SSML document
-      #
-      def self.new(atts = {}, &block)
-        super 'prosody', atts, &block
-      end
+      VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 
       ##
       # The baseline pitch for the contained text. Although the exact meaning of "baseline pitch" will vary across synthesis processors, increasing/decreasing this value will typically increase/decrease the approximate pitch of the output. Legal values are: a number followed by "Hz", a relative change or "x-low", "low", "medium", "high", "x-high", or "default". Labels "x-low" through "x-high" represent a sequence of monotonically non-decreasing pitch levels.

@@ -12,7 +12,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<token>hello</token>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Token }
 
@@ -23,6 +23,16 @@ module RubySpeech
         before { subject.language = 'jp' }
 
         its(:language) { should == 'jp' }
+      end
+
+      describe "#normalize_whitespace" do
+        it "should remove leading & trailing whitespace and collapse multiple spaces down to 1" do
+          element = Element.import '<token> Welcome to  San Francisco </token>'
+
+          element.normalize_whitespace
+
+          element.content.should == 'Welcome to San Francisco'
+        end
       end
 
       describe "comparing objects" do

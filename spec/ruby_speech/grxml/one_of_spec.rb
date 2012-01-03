@@ -12,7 +12,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<one-of> <item>test</item> </one-of>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of OneOf }
       end

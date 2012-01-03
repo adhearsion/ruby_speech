@@ -4,7 +4,7 @@ module RubySpeech
   module GenericElement
 
     def self.included(klass)
-      klass.class_attribute :registered_ns, :registered_name
+      klass.class_attribute :registered_ns, :registered_name, :defaults
       klass.extend ClassMethods
     end
 
@@ -43,7 +43,7 @@ module RubySpeech
       def import(node)
         node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node)
         return node.content if node.is_a?(Nokogiri::XML::Text)
-        klass = class_from_registration(node.element_name)
+        klass = class_from_registration node.element_name
         if klass && klass != self
           klass.import node
         else
@@ -51,22 +51,69 @@ module RubySpeech
         end
       end
 
-      def new(element_name, atts = {}, &block)
+      def new(atts = {}, &block)
         blk_proc = lambda do |new_node|
-          atts.each_pair { |k, v| new_node.send :"#{k}=", v }
+          (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
-          new_node << new_node.encode_special_chars(block_return) if block_return.is_a?(String)
+          new_node << block_return if block_return.is_a?(String)
         end
 
         case RUBY_VERSION.split('.')[0,2].join.to_i
         when 18
-          super(element_name).tap do |n|
+          super(self.registered_name, nil, self.namespace).tap do |n|
             blk_proc[n]
           end
         else
-          super(element_name) do |n|
+          super(self.registered_name, nil, self.namespace) do |n|
             blk_proc[n]
           end
+        end
+      end
+    end
+
+    attr_writer :parent
+
+    def parent
+      @parent || super
+    end
+
+    def inherit(node)
+      self.parent = node.parent
+      super
+    end
+
+    def version
+      read_attr :version
+    end
+
+    def version=(other)
+      write_attr :version, other
+    end
+
+    ##
+    # @return [String] the base URI to which relative URLs are resolved
+    #
+    def base_uri
+      read_attr :base
+    end
+
+    ##
+    # @param [String] uri the base URI to which relative URLs are resolved
+    #
+    def base_uri=(uri)
+      write_attr 'xml:base', uri
+    end
+
+    def to_doc
+      Nokogiri::XML::Document.new.tap do |doc|
+        doc << self
+      end
+    end
+
+    def +(other)
+      self.class.new(:base_uri => base_uri).tap do |new_element|
+        (self.children + other.children).each do |child|
+          new_element << child
         end
       end
     end
@@ -106,24 +153,38 @@ module RubySpeech
       when self.class.module::Element
         self << other
       else
-        raise ArgumentError, "Can only embed a String or an SSML element"
+        raise ArgumentError, "Can only embed a String or a #{self.class.module} element, not a #{other}"
       end
     end
 
     def string(other)
-      self << encode_special_chars(other)
+      self << other
+    end
+
+    def <<(other)
+      other = encode_special_chars other if other.is_a? String
+      super other
     end
 
     def method_missing(method_name, *args, &block)
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
       if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
-        self << const.new(*args, &block)
+        embed const.new(*args, &block)
       elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else
         super
       end
+    end
+
+    def clone
+      GRXML.import to_xml
+    end
+
+    def traverse(&block)
+      nokogiri_children.each { |j| j.traverse &block }
+      block.call self
     end
 
     def eql?(o, *args)

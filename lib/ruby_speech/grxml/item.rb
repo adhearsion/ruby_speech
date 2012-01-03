@@ -32,17 +32,6 @@ module RubySpeech
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, OneOf, Item, String, Ruleref, Tag, Token].freeze
 
       ##
-      # Create a new GRXML item element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Item] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'item', atts, &block
-      end
-
-      ##
       #
       # The optional weight attribute
       #
@@ -83,6 +72,7 @@ module RubySpeech
       # @param [String] r
       #
       def repeat=(r)
+        r = "#{r.min}-#{r.max}" if r.is_a?(Range)
         r = r.to_s
         error = ArgumentError.new "A Item's repeat must be 0 or a positive integer"
 
@@ -129,6 +119,17 @@ module RubySpeech
 
       def eql?(o)
         super o, :weight, :repeat
+      end
+
+      def regexp_content # :nodoc:
+        return super unless repeat
+
+        if repeat.include?('-')
+          min, max = repeat.split '-'
+          "#{super}{#{min},#{max}}"
+        else
+          "#{super}{#{repeat}}"
+        end
       end
     end # Item
   end # GRXML

@@ -19,7 +19,7 @@ module RubySpeech
       describe "from a document" do
         let(:document) { '<break strength="strong" time="3"/>' }
 
-        subject { Element.import parse_xml(document).root }
+        subject { Element.import document }
 
         it { should be_instance_of Break }
 

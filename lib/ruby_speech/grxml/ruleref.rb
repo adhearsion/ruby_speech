@@ -19,17 +19,6 @@ module RubySpeech
       register :ruleref
 
       ##
-      # Create a new GRXML ruleref element
-      #
-      # @param [Hash] atts Key-value pairs of options mapping to setter methods
-      #
-      # @return [Ruleref] an element for use in an GRXML document
-      #
-      def self.new(atts = {}, &block)
-        super 'ruleref', atts, &block
-      end
-
-      ##
       # XML URI: in the XML Form of this specification any URI is provided as an attribute to an element; for example the ruleref and lexicon elements.
       #
       # @return [String]

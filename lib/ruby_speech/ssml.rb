@@ -5,11 +5,17 @@ module RubySpeech
     eager_autoload do
       autoload :Audio
       autoload :Break
+      autoload :Desc
       autoload :Element
       autoload :Emphasis
+      autoload :Mark
+      autoload :P
+      autoload :Phoneme
       autoload :Prosody
+      autoload :S
       autoload :SayAs
       autoload :Speak
+      autoload :Sub
       autoload :Voice
     end
 

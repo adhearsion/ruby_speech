@@ -363,7 +363,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '6',
-                                              :interpretation => '6'
+                                              :interpretation => 'dtmf-6'
             subject.match('6').should == expected_match
           end
 
@@ -387,7 +387,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '56',
-                                              :interpretation => '56'
+                                              :interpretation => 'dtmf-5 dtmf-6'
             subject.match('56').should == expected_match
           end
 
@@ -411,7 +411,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '*6',
-                                              :interpretation => '*6'
+                                              :interpretation => 'dtmf-star dtmf-6'
             subject.match('*6').should == expected_match
           end
 
@@ -435,7 +435,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '#6',
-                                              :interpretation => '#6'
+                                              :interpretation => 'dtmf-pound dtmf-6'
             subject.match('#6').should == expected_match
           end
 
@@ -464,7 +464,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '*6',
-                                              :interpretation => '*6'
+                                              :interpretation => 'dtmf-star dtmf-6'
             subject.match('*6').should == expected_match
           end
 
@@ -492,7 +492,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '*6',
-                                              :interpretation => '*6'
+                                              :interpretation => 'dtmf-star dtmf-6'
             subject.match('*6').should == expected_match
           end
 
@@ -500,7 +500,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '*7',
-                                              :interpretation => '*7'
+                                              :interpretation => 'dtmf-star dtmf-7'
             subject.match('*7').should == expected_match
           end
 
@@ -527,7 +527,7 @@ module RubySpeech
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '166',
-                                              :interpretation => '166'
+                                              :interpretation => 'dtmf-1 dtmf-6 dtmf-6'
             subject.match('166').should == expected_match
           end
 
@@ -550,12 +550,17 @@ module RubySpeech
             end
           end
 
-          %w{1 16 166 1666}.each do |input|
+          {
+            '1' => 'dtmf-1',
+            '16' => 'dtmf-1 dtmf-6',
+            '166' => 'dtmf-1 dtmf-6 dtmf-6',
+            '1666' => 'dtmf-1 dtmf-6 dtmf-6 dtmf-6'
+          }.each_pair do |input, interpretation|
             it "should match '#{input}'" do
               expected_match = GRXML::Match.new :mode           => :dtmf,
                                                 :confidence     => 1,
                                                 :utterance      => input,
-                                                :interpretation => input
+                                                :interpretation => interpretation
               subject.match(input).should == expected_match
             end
           end
@@ -579,12 +584,16 @@ module RubySpeech
             end
           end
 
-          %w{166 1666 16666}.each do |input|
+          {
+            '166' => 'dtmf-1 dtmf-6 dtmf-6',
+            '1666' => 'dtmf-1 dtmf-6 dtmf-6 dtmf-6',
+            '16666' => 'dtmf-1 dtmf-6 dtmf-6 dtmf-6 dtmf-6'
+          }.each_pair do |input, interpretation|
             it "should match '#{input}'" do
               expected_match = GRXML::Match.new :mode           => :dtmf,
                                                 :confidence     => 1,
                                                 :utterance      => input,
-                                                :interpretation => input
+                                                :interpretation => interpretation
               subject.match(input).should == expected_match
             end
           end
@@ -621,12 +630,17 @@ module RubySpeech
             end
           end
 
-          %w{*9 1234# 5678# 1111#}.each do |input|
+          {
+            '*9' => 'dtmf-star dtmf-9',
+            '1234#' => 'dtmf-1 dtmf-2 dtmf-3 dtmf-4 dtmf-pound',
+            '5678#' => 'dtmf-5 dtmf-6 dtmf-7 dtmf-8 dtmf-pound',
+            '1111#' => 'dtmf-1 dtmf-1 dtmf-1 dtmf-1 dtmf-pound'
+          }.each_pair do |input, interpretation|
             it "should match '#{input}'" do
               expected_match = GRXML::Match.new :mode           => :dtmf,
                                                 :confidence     => 1,
                                                 :utterance      => input,
-                                                :interpretation => input
+                                                :interpretation => interpretation
               subject.match(input).should == expected_match
             end
           end

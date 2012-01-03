@@ -253,7 +253,13 @@ module RubySpeech
       end
 
       def interpret_utterance(utterance)
-        utterance
+        conversion = Hash.new { |hash, key| hash[key] = key }
+        conversion['*'] = 'star'
+        conversion['#'] = 'pound'
+
+        utterance.chars.inject [] do |array, digit|
+          array << "dtmf-#{conversion[digit]}"
+        end.join ' '
       end
 
       def split_tokens(element)

@@ -22,6 +22,10 @@ module RubySpeech
       def regexp_content # :nodoc:
         children.map(&:regexp_content).join
       end
+
+      def potential_match?(other)
+        false
+      end
     end # Element
   end # GRXML
 end # RubySpeech

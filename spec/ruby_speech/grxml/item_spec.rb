@@ -187,6 +187,157 @@ module RubySpeech
           lambda { subject << Token.new }.should_not raise_error
         end
       end
+
+      describe "#potential_match?" do
+        subject { Item.new }
+
+        before do
+          tokens.each { |token| subject << token }
+          subject.repeat = repeat if repeat
+        end
+
+        context "with a single token of '6'" do
+          let(:tokens) { [Token.new << '6'] }
+
+          context "with no repeat" do
+            let(:repeat) { nil }
+
+            it "should be true for '6'" do
+              subject.potential_match?('6').should be true
+            end
+
+            %w{5 55 65 66}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with an absolute repeat of 3" do
+            let(:repeat) { 3 }
+
+            %w{6 66 666}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 55 65 6666}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with a range repeat of 0..2" do
+            let(:repeat) { 0..2 }
+
+            it "should be true for ''" do
+              subject.potential_match?('').should be true
+            end
+
+            %w{6 66}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 55 65 666}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with a minimum repeat of 2" do
+            let(:repeat) { 2..Item::Inf }
+
+            %w{6 66 666 6666 66666}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 55 65}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+        end
+
+        context "with a collection of two tokens of '6' and '7'" do
+          let(:tokens) { [Token.new << '6', Token.new << '7'] }
+
+          context "with no repeat" do
+            let(:repeat) { nil }
+
+            %w{6 67}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 55 65 66 676}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with an absolute repeat of 3" do
+            let(:repeat) { 3 }
+
+            %w{6 67 676 6767 67676 676767}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 57 66 677 5767 67677 676766 6767676}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with a range repeat of 0..2" do
+            let(:repeat) { 0..2 }
+
+            it "should be true for ''" do
+              subject.potential_match?('').should be true
+            end
+
+            %w{6 67 676 6767}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 57 66 677 5767 67676 67677 676766 6767676}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+
+          context "with a minimum repeat of 2" do
+            let(:repeat) { 2..Item::Inf }
+
+            %w{6 67 676 6767 67676 676767 67676767}.each do |input|
+              it "should be true for '#{input}'" do
+                subject.potential_match?(input).should be true
+              end
+            end
+
+            %w{5 57 66 677 5767 67677 676766}.each do |input|
+              it "should be false for '#{input}'" do
+                subject.potential_match?(input).should be false
+              end
+            end
+          end
+        end
+      end
     end # Item
   end # GRXML
 end # RubySpeech

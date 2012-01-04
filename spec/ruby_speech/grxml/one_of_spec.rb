@@ -45,6 +45,73 @@ module RubySpeech
         end
       end
 
+      describe "#potential_match?" do
+        before do
+          items.each { |item| subject << item }
+        end
+
+        context "with a single item of '6'" do
+          let(:items) { [Item.new << (Token.new << '6')] }
+
+          it "should be true for '6'" do
+            subject.potential_match?('6').should be true
+          end
+
+          %w{5 7}.each do |input|
+            it "should be false for '#{input}'" do
+              subject.potential_match?(input).should be false
+            end
+          end
+        end
+
+        context "with options of '6' or '7'" do
+          let(:items) { [Item.new << (Token.new << '6'), Item.new << (Token.new << '7')] }
+
+          %w{6 7}.each do |input|
+            it "should be true for '#{input}'" do
+              subject.potential_match?(input).should be true
+            end
+          end
+
+          %w{5 8 67 76}.each do |input|
+            it "should be false for '#{input}'" do
+              subject.potential_match?(input).should be false
+            end
+          end
+        end
+
+        context "with options of '67' or '25'" do
+          let(:items) { [Item.new << (Token.new << '6') << (Token.new << '7'), Item.new << (Token.new << '2') << (Token.new << '5')] }
+
+          %w{6 2}.each do |input|
+            it "should be true for '#{input}'" do
+              subject.potential_match?(input).should be true
+            end
+          end
+
+          %w{3 7 5 65 27 76 52}.each do |input|
+            it "should be false for '#{input}'" do
+              subject.potential_match?(input).should be false
+            end
+          end
+        end
+
+        context "with options of '678' or '251'" do
+          let(:items) { [Item.new << (Token.new << '6') << (Token.new << '7') << (Token.new << '8'), Item.new << (Token.new << '2') << (Token.new << '5') << (Token.new << '1')] }
+
+          %w{6 67 2 25}.each do |input|
+            it "should be true for '#{input}'" do
+              subject.potential_match?(input).should be true
+            end
+          end
+
+          %w{3 7 5 65 27 76 52}.each do |input|
+            it "should be false for '#{input}'" do
+              subject.potential_match?(input).should be false
+            end
+          end
+        end
+      end
     end # OneOf
   end # GRXML
 end # RubySpeech

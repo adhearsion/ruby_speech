@@ -164,6 +164,7 @@ module RubySpeech
     def <<(other)
       other = encode_special_chars other if other.is_a? String
       super other
+      self
     end
 
     def method_missing(method_name, *args, &block)

@@ -26,6 +26,7 @@ module RubySpeech
     # xml:lang declares declaration declares the language of the grammar section for the item element just as xml:lang in the <grammar> element declares for the entire document
     #
     class Item < Element
+      Inf = 1.0 / 0.0
 
       register :item
 
@@ -61,7 +62,14 @@ module RubySpeech
       # @return [String]
       #
       def repeat
-        read_attr :repeat
+        repeat = read_attr :repeat
+        return nil unless repeat
+        if repeat.include?('-')
+          min, max = repeat.split('-').map &:to_i
+          (min || 0)..(max || Inf)
+        else
+          repeat.to_i
+        end
       end
 
       ##
@@ -72,7 +80,7 @@ module RubySpeech
       # @param [String] r
       #
       def repeat=(r)
-        r = "#{r.min}-#{r.max}" if r.is_a?(Range)
+        r = "#{r.min}-#{r.max unless r.max == Inf}" if r.is_a?(Range)
         r = r.to_s
         error = ArgumentError.new "A Item's repeat must be 0 or a positive integer"
 
@@ -122,13 +130,13 @@ module RubySpeech
       end
 
       def regexp_content # :nodoc:
-        return super unless repeat
-
-        if repeat.include?('-')
-          min, max = repeat.split '-'
-          "#{super}{#{min},#{max}}"
-        else
+        case repeat
+        when Range
+          "#{super}{#{repeat.min},#{repeat.max unless repeat.max == Inf}}"
+        when Integer
           "#{super}{#{repeat}}"
+        else
+          super
         end
       end
     end # Item

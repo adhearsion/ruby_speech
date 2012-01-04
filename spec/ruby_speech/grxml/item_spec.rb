@@ -8,7 +8,7 @@ module RubySpeech
       its(:name) { should == 'item' }
 
       its(:weight)  { should == 1.1 }
-      its(:repeat)  { should == '1' }
+      its(:repeat)  { should == 1 }
 
       it 'registers itself' do
         Element.class_from_registration(:item).should == Item
@@ -22,7 +22,7 @@ module RubySpeech
         it { should be_instance_of Item }
 
         its(:weight)  { should == 1.1 }
-        its(:repeat)  { should == '1' }
+        its(:repeat)  { should == 1 }
         its(:content) { should == 'one' }
       end
 
@@ -69,10 +69,19 @@ module RubySpeech
       # Validate various values for repeat -- http://www.w3.org/TR/speech-grammar/#S2.5
       describe "#repeat" do
         context "exact" do
-          it "valid values (0 or a positive integer)" do
-            lambda { subject.repeat = 0 }.should_not raise_error
-            lambda { subject.repeat = 5 }.should_not raise_error
-            lambda { subject.repeat = '1' }.should_not raise_error
+          context "0" do
+            before { subject.repeat = 0 }
+            its(:repeat) { should == 0 }
+          end
+
+          context "5" do
+            before { subject.repeat = 5 }
+            its(:repeat) { should == 5 }
+          end
+
+          context "'1'" do
+            before { subject.repeat = '1' }
+            its(:repeat) { should == 1 }
           end
 
           it "invalid values" do
@@ -82,10 +91,21 @@ module RubySpeech
         end
 
         context "ranges" do
-          it "valid ranges from m to n" do
-            lambda { subject.repeat = '1-5' }.should_not raise_error
-            lambda { subject.repeat = '0-5' }.should_not raise_error
-            lambda { subject.repeat = 0..5 }.should_not raise_error
+          context "valid ranges from m to n" do
+            context "'1-5'" do
+              before { subject.repeat = '1-5' }
+              its(:repeat) { should == (1..5) }
+            end
+
+            context "'0-5'" do
+              before { subject.repeat = '0-5' }
+              its(:repeat) { should == (0..5) }
+            end
+
+            context "0..5" do
+              before { subject.repeat = 0..5 }
+              its(:repeat) { should == (0..5) }
+            end
           end
 
           it "illegal ranges from m to n" do
@@ -97,9 +117,18 @@ module RubySpeech
             lambda { subject.repeat = 1..-2 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
           end
 
-          it "valid ranges of m or more" do
-            lambda { subject.repeat = '3-' }.should_not raise_error
-            lambda { subject.repeat = '0-' }.should_not raise_error
+          context "valid ranges of m or more" do
+            context "'3-'" do
+              before { subject.repeat = '3-' }
+              its(:repeat) { should == (3..Item::Inf) }
+              its(:repeat) { should include 10000 }
+            end
+
+            context "'0-'" do
+              before { subject.repeat = '0-' }
+              its(:repeat) { should == (0..Item::Inf) }
+              its(:repeat) { should include 10000 }
+            end
           end
 
           it "illegal ranges for m or more" do

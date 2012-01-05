@@ -219,11 +219,13 @@ module RubySpeech
       end
 
       def potential_match?(other)
-        tokens = root_rule.children
-        other.chars.each_with_index do |digit, index|
-          return false unless tokens[index] && tokens[index].potential_match?(digit)
+        root_rule.children.each do |token|
+          return true if other.length.zero?
+          longest_potential_match = token.longest_potential_match other
+          return false if longest_potential_match.length.zero?
+          other.gsub! /^#{Regexp.escape longest_potential_match}/, ''
         end
-        true
+        other.length.zero?
       end
 
       ##

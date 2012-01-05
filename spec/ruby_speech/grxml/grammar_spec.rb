@@ -611,7 +611,6 @@ module RubySpeech
 
           %w{6 65 7 72}.each do |input|
             it "should potentially match '#{input}'" do
-              pending
               subject.match(input).should == GRXML::PotentialMatch.new
             end
           end

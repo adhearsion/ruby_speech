@@ -26,6 +26,19 @@ module RubySpeech
       def potential_match?(other)
         false
       end
+
+      def max_input_length
+        0
+      end
+
+      def longest_potential_match(input)
+        input.dup.tap do |longest_input|
+          begin
+            return longest_input if potential_match? longest_input
+            longest_input.chop!
+          end until longest_input.length.zero?
+        end
+      end
     end # Element
   end # GRXML
 end # RubySpeech

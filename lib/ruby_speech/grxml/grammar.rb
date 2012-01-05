@@ -203,6 +203,7 @@ module RubySpeech
       #     ```
       #
       def match(other)
+        other = other.dup
         regex = to_regexp
         return check_for_potential_match(other) if regex == //
         match = regex.match other

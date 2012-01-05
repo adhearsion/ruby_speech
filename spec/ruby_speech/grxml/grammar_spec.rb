@@ -360,11 +360,13 @@ module RubySpeech
           end
 
           it "should match '6'" do
+            input = '6'
             expected_match = GRXML::Match.new :mode           => :dtmf,
                                               :confidence     => 1,
                                               :utterance      => '6',
                                               :interpretation => 'dtmf-6'
-            subject.match('6').should == expected_match
+            subject.match(input).should == expected_match
+            input.should == '6'
           end
 
           %w{1 2 3 4 5 7 8 9 10 66 26 61}.each do |input|
@@ -392,7 +394,9 @@ module RubySpeech
           end
 
           it "should potentially match '5'" do
-            subject.match('5').should == GRXML::PotentialMatch.new
+            input = '5'
+            subject.match(input).should == GRXML::PotentialMatch.new
+            input.should == '5'
           end
 
           %w{* *7 #6 6* 1 2 3 4 6 7 8 9 10 65 57 46 26 61}.each do |input|

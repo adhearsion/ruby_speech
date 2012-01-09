@@ -195,20 +195,38 @@ module RubySpeech
       #             @interpretation = "1234#"
       #           >
       #       >> subject.match '111'
-      #       => #<RubySpeech::GRXML::NoMatch:0x00000101371660>
+      #       => #<RubySpeech::GRXML::PotentialMatch:0x00000101371660>
+      #
+      #       >> subject.match '11111'
+      #       => #<RubySpeech::GRXML::NoMatch:0x00000101371936>
       #
       #     ```
       #
       def match(other)
+        other = other.dup
         regex = to_regexp
-        return NoMatch.new if regex == //
+        return check_for_potential_match(other) if regex == //
         match = regex.match other
-        return NoMatch.new unless match
+        return check_for_potential_match(other) unless match
 
         Match.new :mode           => mode,
                   :confidence     => dtmf? ? 1 : 0,
                   :utterance      => other,
                   :interpretation => interpret_utterance(other)
+      end
+
+      def check_for_potential_match(other)
+        potential_match?(other) ? PotentialMatch.new : NoMatch.new
+      end
+
+      def potential_match?(other)
+        root_rule.children.each do |token|
+          return true if other.length.zero?
+          longest_potential_match = token.longest_potential_match other
+          return false if longest_potential_match.length.zero?
+          other.gsub! /^#{Regexp.escape longest_potential_match}/, ''
+        end
+        other.length.zero?
       end
 
       ##

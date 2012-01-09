@@ -1,5 +1,10 @@
 # develop
 
+# 0.5.1 - 2012-01-09
+  * Feature: Chaining child injection using #<< now works
+  * Feature: Reading the repeat value for a GRXML Item now returns an Integer or a Range, rather than the plain string
+  * Feature: Most simple GRXML grammars now return PotentialMatch when the provided input is valid but incomplete. This does not work for complex grammars including repeats and deep nesting. Fixes for these coming soon.
+
 # 0.5.0 - 2012-01-03
   * Feature: Add a whole bunch more SSML elements:
   ** p & s

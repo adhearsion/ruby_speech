@@ -51,6 +51,11 @@ module RubySpeech
         it "should accept String" do
           lambda { subject << 'anything' }.should_not raise_error
         end
+
+        it "should allow chaining" do
+          subject << 'foo' << 'bar'
+          subject.content.should == 'foobar'
+        end
       end
     end # Token
   end # GRXML

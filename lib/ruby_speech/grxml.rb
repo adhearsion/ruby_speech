@@ -15,6 +15,7 @@ module RubySpeech
 
     autoload :Match
     autoload :NoMatch
+    autoload :PotentialMatch
 
     InvalidChildError = Class.new StandardError
 

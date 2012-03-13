@@ -1,5 +1,8 @@
 # develop
 
+# 1.0.0 - 2012-03-13
+  * Bump major version because we have a stable API
+
 # 0.5.1 - 2012-01-09
   * Feature: Chaining child injection using #<< now works
   * Feature: Reading the repeat value for a GRXML Item now returns an Integer or a Range, rather than the plain string

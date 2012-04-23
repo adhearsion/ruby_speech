@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'ruby_speech'
 require 'mocha'
 

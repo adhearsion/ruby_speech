@@ -1,5 +1,4 @@
 require 'ruby_speech'
-require 'mocha'
 
 include RubySpeech::GRXML
 include RubySpeech::XML::Language

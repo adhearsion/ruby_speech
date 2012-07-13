@@ -27,7 +27,7 @@ module RubySpeech
       # @param [String] the name token
       #
       def name=(other)
-        write_attr :name, other
+        self[:name] = other
       end
 
       def <<(*args)

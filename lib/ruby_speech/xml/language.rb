@@ -6,7 +6,7 @@ module RubySpeech
       end
 
       def language=(l)
-        write_attr 'xml:lang', l
+        self['xml:lang'] = l
       end
     end # Language
   end # XML

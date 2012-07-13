@@ -31,7 +31,7 @@ module RubySpeech
       # @param [String] the source. Must be a valid URI
       #
       def src=(s)
-        write_attr :src, s
+        self[:src] = s
       end
 
       def <<(arg)

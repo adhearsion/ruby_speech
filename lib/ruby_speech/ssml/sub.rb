@@ -26,7 +26,7 @@ module RubySpeech
       # @param [String] other the string to be spoken instead of the enclosed string
       #
       def alias=(other)
-        write_attr :alias, other
+        self[:alias] = other
       end
 
       def <<(arg)

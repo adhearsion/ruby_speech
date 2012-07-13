@@ -36,7 +36,7 @@ module RubySpeech
       # @param [String] ia
       #
       def mode=(ia)
-        write_attr :mode, ia
+        self[:mode] = ia
       end
 
       ##
@@ -53,7 +53,7 @@ module RubySpeech
       # @param [String] ia
       #
       def root=(ia)
-        write_attr :root, ia
+        self[:root] = ia
       end
 
       ##
@@ -68,7 +68,7 @@ module RubySpeech
       # @param [String] ia
       #
       def tag_format=(s)
-        write_attr :'tag-format', s
+        self['tag-format'] = s
       end
 
       ##
@@ -104,7 +104,7 @@ module RubySpeech
       # @return self
       #
       def inline!
-        find("//ns:ruleref", :ns => namespace_href).each do |ref|
+        xpath("//ns:ruleref", :ns => namespace_href).each do |ref|
           rule = children(:rule, :id => ref[:uri].sub(/^#/, '')).first
           ref.swap rule.nokogiri_children
         end

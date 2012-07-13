@@ -52,7 +52,7 @@ module RubySpeech
       #
       def weight=(w)
         raise ArgumentError, "A Item's weight attribute must be a positive floating point number" unless w.to_s.match(/[^0-9\.]/) == nil and w.to_f >= 0
-        write_attr :weight, w
+        self[:weight] = w
       end
 
       ##
@@ -99,7 +99,7 @@ module RubySpeech
             m < 0 || n < m
           end
         end
-        write_attr :repeat, r
+        self[:repeat] = r
       end
 
       ##
@@ -117,7 +117,7 @@ module RubySpeech
       #
       def repeat_prob=(rp)
         raise ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0" unless rp.to_s.match(/[^0-9\.]/) == nil and rp.to_f >= 0 and rp.to_f <= 1.0
-        write_attr :'repeat-prob', rp
+        self['repeat-prob'] = rp
       end
 
       def <<(arg)

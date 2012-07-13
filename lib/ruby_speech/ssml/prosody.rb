@@ -43,7 +43,7 @@ module RubySpeech
       def pitch=(p)
         hz = p.is_a?(String) && p.include?('Hz') && p.to_f > 0
         raise ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", #{VALID_PITCHES.map(&:inspect).join ', '})" unless hz || VALID_PITCHES.include?(p)
-        write_attr :pitch, p
+        self[:pitch] = p
       end
 
       ##
@@ -61,7 +61,7 @@ module RubySpeech
       # @param [String] v
       #
       def contour=(v)
-        write_attr :contour, v
+        self[:contour] = v
       end
 
       ##
@@ -87,7 +87,7 @@ module RubySpeech
       def range=(p)
         hz = p.is_a?(String) && p.include?('Hz') && p.to_f > 0
         raise ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", #{VALID_PITCHES.map(&:inspect).join ', '})" unless hz || VALID_PITCHES.include?(p)
-        write_attr :range, p
+        self[:range] = p
       end
 
       ##
@@ -112,7 +112,7 @@ module RubySpeech
       #
       def rate=(v)
         raise ArgumentError, "You must specify a valid rate ([positive-number](multiplier), #{VALID_RATES.map(&:inspect).join ', '})" unless (v.is_a?(Numeric) && v >= 0) || VALID_RATES.include?(v)
-        write_attr :rate, v
+        self[:rate] = v
       end
 
       ##
@@ -131,7 +131,7 @@ module RubySpeech
       #
       def duration=(t)
         raise ArgumentError, "You must specify a valid duration (positive float value in seconds)" unless t.is_a?(Numeric) && t >= 0
-        write_attr :duration, "#{t}s"
+        self[:duration] = "#{t}s"
       end
 
       ##
@@ -156,7 +156,7 @@ module RubySpeech
       #
       def volume=(v)
         raise ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), #{VALID_VOLUMES.map(&:inspect).join ', '})" unless (v.is_a?(Numeric) && (0..100).include?(v)) || VALID_VOLUMES.include?(v)
-        write_attr :volume, v
+        self[:volume] = v
       end
 
       def <<(arg)

@@ -52,21 +52,10 @@ module RubySpeech
       end
 
       def new(atts = {}, &block)
-        blk_proc = lambda do |new_node|
+        super(self.registered_name, nil, self.namespace) do |new_node|
           (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
           new_node << block_return if block_return.is_a?(String)
-        end
-
-        case RUBY_VERSION.split('.')[0,2].join.to_i
-        when 18
-          super(self.registered_name, nil, self.namespace).tap do |n|
-            blk_proc[n]
-          end
-        else
-          super(self.registered_name, nil, self.namespace) do |n|
-            blk_proc[n]
-          end
         end
       end
     end

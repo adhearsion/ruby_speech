@@ -1,10 +1,12 @@
 # RubySpeech
-RubySpeech is a library for constructing and parsing Text to Speech (TTS) and Automatic Speech Recognition (ASR) documents such as [SSML](http://www.w3.org/TR/speech-synthesis) and [GRXML](http://www.w3.org/TR/speech-grammar/). The primary use case is for construction of these documents to be processed by TTS and ASR engines.
+RubySpeech is a library for constructing and parsing Text to Speech (TTS) and Automatic Speech Recognition (ASR) documents such as [SSML](http://www.w3.org/TR/speech-synthesis), [GRXML](http://www.w3.org/TR/speech-grammar/) and [NLSML](http://www.w3.org/TR/nl-spec/). Such documents can be constructed to be processed by TTS and ASR engines, parsed as the result from such, or used in the implementation of such engines.
 
 ## Installation
     gem install ruby_speech
 
 ## Library
+
+### SSML
 RubySpeech provides a DSL for constructing SSML documents like so:
 
 ```ruby
@@ -45,6 +47,7 @@ Once your `Speak` is fully prepared and you're ready to send it off for processi
 
 You may also then need to call `to_s`.
 
+### GRXML
 
 Construct a GRXML (SRGS) document like this:
 
@@ -103,7 +106,7 @@ which becomes
 </grammar>
 ```
 
-### Grammar matching
+#### Grammar matching
 
 It is possible to match some arbitrary input against a GRXML grammar. In order to do so, certain normalization routines should first be run on the grammar in order to prepare it for matching. These are reference inlining, tokenization and whitespace normalization, and are described [in the SRGS spec](http://www.w3.org/TR/speech-grammar/#S2.1). This process will transform the above grammar like so:
 
@@ -198,6 +201,105 @@ Matching against some sample input strings then returns the following results:
 => #<RubySpeech::GRXML::NoMatch:0x00000101371660>
 ```
 
+### NLSML
+
+[Natural Language Semantics Markup Language](http://www.w3.org/TR/nl-spec/) is the format used by many Speech Recognition engines and natural language processors to add semantic information to human language. RubySpeech is capable of generating and parsing such documents.
+
+It is possible to generate an NLSML document like so:
+
+```ruby
+require 'ruby_speech'
+
+nlsml = RubySpeech::NLSML.draw do
+  interpretation confidence: 0.6 do
+    input mode: :speech do
+      "I want to go to Pittsburgh"
+    end
+
+    model do
+      group name: 'airline' do
+        string name: 'to_city'
+      end
+    end
+
+    instance do
+      """
+      <myApp:airline>
+        <to_city>Pittsburgh</to_city>
+      </myApp:airline>
+      """
+    end
+  end
+
+  interpretation confidence: 0.4 do
+    input do
+      I want to go to Stockholm
+    end
+
+    model do
+      group name: 'airline' do
+        string name: 'to_city'
+      end
+    end
+
+    instance do
+      """
+      <myApp:airline>
+        <to_city>Stockholm</to_city>
+      </myApp:airline>
+      """
+    end
+  end
+end
+
+nlsml.to_s
+```
+
+becomes:
+
+```xml
+<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+  <interpretation confidence="60">
+    <input mode="speech">
+      I want to go to Pittsburgh
+    </input>
+    <xf:model>
+      <group name="airline">
+        <string name="to_city"/>
+      </group>
+    </xf:model>
+    <xf:instance>
+      <myApp:airline>
+        <to_city>Pittsburgh</to_city>
+      </myApp:airline>
+    </xf:instance>
+  </interpretation>
+  <interpretation confidence="40">
+    <input>I want to go to Stockholm</input>
+    <xf:model>
+      <group name="airline">
+        <string name="to_city"/>
+      </group>
+    </xf:model>
+    <xf:instance>
+      <myApp:airline>
+        <to_city>Stockholm</to_city>
+      </myApp:airline>
+    </xf:instance>
+  </interpretation>
+</result>
+```
+
+It's also possible to parse an NLSML document and extract useful information from it. Taking the above example, one may do:
+
+```ruby
+document = RubySpeech.parse nlsml.to_s
+
+document.match? # => true
+document.interpretations # => [#<RubySpeech::NLSML::Interpretation ...>, #<RubySpeech::NLSML::Interpretation ...>]
+document.best_interpretation # => #<RubySpeech::NLSML::Interpretation confidence=0.6 input=#<RubySpeech::NLSML::Input mode=:speech, text="I want to go to Pittsburgh"> model=#<RubySpeech::NLSML::Model ...> #<RubySpeech::NLSML::Instance ...>>
+```
+
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
 
 ## Features:
@@ -226,6 +328,8 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<tag/>`
 * `<token/>`
 
+### NLSML
+
 ## TODO:
 ### SSML
 * `<lexicon/>`
@@ -236,11 +340,20 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<example/>`
 * `<lexicon/>`
 
+### NLSML
+* `<result/>`
+* `<interpretation/>`
+* `<model/>`
+* `<instance/>`
+* `<input/>`
+* `<nomatch/>`
+* `<noinput/>`
 
 ## Links:
 * [Source](https://github.com/benlangfeld/ruby_speech)
 * [Documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames)
 * [Bug Tracker](https://github.com/benlangfeld/ruby_speech/issues)
+* [CI](https://travis-ci.org/#!/benlangfeld/ruby_speech)
 
 ## Note on Patches/Pull Requests
 

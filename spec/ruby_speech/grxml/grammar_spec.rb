@@ -737,6 +737,39 @@ module RubySpeech
           end
         end
 
+        context "with a grammar that takes a specific digit repeated an exact number of times, followed by a specific digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                item :repeat => 2 do
+                  '6'
+                end
+                string '1'
+              end
+            end
+          end
+
+          it "should match '661'" do
+            expected_match = GRXML::Match.new :mode           => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '661',
+                                              :interpretation => 'dtmf-6 dtmf-6 dtmf-1'
+            subject.match('661').should == expected_match
+          end
+
+          %w{6 66}.each do |input|
+            it "should potentially match '#{input}'" do
+              subject.match(input).should == GRXML::PotentialMatch.new
+            end
+          end
+
+          %w{61 6661 66661 71 771}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
         context "with a grammar that takes a specific digit, followed by a specific digit repeated within a range" do
           subject do
             GRXML.draw :mode => :dtmf, :root => 'digits' do
@@ -764,7 +797,47 @@ module RubySpeech
             end
           end
 
-          %w{6 16666 17}.each do |input|
+          %w{6 66 666}.each do |input|
+            it "should potentially match '#{input}'" do
+              subject.match(input).should == GRXML::PotentialMatch.new
+            end
+          end
+
+          %w{66661 71}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a a specific digit repeated within a range, followed by specific digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                item :repeat => 0..3 do
+                  '6'
+                end
+                string '1'
+              end
+            end
+          end
+
+          {
+            '1' => 'dtmf-1',
+            '61' => 'dtmf-6 dtmf-1',
+            '661' => 'dtmf-6 dtmf-6 dtmf-1',
+            '6661' => 'dtmf-6 dtmf-6 dtmf-6 dtmf-1'
+          }.each_pair do |input, interpretation|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => interpretation
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{6 66661 71}.each do |input|
             it "should not match '#{input}'" do
               subject.match(input).should == GRXML::NoMatch.new
             end
@@ -804,6 +877,45 @@ module RubySpeech
           end
 
           %w{7 17}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
+        context "with a grammar that takes a specific digit repeated a minimum number of times, followed by a specific digit" do
+          subject do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                item :repeat => '2-' do
+                  '6'
+                end
+                string '1'
+              end
+            end
+          end
+
+          {
+            '661' => 'dtmf-6 dtmf-6 dtmf-1',
+            '6661' => 'dtmf-6 dtmf-6 dtmf-6 dtmf-1',
+            '66661' => 'dtmf-6 dtmf-6 dtmf-6 dtmf-6 dtmf-1'
+          }.each_pair do |input, interpretation|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => interpretation
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{6 66}.each do |input|
+            it "should potentially match '#{input}'" do
+              subject.match(input).should == GRXML::PotentialMatch.new
+            end
+          end
+
+          %w{7 71 61}.each do |input|
             it "should not match '#{input}'" do
               subject.match(input).should == GRXML::NoMatch.new
             end
@@ -852,7 +964,6 @@ module RubySpeech
 
           %w{* 1 12 123 1234}.each do |input|
             it "should potentially match '#{input}'" do
-              pending
               subject.match(input).should == GRXML::PotentialMatch.new
             end
           end

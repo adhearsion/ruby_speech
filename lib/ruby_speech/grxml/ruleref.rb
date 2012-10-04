@@ -34,7 +34,7 @@ module RubySpeech
       #
       def uri=(u)
         raise ArgumentError, "A Ruleref can only take uri or special" if special
-        write_attr :uri, u
+        self[:uri] = u
       end
 
       ##
@@ -54,7 +54,7 @@ module RubySpeech
       def special=(sp)
         raise ArgumentError, "A Ruleref can only take uri or special" if uri
         raise ArgumentError, "The Ruleref#special method only takes :NULL, :VOID, and :GARBAGE" unless %w{NULL VOID GARBAGE}.include? sp.to_s
-        write_attr :special, sp
+        self[:special] = sp
       end
 
       def <<(*args)

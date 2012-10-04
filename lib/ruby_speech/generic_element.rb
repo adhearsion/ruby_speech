@@ -43,7 +43,7 @@ module RubySpeech
       def import(node)
         node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node)
         return node.content if node.is_a?(Nokogiri::XML::Text)
-        klass = class_from_registration node.element_name
+        klass = class_from_registration node.node_name
         if klass && klass != self
           klass.import node
         else
@@ -52,21 +52,10 @@ module RubySpeech
       end
 
       def new(atts = {}, &block)
-        blk_proc = lambda do |new_node|
+        super(self.registered_name, nil, self.namespace) do |new_node|
           (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
           new_node << block_return if block_return.is_a?(String)
-        end
-
-        case RUBY_VERSION.split('.')[0,2].join.to_i
-        when 18
-          super(self.registered_name, nil, self.namespace).tap do |n|
-            blk_proc[n]
-          end
-        else
-          super(self.registered_name, nil, self.namespace) do |n|
-            blk_proc[n]
-          end
         end
       end
     end
@@ -87,7 +76,7 @@ module RubySpeech
     end
 
     def version=(other)
-      write_attr :version, other
+      self[:version] = other
     end
 
     ##
@@ -101,7 +90,7 @@ module RubySpeech
     # @param [String] uri the base URI to which relative URLs are resolved
     #
     def base_uri=(uri)
-      write_attr 'xml:base', uri
+      self['xml:base'] = uri
     end
 
     def to_doc
@@ -133,9 +122,9 @@ module RubySpeech
         end.join(',') << ']' if attributes
 
         if namespace_href
-          find "ns:#{expression}", :ns => namespace_href
+          xpath "ns:#{expression}", :ns => namespace_href
         else
-          find expression
+          xpath expression
         end
       else
         super()

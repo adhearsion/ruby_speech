@@ -1,14 +1,11 @@
+language: ruby
+
 rvm:
   - 1.9.2
-  - rbx
-  - rbx-2.0
-  - jruby
+  - 1.9.3
+  - jruby-19mode
+  - rbx-19mode
   - ruby-head
 
 notifications:
   irc: "irc.freenode.org#adhearsion-dev"
-
-branches:
-  only:
-    - master
-    - develop

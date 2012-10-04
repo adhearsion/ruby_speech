@@ -1,4 +1,5 @@
 # develop
+  * Bugfix: Don't load rubygems because it is evil
 
 # 1.0.0 - 2012-03-13
   * Bump major version because we have a stable API

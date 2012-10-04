@@ -36,7 +36,7 @@ module RubySpeech
       # @param [String] ia
       #
       def id=(ia)
-        write_attr :id, ia
+        self[:id] = ia
       end
 
       ##
@@ -57,7 +57,7 @@ module RubySpeech
       #
       def scope=(sc)
         raise ArgumentError, "A Rule's scope can only be 'public' or 'private'" unless %w{public private}.include?(sc.to_s)
-        write_attr :scope, sc
+        self[:scope] = sc
       end
 
       def <<(arg)

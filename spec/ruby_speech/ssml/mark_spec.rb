@@ -3,7 +3,7 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Mark do
-      its(:element_name) { should == 'mark' }
+      its(:node_name) { should == 'mark' }
 
       describe "setting options in initializers" do
         subject { Mark.new :name => 'foo' }

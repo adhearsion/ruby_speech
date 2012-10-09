@@ -71,8 +71,6 @@ describe RubySpeech::NLSML do
         end
       end
 
-      puts document.to_xml
-
       document.to_xml.should == expected_document
     end
   end

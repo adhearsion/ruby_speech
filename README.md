@@ -210,11 +210,9 @@ It is possible to generate an NLSML document like so:
 ```ruby
 require 'ruby_speech'
 
-nlsml = RubySpeech::NLSML.draw do
+nlsml = RubySpeech::NLSML.draw(grammar: 'http://flight', 'xmlns:myApp' => 'foo') do
   interpretation confidence: 0.6 do
-    input mode: :speech do
-      "I want to go to Pittsburgh"
-    end
+    input "I want to go to Pittsburgh", mode: :speech
 
     model do
       group name: 'airline' do
@@ -223,18 +221,14 @@ nlsml = RubySpeech::NLSML.draw do
     end
 
     instance do
-      """
-      <myApp:airline>
-        <to_city>Pittsburgh</to_city>
-      </myApp:airline>
-      """
+      self['myApp'].airline do
+        to_city 'Pittsburgh'
+      end
     end
   end
 
   interpretation confidence: 0.4 do
-    input do
-      I want to go to Stockholm
-    end
+    input "I want to go to Stockholm"
 
     model do
       group name: 'airline' do
@@ -243,11 +237,9 @@ nlsml = RubySpeech::NLSML.draw do
     end
 
     instance do
-      """
-      <myApp:airline>
-        <to_city>Stockholm</to_city>
-      </myApp:airline>
-      """
+      self['myApp'].airline do
+        to_city "Stockholm"
+      end
     end
   end
 end
@@ -258,32 +250,31 @@ nlsml.to_s
 becomes:
 
 ```xml
-<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+<?xml version="1.0"?>
+<result xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
   <interpretation confidence="60">
-    <input mode="speech">
-      I want to go to Pittsburgh
-    </input>
+    <input mode="speech">I want to go to Pittsburgh</input>
     <xf:model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
+      <xf:group name="airline">
+        <xf:string name="to_city"/>
+      </xf:group>
     </xf:model>
     <xf:instance>
       <myApp:airline>
-        <to_city>Pittsburgh</to_city>
+        <myApp:to_city>Pittsburgh</myApp:to_city>
       </myApp:airline>
     </xf:instance>
   </interpretation>
   <interpretation confidence="40">
     <input>I want to go to Stockholm</input>
     <xf:model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
+      <xf:group name="airline">
+        <xf:string name="to_city"/>
+      </xf:group>
     </xf:model>
     <xf:instance>
       <myApp:airline>
-        <to_city>Stockholm</to_city>
+        <myApp:to_city>Stockholm</myApp:to_city>
       </myApp:airline>
     </xf:instance>
   </interpretation>

@@ -15,6 +15,7 @@ module RubySpeech
     autoload :GenericElement
     autoload :SSML
     autoload :GRXML
+    autoload :NLSML
     autoload :XML
   end
 end

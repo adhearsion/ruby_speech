@@ -287,8 +287,23 @@ It's also possible to parse an NLSML document and extract useful information fro
 document = RubySpeech.parse nlsml.to_s
 
 document.match? # => true
-document.interpretations # => [#<RubySpeech::NLSML::Interpretation ...>, #<RubySpeech::NLSML::Interpretation ...>]
-document.best_interpretation # => #<RubySpeech::NLSML::Interpretation confidence=0.6 input=#<RubySpeech::NLSML::Input mode=:speech, text="I want to go to Pittsburgh"> model=#<RubySpeech::NLSML::Model ...> #<RubySpeech::NLSML::Instance ...>>
+document.interpretations # => [
+      {
+        confidence: 0.6,
+        input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+        instance: { airline: { to_city: 'Pittsburgh' } }
+      },
+      {
+        confidence: 0.4,
+        input: { content: 'I want to go to Stockholm' },
+        instance: { airline: { to_city: 'Stockholm' } }
+      }
+    ]
+document.best_interpretation # => {
+          confidence: 0.6,
+          input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+          instance: { airline: { to_city: 'Pittsburgh' } }
+        }
 ```
 
 Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more

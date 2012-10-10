@@ -18,6 +18,11 @@ module RubySpeech
     autoload :NLSML
     autoload :XML
   end
+
+  def self.parse(string)
+    document = Nokogiri::XML.parse string, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS
+    NLSML::Document.new document
+  end
 end
 
 ActiveSupport::Autoload.eager_autoload!

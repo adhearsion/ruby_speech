@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe RubySpeech::NLSML do
-  describe 'drawing a document' do
-    let :expected_document do
-      string = '''
+  let :example_document do
+    '''
 <result xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
   <interpretation confidence="60">
     <input mode="speech">I want to go to Pittsburgh</input>
@@ -14,7 +13,7 @@ describe RubySpeech::NLSML do
     </xf:model>
     <xf:instance>
       <myApp:airline>
-        <myApp:to_city>Pittsburgh</to_city>
+        <myApp:to_city>Pittsburgh</myApp:to_city>
       </myApp:airline>
     </xf:instance>
   </interpretation>
@@ -27,13 +26,17 @@ describe RubySpeech::NLSML do
     </xf:model>
     <xf:instance>
       <myApp:airline>
-        <myApp:to_city>Stockholm</to_city>
+        <myApp:to_city>Stockholm</myApp:to_city>
       </myApp:airline>
     </xf:instance>
   </interpretation>
 </result>
-'''
-      Nokogiri::XML(string).to_xml
+    '''
+  end
+
+  describe 'drawing a document' do
+    let :expected_document do
+      Nokogiri::XML(example_document).to_xml
     end
 
     it "should allow building a document" do
@@ -72,6 +75,90 @@ describe RubySpeech::NLSML do
       end
 
       document.to_xml.should == expected_document
+    end
+  end
+
+  describe "parsing a document" do
+    subject do
+      RubySpeech.parse example_document
+    end
+
+    its(:grammar) { should == 'http://flight' }
+
+    it { should be_match }
+
+    let(:expected_best_interpretation) do
+      {
+        confidence: 0.6,
+        input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+        instance: { airline: { to_city: 'Pittsburgh' } }
+      }
+    end
+
+    let(:expected_interpretations) do
+      [
+        expected_best_interpretation,
+        {
+          confidence: 0.4,
+          input: { content: 'I want to go to Stockholm' },
+          instance: { airline: { to_city: 'Stockholm' } }
+        }
+      ]
+    end
+
+    its(:interpretations)     { should == expected_interpretations }
+    its(:best_interpretation) { should == expected_best_interpretation }
+
+    context "without any interpretations" do
+      let :doc_without_interpretations do
+        '''
+<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight"/>
+        '''
+      end
+
+      subject do
+        RubySpeech.parse doc_without_interpretations
+      end
+
+      it { should_not be_match }
+    end
+
+    context "with interpretations out of confidence order" do
+      let :example_document do
+        '''
+<result xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+  <interpretation confidence="40">
+    <input>I want to go to Stockholm</input>
+    <xf:model>
+      <xf:group name="airline">
+        <xf:string name="to_city"/>
+      </xf:group>
+    </xf:model>
+    <xf:instance>
+      <myApp:airline>
+        <myApp:to_city>Stockholm</myApp:to_city>
+      </myApp:airline>
+    </xf:instance>
+  </interpretation>
+  <interpretation confidence="60">
+    <input mode="speech">I want to go to Pittsburgh</input>
+    <xf:model>
+      <xf:group name="airline">
+        <xf:string name="to_city"/>
+      </xf:group>
+    </xf:model>
+    <xf:instance>
+      <myApp:airline>
+        <myApp:to_city>Pittsburgh</myApp:to_city>
+      </myApp:airline>
+    </xf:instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      its(:interpretations)     { should == expected_interpretations }
+      its(:best_interpretation) { should == expected_best_interpretation }
     end
   end
 end

@@ -335,6 +335,8 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<token/>`
 
 ### NLSML
+* Document construction
+* Simple data extraction from documents
 
 ## TODO:
 ### SSML

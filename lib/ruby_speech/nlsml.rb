@@ -4,6 +4,7 @@ module RubySpeech
 
     eager_autoload do
       autoload :Builder
+      autoload :Document
     end
 
     def self.draw(options = {}, &block)

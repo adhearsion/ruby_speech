@@ -109,6 +109,14 @@ describe RubySpeech::NLSML do
     its(:interpretations)     { should == expected_interpretations }
     its(:best_interpretation) { should == expected_best_interpretation }
 
+    it "should be equal if the XML is the same" do
+      subject.should be == RubySpeech.parse(example_document)
+    end
+
+    it "should not be equal if the XML is different" do
+      subject.should_not be == RubySpeech.parse('<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight"/>')
+    end
+
     context "without any interpretations" do
       let :doc_without_interpretations do
         '''

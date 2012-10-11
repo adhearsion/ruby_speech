@@ -83,6 +83,8 @@ describe RubySpeech::NLSML do
       RubySpeech.parse example_document
     end
 
+    let(:empty_result) { '<result xmlns:xf="http://www.w3.org/2000/xforms"/>' }
+
     its(:grammar) { should == 'http://flight' }
 
     it { should be_match }
@@ -114,18 +116,12 @@ describe RubySpeech::NLSML do
     end
 
     it "should not be equal if the XML is different" do
-      subject.should_not be == RubySpeech.parse('<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight"/>')
+      subject.should_not be == RubySpeech.parse(empty_result)
     end
 
     context "without any interpretations" do
-      let :doc_without_interpretations do
-        '''
-<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight"/>
-        '''
-      end
-
       subject do
-        RubySpeech.parse doc_without_interpretations
+        RubySpeech.parse empty_result
       end
 
       it { should_not be_match }

@@ -8,7 +8,7 @@ module RubySpeech
           builder.result options.merge("xmlns:xf" => "http://www.w3.org/2000/xforms") do |r|
             apply_block r, &block
           end
-        end
+        end.doc
       end
 
       def interpretation(*args, &block)

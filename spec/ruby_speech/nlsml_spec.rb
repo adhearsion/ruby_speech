@@ -119,6 +119,43 @@ describe RubySpeech::NLSML do
       subject.should_not be == RubySpeech.parse(empty_result)
     end
 
+    context "with an interpretation that has no model/instance" do
+      let :example_document do
+        '''
+<result xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+  <interpretation confidence="60">
+    <input mode="speech">I want to go to Pittsburgh</input>
+  </interpretation>
+  <interpretation confidence="40">
+    <input>I want to go to Stockholm</input>
+  </interpretation>
+</result>
+        '''
+      end
+
+      let(:expected_best_interpretation) do
+        {
+          confidence: 0.6,
+          input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+          instance: nil
+        }
+      end
+
+      let(:expected_interpretations) do
+        [
+          expected_best_interpretation,
+          {
+            confidence: 0.4,
+            input: { content: 'I want to go to Stockholm' },
+            instance: nil
+          }
+        ]
+      end
+
+      its(:interpretations)     { should == expected_interpretations }
+      its(:best_interpretation) { should == expected_best_interpretation }
+    end
+
     context "without any interpretations" do
       subject do
         RubySpeech.parse empty_result

@@ -41,6 +41,7 @@ module RubySpeech
 
       def instance_hash_for_interpretation(interpretation)
         instance_element = interpretation.at_xpath 'xf:instance'
+        return unless instance_element
         element_children_key_value instance_element
       end
 

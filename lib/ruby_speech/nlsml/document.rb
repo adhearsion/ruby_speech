@@ -1,7 +1,10 @@
+require 'delegate'
+
 module RubySpeech
   module NLSML
-    class Document
+    class Document < SimpleDelegator
       def initialize(xml)
+        super
         @xml = xml
       end
 
@@ -24,12 +27,8 @@ module RubySpeech
       end
 
       def ==(other)
-        xml.to_xml == other.xml.to_xml
+        to_xml == other.to_xml
       end
-
-      protected
-
-      attr_accessor :xml
 
       private
 
@@ -72,7 +71,7 @@ module RubySpeech
       end
 
       def result
-        xml.root
+        root
       end
 
       def interpretation_nodes

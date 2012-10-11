@@ -23,6 +23,14 @@ module RubySpeech
         interpretation_nodes.count > 0
       end
 
+      def ==(other)
+        xml.to_xml == other.xml.to_xml
+      end
+
+      protected
+
+      attr_accessor :xml
+
       private
 
       def input_hash_for_interpretation(interpretation)
@@ -64,7 +72,7 @@ module RubySpeech
       end
 
       def result
-        @xml.root
+        xml.root
       end
 
       def interpretation_nodes

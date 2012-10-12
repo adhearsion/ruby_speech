@@ -2,6 +2,8 @@ module RubySpeech
   module NLSML
     extend ActiveSupport::Autoload
 
+    NLSML_NAMESPACE = 'http://www.w3c.org/2000/11/nlsml'
+
     eager_autoload do
       autoload :Builder
       autoload :Document

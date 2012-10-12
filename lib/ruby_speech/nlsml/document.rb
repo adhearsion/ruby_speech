@@ -33,7 +33,7 @@ module RubySpeech
       private
 
       def input_hash_for_interpretation(interpretation)
-        input_element = interpretation.at_xpath 'input'
+        input_element = interpretation.at_xpath 'ns:input', 'ns' => NLSML_NAMESPACE
         { content: input_element.content }.tap do |h|
           h[:mode] = input_element['mode'].to_sym if input_element['mode']
         end
@@ -76,7 +76,7 @@ module RubySpeech
       end
 
       def interpretation_nodes
-        result.xpath('interpretation').sort_by { |int| -int[:confidence].to_i }
+        result.xpath('ns:interpretation', 'ns' => NLSML_NAMESPACE).sort_by { |int| -int[:confidence].to_i }
       end
     end
   end

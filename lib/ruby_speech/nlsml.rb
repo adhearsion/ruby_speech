@@ -2,7 +2,8 @@ module RubySpeech
   module NLSML
     extend ActiveSupport::Autoload
 
-    NLSML_NAMESPACE = 'http://www.w3c.org/2000/11/nlsml'
+    NLSML_NAMESPACE   = 'http://www.w3c.org/2000/11/nlsml'
+    XFORMS_NAMESPACE  = 'http://www.w3.org/2000/xforms'
 
     eager_autoload do
       autoload :Builder

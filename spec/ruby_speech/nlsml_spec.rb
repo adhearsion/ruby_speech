@@ -122,7 +122,7 @@ describe RubySpeech::NLSML do
     context "with an interpretation that has no model/instance" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
   <interpretation confidence="60">
     <input mode="speech">I want to go to Pittsburgh</input>
   </interpretation>

@@ -4,7 +4,7 @@ module RubySpeech
       attr_reader :document
 
       def initialize(options = {}, &block)
-        options = {"xmlns" => 'http://www.w3c.org/2000/11/nlsml', "xmlns:xf" => "http://www.w3.org/2000/xforms"}.merge(options)
+        options = {'xmlns' => NLSML_NAMESPACE, 'xmlns:xf' => XFORMS_NAMESPACE}.merge(options)
         @document = Nokogiri::XML::Builder.new do |builder|
           builder.result options do |r|
             apply_block r, &block

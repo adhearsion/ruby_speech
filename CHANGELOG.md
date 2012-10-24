@@ -1,4 +1,6 @@
 # develop
+
+# 1.0.1 - 2012-10-24
   * Bugfix: Don't load rubygems because it is evil
   * Bugfix: Allow setting language (and other) attributes on root of SSML doc when using #draw DSL
 

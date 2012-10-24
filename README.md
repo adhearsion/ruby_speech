@@ -239,7 +239,7 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 
 ## Links:
 * [Source](https://github.com/benlangfeld/ruby_speech)
-* [Documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames)
+* [Documentation](http://rdoc.info/gems/ruby_speech/frames)
 * [Bug Tracker](https://github.com/benlangfeld/ruby_speech/issues)
 
 ## Note on Patches/Pull Requests

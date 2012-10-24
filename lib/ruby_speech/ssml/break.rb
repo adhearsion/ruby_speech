@@ -27,7 +27,7 @@ module RubySpeech
       #
       def strength=(s)
         raise ArgumentError, "You must specify a valid strength (#{VALID_STRENGTHS.map(&:inspect).join ', '})" unless VALID_STRENGTHS.include? s
-        write_attr :strength, s
+        self[:strength] = s
       end
 
       ##
@@ -46,7 +46,7 @@ module RubySpeech
       #
       def time=(t)
         raise ArgumentError, "You must specify a valid time (positive float value in seconds)" unless t.is_a?(Numeric) && t >= 0
-        write_attr :time, "#{t}s"
+        self[:time] = "#{t}s"
       end
 
       def <<(*args)

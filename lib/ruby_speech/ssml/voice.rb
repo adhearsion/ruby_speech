@@ -29,7 +29,7 @@ module RubySpeech
       #
       def gender=(g)
         raise ArgumentError, "You must specify a valid gender (#{VALID_GENDERS.map(&:inspect).join ', '})" unless VALID_GENDERS.include? g
-        write_attr :gender, g
+        self[:gender] = g
       end
 
       ##
@@ -48,7 +48,7 @@ module RubySpeech
       #
       def age=(i)
         raise ArgumentError, "You must specify a valid age (non-negative integer)" unless i.is_a?(Integer) && i >= 0
-        write_attr :age, i
+        self[:age] = i
       end
 
       ##
@@ -67,7 +67,7 @@ module RubySpeech
       #
       def variant=(i)
         raise ArgumentError, "You must specify a valid variant (positive integer)" unless i.is_a?(Integer) && i > 0
-        write_attr :variant, i
+        self[:variant] = i
       end
 
       ##
@@ -92,7 +92,7 @@ module RubySpeech
       def name=(n)
         # TODO: Raise ArgumentError if names contain whitespace
         n = n.join(' ') if n.is_a? Array
-        write_attr :name, n
+        self[:name] = n
       end
 
       def <<(arg)

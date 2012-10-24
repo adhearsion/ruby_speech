@@ -40,7 +40,7 @@ module RubySpeech
       # @param [String] other the phonemic/phonetic alphabet
       #
       def alphabet=(other)
-        write_attr :alphabet, other
+        self[:alphabet] = other
       end
 
       ##
@@ -56,7 +56,7 @@ module RubySpeech
       # @param [String] other the phoneme/phone string.
       #
       def ph=(other)
-        write_attr :ph, other
+        self[:ph] = other
       end
 
       def <<(arg)

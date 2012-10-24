@@ -28,7 +28,7 @@ module RubySpeech
       #
       def level=(l)
         raise ArgumentError, "You must specify a valid level (#{VALID_LEVELS.map(&:inspect).join ', '})" unless VALID_LEVELS.include? l
-        write_attr :level, l
+        self[:level] = l
       end
 
       def <<(arg)

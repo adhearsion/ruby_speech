@@ -42,7 +42,7 @@ module RubySpeech
       # @param [String] ia
       #
       def interpret_as=(ia)
-        write_attr :'interpret-as', ia
+        self['interpret-as'] = ia
       end
 
       ##
@@ -61,7 +61,7 @@ module RubySpeech
       # @param [String] format
       #
       def format=(format)
-        write_attr :format, format
+        self[:format] = format
       end
 
       ##
@@ -84,7 +84,7 @@ module RubySpeech
       # @param [String] detail
       #
       def detail=(detail)
-        write_attr :detail, detail
+        self[:detail] = detail
       end
 
       def <<(arg)

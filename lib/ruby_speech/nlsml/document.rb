@@ -34,6 +34,7 @@ module RubySpeech
 
       def input_hash_for_interpretation(interpretation)
         input_element = interpretation.at_xpath 'ns:input', 'ns' => NLSML_NAMESPACE
+        input_element ||= interpretation.at_xpath 'input'
         { content: input_element.content }.tap do |h|
           h[:mode] = input_element['mode'].to_sym if input_element['mode']
         end
@@ -41,6 +42,7 @@ module RubySpeech
 
       def instance_hash_for_interpretation(interpretation)
         instance_element = interpretation.at_xpath 'xf:instance', 'xf' => XFORMS_NAMESPACE
+        instance_element ||= interpretation.at_xpath 'instance'
         return unless instance_element
         element_children_key_value instance_element
       end
@@ -76,7 +78,9 @@ module RubySpeech
       end
 
       def interpretation_nodes
-        result.xpath('ns:interpretation', 'ns' => NLSML_NAMESPACE).sort_by { |int| -int[:confidence].to_i }
+        nodes = result.xpath 'ns:interpretation', 'ns' => NLSML_NAMESPACE
+        nodes += result.xpath 'interpretation'
+        nodes.sort_by { |int| -int[:confidence].to_i }
       end
     end
   end

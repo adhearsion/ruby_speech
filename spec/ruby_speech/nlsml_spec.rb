@@ -201,5 +201,43 @@ describe RubySpeech::NLSML do
       its(:interpretations)     { should == expected_interpretations }
       its(:best_interpretation) { should == expected_best_interpretation }
     end
+
+    context "with no namespaces (because some vendors think this is ok" do
+      let :example_document do
+        '''
+<result grammar="http://flight">
+  <interpretation confidence="60">
+    <input mode="speech">I want to go to Pittsburgh</input>
+    <model>
+      <group name="airline">
+        <string name="to_city"/>
+      </group>
+    </model>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
+  </interpretation>
+  <interpretation confidence="40">
+    <input>I want to go to Stockholm</input>
+    <model>
+      <group name="airline">
+        <string name="to_city"/>
+      </group>
+    </model>
+    <instance>
+      <airline>
+        <to_city>Stockholm</to_city>
+      </airline>
+    </instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      its(:interpretations)     { should == expected_interpretations }
+      its(:best_interpretation) { should == expected_best_interpretation }
+    end
   end
 end

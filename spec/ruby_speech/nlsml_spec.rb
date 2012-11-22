@@ -93,7 +93,8 @@ describe RubySpeech::NLSML do
       {
         confidence: 0.6,
         input: { mode: :speech, content: 'I want to go to Pittsburgh' },
-        instance: { airline: { to_city: 'Pittsburgh' } }
+        instance: { airline: { to_city: 'Pittsburgh' } },
+        instances: [{ airline: { to_city: 'Pittsburgh' } }]
       }
     end
 
@@ -103,7 +104,8 @@ describe RubySpeech::NLSML do
         {
           confidence: 0.4,
           input: { content: 'I want to go to Stockholm' },
-          instance: { airline: { to_city: 'Stockholm' } }
+          instance: { airline: { to_city: 'Stockholm' } },
+          instances: [{ airline: { to_city: 'Stockholm' } }]
         }
       ]
     end
@@ -137,7 +139,8 @@ describe RubySpeech::NLSML do
         {
           confidence: 0.6,
           input: { mode: :speech, content: 'I want to go to Pittsburgh' },
-          instance: nil
+          instance: nil,
+          instances: []
         }
       end
 
@@ -147,7 +150,8 @@ describe RubySpeech::NLSML do
           {
             confidence: 0.4,
             input: { content: 'I want to go to Stockholm' },
-            instance: nil
+            instance: nil,
+            instances: []
           }
         ]
       end
@@ -200,6 +204,48 @@ describe RubySpeech::NLSML do
 
       its(:interpretations)     { should == expected_interpretations }
       its(:best_interpretation) { should == expected_best_interpretation }
+    end
+
+    context "with multiple instances for a single interpretation" do
+      let :example_document do
+        '''
+<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
+  <interpretation confidence="100">
+    <input mode="speech">I want to go to Boston</input>
+    <xf:model>
+      <xf:group name="airline">
+        <xf:string name="to_city"/>
+      </xf:group>
+    </xf:model>
+    <xf:instance>
+      <myApp:airline>
+        <myApp:to_city>Boston, MA</myApp:to_city>
+      </myApp:airline>
+    </xf:instance>
+    <xf:instance>
+      <myApp:airline>
+        <myApp:to_city>Boston, UK</myApp:to_city>
+      </myApp:airline>
+    </xf:instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      let(:expected_interpretation) do
+        {
+          confidence: 1.0,
+          input: { content: 'I want to go to Boston', mode: :speech },
+          instance: { airline: { to_city: 'Boston, MA' } },
+          instances: [
+            { airline: { to_city: 'Boston, MA' } },
+            { airline: { to_city: 'Boston, UK' } }
+          ]
+        }
+      end
+
+      its(:interpretations)     { should == [expected_interpretation] }
+      its(:best_interpretation) { should == expected_interpretation }
     end
 
     context "with no namespaces (because some vendors think this is ok)" do

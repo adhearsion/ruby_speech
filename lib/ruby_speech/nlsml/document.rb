@@ -41,11 +41,23 @@ module RubySpeech
       end
 
       def instance_hash_for_interpretation(interpretation)
-        instance_element = interpretation.at_xpath 'xf:instance', 'xf' => XFORMS_NAMESPACE
-        instance_element ||= interpretation.at_xpath 'ns:instance', 'ns' => NLSML_NAMESPACE
-        instance_element ||= interpretation.at_xpath 'instance'
-        return unless instance_element
-        element_children_key_value instance_element
+        instances = instance_elements interpretation
+        return unless instances.any?
+        element_children_key_value instances.first
+      end
+
+      def instances_collection_for_interpretation(interpretation)
+        instances = instance_elements interpretation
+        instances.map do |instance|
+          element_children_key_value instance
+        end
+      end
+
+      def instance_elements(interpretation)
+        instance_elements = interpretation.xpath 'xf:instance', 'xf' => XFORMS_NAMESPACE
+        instance_elements += interpretation.xpath 'ns:instance', 'ns' => NLSML_NAMESPACE
+        instance_elements += interpretation.xpath 'instance'
+        instance_elements
       end
 
       def element_children_key_value(element)
@@ -70,7 +82,8 @@ module RubySpeech
         {
           confidence: interpretation['confidence'].to_f/100,
           input: input_hash_for_interpretation(interpretation),
-          instance: instance_hash_for_interpretation(interpretation)
+          instance: instance_hash_for_interpretation(interpretation),
+          instances: instances_collection_for_interpretation(interpretation)
         }
       end
 

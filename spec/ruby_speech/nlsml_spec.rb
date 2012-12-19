@@ -323,5 +323,67 @@ describe RubySpeech::NLSML do
       its(:interpretations)     { should == expected_interpretations }
       its(:best_interpretation) { should == expected_best_interpretation }
     end
+
+    context "with a single interpretation with a nomatch input" do
+      let :example_document do
+        '''
+<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
+  <interpretation>
+    <input>
+       <nomatch/>
+    </input>
+  </interpretation>
+</result>
+        '''
+      end
+
+      it { should_not be_match }
+    end
+
+    context "with multiple interpretations where one is a nomatch input" do
+      let :example_document do
+        '''
+<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
+  <interpretation confidence="60">
+    <input mode="speech">I want to go to Pittsburgh</input>
+    <model>
+      <group name="airline">
+        <string name="to_city"/>
+      </group>
+    </model>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
+  </interpretation>
+  <interpretation>
+    <input>
+       <nomatch/>
+    </input>
+  </interpretation>
+</result>
+        '''
+      end
+
+      it { should be_match }
+    end
+
+    context "with a single interpretation with a noinput" do
+      let :example_document do
+        '''
+<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
+  <interpretation>
+    <input>
+       <noinput/>
+    </input>
+  </interpretation>
+</result>
+        '''
+      end
+
+      it { should_not be_match }
+      it { should be_noinput }
+    end
   end
 end

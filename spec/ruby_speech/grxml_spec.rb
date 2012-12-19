@@ -195,7 +195,7 @@ module RubySpeech
         end
         expected_doc = GRXML::Grammar.new
         3.times do
-          expected_doc << GRXML::Rule.new(:content => "I <3 nachos.")
+          expected_doc << GRXML::Rule.new(:native_content => "I <3 nachos.")
         end
         doc.should == expected_doc
       end

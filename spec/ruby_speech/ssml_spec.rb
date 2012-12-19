@@ -154,7 +154,7 @@ module RubySpeech
         end
         expected_doc = SSML::Speak.new
         2.times do
-          expected_doc << SSML::Voice.new(:content => "I <3 nachos.")
+          expected_doc << SSML::Voice.new(:native_content => "I <3 nachos.")
         end
         doc.should == expected_doc
       end

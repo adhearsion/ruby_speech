@@ -348,15 +348,6 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<example/>`
 * `<lexicon/>`
 
-### NLSML
-* `<result/>`
-* `<interpretation/>`
-* `<model/>`
-* `<instance/>`
-* `<input/>`
-* `<nomatch/>`
-* `<noinput/>`
-
 ## Links:
 * [Source](https://github.com/benlangfeld/ruby_speech)
 * [Documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames)

@@ -23,14 +23,34 @@ module RubySpeech
       end
 
       def match?
-        interpretation_nodes.count > 0
+        interpretation_nodes.count > 0 && !nomatch? && !noinput?
       end
 
       def ==(other)
         to_xml == other.to_xml
       end
 
+      def noinput?
+        noinput_elements.any?
+      end
+
       private
+
+      def nomatch?
+        nomatch_elements.count >= input_elements.count
+      end
+
+      def nomatch_elements
+        result.xpath 'ns:interpretation/ns:input/ns:nomatch|interpretation/input/nomatch', 'ns' => NLSML_NAMESPACE
+      end
+
+      def noinput_elements
+        result.xpath 'ns:interpretation/ns:input/ns:noinput|interpretation/input/noinput', 'ns' => NLSML_NAMESPACE
+      end
+
+      def input_elements
+        result.xpath 'ns:interpretation/ns:input|interpretation/input', 'ns' => NLSML_NAMESPACE
+      end
 
       def input_hash_for_interpretation(interpretation)
         input_element = interpretation.at_xpath '(ns:input|input)', 'ns' => NLSML_NAMESPACE

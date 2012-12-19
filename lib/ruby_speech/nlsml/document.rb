@@ -33,8 +33,7 @@ module RubySpeech
       private
 
       def input_hash_for_interpretation(interpretation)
-        input_element = interpretation.at_xpath 'ns:input', 'ns' => NLSML_NAMESPACE
-        input_element ||= interpretation.at_xpath 'input'
+        input_element = interpretation.at_xpath '(ns:input|input)', 'ns' => NLSML_NAMESPACE
         { content: input_element.content }.tap do |h|
           h[:mode] = input_element['mode'].to_sym if input_element['mode']
         end
@@ -54,10 +53,7 @@ module RubySpeech
       end
 
       def instance_elements(interpretation)
-        instance_elements = interpretation.xpath 'xf:instance', 'xf' => XFORMS_NAMESPACE
-        instance_elements += interpretation.xpath 'ns:instance', 'ns' => NLSML_NAMESPACE
-        instance_elements += interpretation.xpath 'instance'
-        instance_elements
+        interpretation.xpath '(xf:instance|ns:instance|instance)', 'xf' => XFORMS_NAMESPACE, 'ns' => NLSML_NAMESPACE
       end
 
       def element_children_key_value(element)
@@ -92,8 +88,7 @@ module RubySpeech
       end
 
       def interpretation_nodes
-        nodes = result.xpath 'ns:interpretation', 'ns' => NLSML_NAMESPACE
-        nodes += result.xpath 'interpretation'
+        nodes = result.xpath '(ns:interpretation|interpretation)', 'ns' => NLSML_NAMESPACE
         nodes.sort_by { |int| -int[:confidence].to_i }
       end
     end

@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency %q<niceogiri>, ["~> 1.0"]
+  s.add_runtime_dependency %q<niceogiri>, ["~> 1.1", ">= 1.1.1"]
+  s.add_runtime_dependency %q<nokogiri>, ["~> 1.5", ">= 1.5.6"]
   s.add_runtime_dependency %q<activesupport>, [">= 3.0.7"]
 
   s.add_development_dependency %q<bundler>, [">= 1.0.0"]

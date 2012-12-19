@@ -18,7 +18,7 @@ class SpeechDocMatcher
       @subject = s
     else
       doc = Nokogiri::XML::Document.new
-      doc << s
+      doc << s.to_xml
       @subject = doc
     end
   end

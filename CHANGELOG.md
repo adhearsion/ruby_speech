@@ -1,6 +1,9 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
 
-# [1.0.1](https://github.com/benlangfeld/ruby_speech/compare/v1.0.1...v1.0.1) - [2012-10-24](https://rubygems.org/gems/ruby_speech/versions/1.0.1)
+# [1.0.2](https://github.com/benlangfeld/ruby_speech/compare/v1.0.1...v1.0.2) - [2012-12-26](https://rubygems.org/gems/ruby_speech/versions/1.0.2)
+  * Bugfix: Get test suite passing on JRuby
+
+# [1.0.1](https://github.com/benlangfeld/ruby_speech/compare/v1.0.0...v1.0.1) - [2012-10-24](https://rubygems.org/gems/ruby_speech/versions/1.0.1)
   * Bugfix: Don't load rubygems because it is evil
   * Bugfix: Allow setting language (and other) attributes on root of SSML doc when using #draw DSL
 

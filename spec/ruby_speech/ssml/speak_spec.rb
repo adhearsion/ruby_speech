@@ -140,14 +140,8 @@ module RubySpeech
       end
 
       describe "#to_doc" do
-        let(:expected_doc) do
-          Nokogiri::XML::Document.new.tap do |doc|
-            doc << Speak.new
-          end
-        end
-
-        it "should create an XML document from the speak" do
-          Speak.new.to_doc.to_s.should == expected_doc.to_s
+        it "should create an XML document from the grammar" do
+          subject.to_doc.should == subject.document
         end
       end
 

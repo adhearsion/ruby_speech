@@ -16,6 +16,8 @@ module RubySpeech
       end
 
       include GenericElement
+
+      alias :to_doc :document
     end # Element
   end # SSML
 end # RubySpeech

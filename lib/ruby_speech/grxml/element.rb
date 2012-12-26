@@ -17,6 +17,8 @@ module RubySpeech
 
       alias_method :nokogiri_children, :children
 
+      alias :to_doc :document
+
       include GenericElement
 
       def regexp_content # :nodoc:

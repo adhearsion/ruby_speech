@@ -2,7 +2,7 @@ module RubySpeech
   module XML
     module Language
       def language
-        read_attr :lang
+        self['xml:lang']
       end
 
       def language=(l)

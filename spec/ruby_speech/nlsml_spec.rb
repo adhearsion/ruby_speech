@@ -74,6 +74,12 @@ describe RubySpeech::NLSML do
         end
       end
 
+      if RUBY_ENGINE == 'jruby'
+        expected_document.gsub! 'myApp:to_city', 'to_city'
+        expected_document.gsub! 'xf:group', 'group'
+        expected_document.gsub! 'xf:string', 'string'
+      end
+
       document.to_xml.should == expected_document
     end
   end

@@ -36,7 +36,7 @@ describe RubySpeech::NLSML do
 
   describe 'drawing a document' do
     let :expected_document do
-      Nokogiri::XML(example_document).to_xml
+      Nokogiri::XML(example_document, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).to_xml
     end
 
     it "should allow building a document" do

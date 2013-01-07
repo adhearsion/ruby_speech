@@ -8,6 +8,11 @@ module RubySpeech
         SSML.draw.should == expected_doc
       end
 
+      it "can draw with a language" do
+        expected_doc = SSML::Speak.new language: 'pt-BR'
+        SSML.draw(language: 'pt-BR').should == expected_doc
+      end
+
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
           expected_doc = SSML::Speak.new(:content => "Hi, I'm Fred")
@@ -149,7 +154,7 @@ module RubySpeech
         end
         expected_doc = SSML::Speak.new
         2.times do
-          expected_doc << SSML::Voice.new(:content => "I <3 nachos.")
+          expected_doc << SSML::Voice.new(:native_content => "I <3 nachos.")
         end
         doc.should == expected_doc
       end

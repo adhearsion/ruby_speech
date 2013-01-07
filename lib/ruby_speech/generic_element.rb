@@ -55,7 +55,7 @@ module RubySpeech
         super(self.registered_name, nil, self.namespace) do |new_node|
           (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
           block_return = new_node.eval_dsl_block &block
-          new_node << block_return if block_return.is_a?(String)
+          new_node.string block_return if block_return.is_a?(String) && block_return.present?
         end
       end
     end
@@ -83,7 +83,7 @@ module RubySpeech
     # @return [String] the base URI to which relative URLs are resolved
     #
     def base_uri
-      read_attr :base
+      read_attr 'xml:base'
     end
 
     ##
@@ -91,12 +91,6 @@ module RubySpeech
     #
     def base_uri=(uri)
       self['xml:base'] = uri
-    end
-
-    def to_doc
-      Nokogiri::XML::Document.new.tap do |doc|
-        doc << self
-      end
     end
 
     def +(other)
@@ -147,13 +141,7 @@ module RubySpeech
     end
 
     def string(other)
-      self << other
-    end
-
-    def <<(other)
-      other = encode_special_chars other if other.is_a? String
-      super other
-      self
+      self << Nokogiri::XML::Text.new(other, document)
     end
 
     def method_missing(method_name, *args, &block)

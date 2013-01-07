@@ -23,8 +23,8 @@ module RubySpeech
 
     SSML_NAMESPACE = 'http://www.w3.org/2001/10/synthesis'
 
-    def self.draw(&block)
-      Speak.new.tap do |speak|
+    def self.draw(*args, &block)
+      Speak.new(*args).tap do |speak|
         block_return = speak.eval_dsl_block &block
         speak << block_return if block_return.is_a?(String)
       end

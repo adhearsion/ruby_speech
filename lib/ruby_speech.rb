@@ -15,7 +15,21 @@ module RubySpeech
     autoload :GenericElement
     autoload :SSML
     autoload :GRXML
+    autoload :NLSML
     autoload :XML
+  end
+
+  def self.parse(string)
+    document = Nokogiri::XML.parse string, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS
+    namespace = document.root.namespace
+    case namespace && namespace.href
+    when SSML::SSML_NAMESPACE
+      SSML::Element.import string
+    when GRXML::GRXML_NAMESPACE
+      GRXML::Element.import string
+    when NLSML::NLSML_NAMESPACE, nil
+      NLSML::Document.new document
+    end
   end
 end
 

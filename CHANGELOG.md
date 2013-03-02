@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [1.1.0](https://github.com/benlangfeld/ruby_speech/compare/v1.0.2...v1.1.0) - [2013-03-02](https://rubygems.org/gems/ruby_speech/versions/1.1.0)
   * Feature: NLSML building & parsing
 
 # [1.0.2](https://github.com/benlangfeld/ruby_speech/compare/v1.0.1...v1.0.2) - [2012-12-26](https://rubygems.org/gems/ruby_speech/versions/1.0.2)

@@ -108,96 +108,64 @@ which becomes
 
 #### Grammar matching
 
-It is possible to match some arbitrary input against a GRXML grammar. In order to do so, certain normalization routines should first be run on the grammar in order to prepare it for matching. These are reference inlining, tokenization and whitespace normalization, and are described [in the SRGS spec](http://www.w3.org/TR/speech-grammar/#S2.1). This process will transform the above grammar like so:
+It is possible to match some arbitrary input against a GRXML grammar, like so:
 
 ```ruby
-grammy.inline!
-grammy.tokenize!
-grammy.normalize_whitespace
-```
+require 'ruby_speech'
 
-```xml
-<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" mode="dtmf" root="pin">
-  <rule id="pin" scope="public">
-    <one-of>
-      <item>
-        <item repeat="4">
-          <one-of>
-            <item>
-              <token>0</token>
-            </item>
-            <item>
-              <token>1</token>
-            </item>
-            <item>
-              <token>2</token>
-            </item>
-            <item>
-              <token>3</token>
-            </item>
-            <item>
-              <token>4</token>
-            </item>
-            <item>
-              <token>5</token>
-            </item>
-            <item>
-              <token>6</token>
-            </item>
-            <item>
-              <token>7</token>
-            </item>
-            <item>
-              <token>8</token>
-            </item>
-            <item>
-              <token>9</token>
-            </item>
-          </one-of>
-        </item>
-        <token>#</token>
-      </item>
-      <item>
-        <token>*</token>
-        <token>9</token>
-      </item>
-    </one-of>
-  </rule>
-</grammar>
-```
+>> grammar = RubySpeech::GRXML.draw mode: :dtmf, root: 'pin' do
+  rule id: 'digit' do
+    one_of do
+      ('0'..'9').map { |d| item { d } }
+    end
+  end
 
-Matching against some sample input strings then returns the following results:
+  rule id: 'pin', scope: 'public' do
+    one_of do
+      item do
+        item repeat: '4' do
+          ruleref uri: '#digit'
+        end
+        "#"
+      end
+      item do
+        "* 9"
+      end
+    end
+  end
+end
 
-```ruby
->> subject.match '*9'
+matcher = RubySpeech::GRXML::Matcher.new grammar
+
+>> matcher.match '*9'
 => #<RubySpeech::GRXML::Match:0x00000100ae5d98
       @mode = :dtmf,
       @confidence = 1,
       @utterance = "*9",
       @interpretation = "*9"
     >
->> subject.match '1234#'
+>> matcher.match '1234#'
 => #<RubySpeech::GRXML::Match:0x00000100b7e020
       @mode = :dtmf,
       @confidence = 1,
       @utterance = "1234#",
       @interpretation = "1234#"
     >
->> subject.match '5678#'
+>> matcher.match '5678#'
 => #<RubySpeech::GRXML::Match:0x00000101218688
       @mode = :dtmf,
       @confidence = 1,
       @utterance = "5678#",
       @interpretation = "5678#"
     >
->> subject.match '1111#'
+>> matcher.match '1111#'
 => #<RubySpeech::GRXML::Match:0x000001012f69d8
       @mode = :dtmf,
       @confidence = 1,
       @utterance = "1111#",
       @interpretation = "1111#"
     >
->> subject.match '111'
+>> matcher.match '111'
 => #<RubySpeech::GRXML::NoMatch:0x00000101371660>
 ```
 

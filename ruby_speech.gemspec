@@ -18,6 +18,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  if RUBY_PLATFORM =~ /java/
+    s.platform = "java"
+    s.files << "lib/ruby_speech/ruby_speech.jar"
+  else
+    s.extensions = ['ext/ruby_speech/extconf.rb']
+  end
+
   s.add_runtime_dependency %q<niceogiri>, ["~> 1.1", ">= 1.1.1"]
   s.add_runtime_dependency %q<nokogiri>, ["~> 1.5", ">= 1.5.6"]
   s.add_runtime_dependency %q<activesupport>, [">= 3.0.7"]
@@ -32,4 +39,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<guard>, [">= 0.9.0"]
   s.add_development_dependency %q<guard-rspec>, [">= 0"]
   s.add_development_dependency %q<ruby_gntp>, [">= 0"]
+  s.add_development_dependency %q<guard-rake>, [">= 0"]
+  s.add_development_dependency %q<rake-compiler>, [">= 0"]
 end

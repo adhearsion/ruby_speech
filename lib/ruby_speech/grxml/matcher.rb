@@ -1,3 +1,10 @@
+require 'ruby_speech/ruby_speech'
+
+if RUBY_PLATFORM =~ /java/
+  require 'jruby'
+  com.benlangfeld.ruby_speech.RubySpeechService.new.basicLoad(JRuby.runtime)
+end
+
 module RubySpeech
   module GRXML
     class Matcher
@@ -102,17 +109,6 @@ module RubySpeech
                   :confidence     => grammar.dtmf? ? 1 : 0,
                   :utterance      => buffer,
                   :interpretation => interpret_utterance(buffer)
-      end
-
-      def check_potential_match(buffer)
-        grammar.root_rule.children.each do |token|
-          p "Checking buffer #{buffer} against token #{token} which has a longest potential match #{token.longest_potential_match(buffer)}"
-          break if buffer.length.zero?
-          longest_potential_match = token.longest_potential_match buffer
-          return if longest_potential_match.length.zero?
-          buffer.gsub! /^#{Regexp.escape longest_potential_match}/, ''
-        end
-        buffer.length.zero? ? PotentialMatch.new : nil
       end
 
       def regexp_content

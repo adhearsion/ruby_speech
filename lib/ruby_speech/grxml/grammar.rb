@@ -149,99 +149,6 @@ module RubySpeech
         end
       end
 
-      ##
-      # Checks the grammar for a match against an input string
-      #
-      # @param [String] other the input string to check for a match with the grammar
-      #
-      # @return [NoMatch, Match] depending on the result of a match attempt. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
-      #
-      # @example A grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence
-      #     ```ruby
-      #       grammar = RubySpeech::GRXML.draw :mode => :dtmf, :root => 'pin' do
-      #         rule :id => 'digit' do
-      #           one_of do
-      #             ('0'..'9').map { |d| item { d } }
-      #           end
-      #         end
-      #
-      #         rule :id => 'pin', :scope => 'public' do
-      #           one_of do
-      #             item do
-      #               item :repeat => '4' do
-      #                 ruleref :uri => '#digit'
-      #               end
-      #               "#"
-      #             end
-      #             item do
-      #               "\* 9"
-      #             end
-      #           end
-      #         end
-      #       end
-      #
-      #       >> subject.match '*9'
-      #       => #<RubySpeech::GRXML::Match:0x00000100ae5d98
-      #             @mode = :dtmf,
-      #             @confidence = 1,
-      #             @utterance = "*9",
-      #             @interpretation = "*9"
-      #           >
-      #       >> subject.match '1234#'
-      #       => #<RubySpeech::GRXML::Match:0x00000100b7e020
-      #             @mode = :dtmf,
-      #             @confidence = 1,
-      #             @utterance = "1234#",
-      #             @interpretation = "1234#"
-      #           >
-      #       >> subject.match '111'
-      #       => #<RubySpeech::GRXML::PotentialMatch:0x00000101371660>
-      #
-      #       >> subject.match '11111'
-      #       => #<RubySpeech::GRXML::NoMatch:0x00000101371936>
-      #
-      #     ```
-      #
-      def match(other)
-        other = other.dup
-        regex = to_regexp
-        return check_for_potential_match(other) if regex == //
-        match = regex.match other
-        return check_for_potential_match(other) unless match
-
-        Match.new :mode           => mode,
-                  :confidence     => dtmf? ? 1 : 0,
-                  :utterance      => other,
-                  :interpretation => interpret_utterance(other)
-      end
-
-      def check_for_potential_match(other)
-        potential_match?(other) ? PotentialMatch.new : NoMatch.new
-      end
-
-      def potential_match?(other)
-        root_rule.children.each do |token|
-          return true if other.length.zero?
-          longest_potential_match = token.longest_potential_match other
-          return false if longest_potential_match.length.zero?
-          other.gsub! /^#{Regexp.escape longest_potential_match}/, ''
-        end
-        other.length.zero?
-      end
-
-      ##
-      # Converts the grammar into a regular expression for matching
-      #
-      # @return [Regexp] a regular expression which is equivalent to the grammar
-      #
-      def to_regexp
-        /^#{regexp_content.join}$/
-      end
-
-      def regexp_content
-        root_rule.children.map &:regexp_content
-      end
-
       def dtmf?
         mode == :dtmf
       end
@@ -268,16 +175,6 @@ module RubySpeech
 
       def has_matching_root_rule?
         !root || root_rule
-      end
-
-      def interpret_utterance(utterance)
-        conversion = Hash.new { |hash, key| hash[key] = key }
-        conversion['*'] = 'star'
-        conversion['#'] = 'pound'
-
-        utterance.chars.inject [] do |array, digit|
-          array << "dtmf-#{conversion[digit]}"
-        end.join ' '
       end
 
       def split_tokens(element)

@@ -26,10 +26,6 @@ module RubySpeech
       def regexp_content # :nodoc:
         Regexp.escape content
       end
-
-      def potential_match?(other)
-        other == content
-      end
     end # Token
   end # GRXML
 end # RubySpeech

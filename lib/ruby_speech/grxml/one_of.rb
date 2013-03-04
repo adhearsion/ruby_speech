@@ -26,10 +26,6 @@ module RubySpeech
       def regexp_content # :nodoc:
         "(#{children.map(&:regexp_content).join '|'})"
       end
-
-      def potential_match?(input)
-        children.any? { |c| c.potential_match? input }
-      end
     end # OneOf
   end # GRXML
 end # RubySpeech

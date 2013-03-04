@@ -11,4 +11,4 @@ before_install:
   - sudo apt-get install libpcre3 libpcre3-dev
 
 notifications:
-  irc: "irc.freenode.org#adhearsion-dev"
+  irc: "irc.freenode.org#adhearsion"

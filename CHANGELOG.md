@@ -1,4 +1,11 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+  * Bugfix: Comply with MRCPv2 flavour of NLSML
+  ** Confidence is now a float in the XML representation
+  ** Models are no longer used
+  ** XForms no longer used
+  ** Now have a true namespace
+  ** Instance is in the NLSML namespace
+  ** Must support string instances
 
 # [1.1.0](https://github.com/benlangfeld/ruby_speech/compare/v1.0.2...v1.1.0) - [2013-03-02](https://rubygems.org/gems/ruby_speech/versions/1.1.0)
   * Feature: NLSML building & parsing

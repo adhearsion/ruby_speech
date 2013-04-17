@@ -97,32 +97,22 @@ describe RubySpeech do
     context "with an NLSML document" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:xf="http://www.w3.org/2000/xforms" xmlns:myApp="foo" grammar="http://flight">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
   <interpretation confidence="60">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Pittsburgh</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
   </interpretation>
   <interpretation confidence="40">
     <input>I want to go to Stockholm</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Stockholm</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Stockholm</to_city>
+      </airline>
+    </instance>
   </interpretation>
 </result>
         '''

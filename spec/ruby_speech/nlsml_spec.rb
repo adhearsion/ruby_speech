@@ -3,32 +3,22 @@ require 'spec_helper'
 describe RubySpeech::NLSML do
   let :example_document do
     '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:xf="http://www.w3.org/2000/xforms" xmlns:myApp="foo" grammar="http://flight">
-  <interpretation confidence="60">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Pittsburgh</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
   </interpretation>
-  <interpretation confidence="40">
+  <interpretation confidence="0.4">
     <input>I want to go to Stockholm</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Stockholm</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Stockholm</to_city>
+      </airline>
+    </instance>
   </interpretation>
 </result>
     '''
@@ -40,18 +30,12 @@ describe RubySpeech::NLSML do
     end
 
     it "should allow building a document" do
-      document = RubySpeech::NLSML.draw(grammar: 'http://flight', 'xmlns:myApp' => 'foo') do
+      document = RubySpeech::NLSML.draw(grammar: 'http://flight') do
         interpretation confidence: 0.6 do
           input "I want to go to Pittsburgh", mode: :speech
 
-          model do
-            group name: 'airline' do
-              string name: 'to_city'
-            end
-          end
-
           instance do
-            self['myApp'].airline do
+            airline do
               to_city 'Pittsburgh'
             end
           end
@@ -60,24 +44,12 @@ describe RubySpeech::NLSML do
         interpretation confidence: 0.4 do
           input "I want to go to Stockholm"
 
-          model do
-            group name: 'airline' do
-              string name: 'to_city'
-            end
-          end
-
           instance do
-            self['myApp'].airline do
+            airline do
               to_city "Stockholm"
             end
           end
         end
-      end
-
-      if RUBY_ENGINE == 'jruby'
-        expected_document.gsub! 'myApp:to_city', 'to_city'
-        expected_document.gsub! 'xf:group', 'group'
-        expected_document.gsub! 'xf:string', 'string'
       end
 
       document.to_xml.should == expected_document
@@ -89,7 +61,7 @@ describe RubySpeech::NLSML do
       RubySpeech.parse example_document
     end
 
-    let(:empty_result) { '<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:xf="http://www.w3.org/2000/xforms"/>' }
+    let(:empty_result) { '<result xmlns="http://www.ietf.org/xml/ns/mrcpv2"/>' }
 
     its(:grammar) { should == 'http://flight' }
 
@@ -127,14 +99,14 @@ describe RubySpeech::NLSML do
       subject.should_not be == RubySpeech.parse(empty_result)
     end
 
-    context "with an interpretation that has no model/instance" do
+    context "with an interpretation that has no instance" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
-  <interpretation confidence="60">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
   </interpretation>
-  <interpretation confidence="40">
+  <interpretation confidence="0.4">
     <input>I want to go to Stockholm</input>
   </interpretation>
 </result>
@@ -177,32 +149,22 @@ describe RubySpeech::NLSML do
     context "with interpretations out of confidence order" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
-  <interpretation confidence="40">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.4">
     <input>I want to go to Stockholm</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Stockholm</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Stockholm</to_city>
+      </airline>
+    </instance>
   </interpretation>
-  <interpretation confidence="60">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Pittsburgh</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
   </interpretation>
 </result>
         '''
@@ -215,24 +177,19 @@ describe RubySpeech::NLSML do
     context "with multiple instances for a single interpretation" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
-  <interpretation confidence="100">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="1">
     <input mode="speech">I want to go to Boston</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Boston, MA</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Boston, UK</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Boston, MA</to_city>
+      </airline>
+    </instance>
+    <instance>
+      <airline>
+        <to_city>Boston, UK</to_city>
+      </airline>
+    </instance>
   </interpretation>
 </result>
         '''
@@ -254,68 +211,20 @@ describe RubySpeech::NLSML do
       its(:best_interpretation) { should == expected_interpretation }
     end
 
-    context "with no namespaces (because some vendors think this is ok)" do
+    context "with no namespace" do
       let :example_document do
         '''
 <result grammar="http://flight">
-  <interpretation confidence="60">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
-    </model>
     <instance>
       <airline>
         <to_city>Pittsburgh</to_city>
       </airline>
     </instance>
   </interpretation>
-  <interpretation confidence="40">
+  <interpretation confidence="0.4">
     <input>I want to go to Stockholm</input>
-    <model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
-    </model>
-    <instance>
-      <airline>
-        <to_city>Stockholm</to_city>
-      </airline>
-    </instance>
-  </interpretation>
-</result>
-        '''
-      end
-
-      its(:interpretations)     { should == expected_interpretations }
-      its(:best_interpretation) { should == expected_best_interpretation }
-    end
-
-    context "with just an NLSML namespace (because we need something, damnit!)" do
-      let :example_document do
-        '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
-  <interpretation confidence="60">
-    <input mode="speech">I want to go to Pittsburgh</input>
-    <model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
-    </model>
-    <instance>
-      <airline>
-        <to_city>Pittsburgh</to_city>
-      </airline>
-    </instance>
-  </interpretation>
-  <interpretation confidence="40">
-    <input>I want to go to Stockholm</input>
-    <model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
-    </model>
     <instance>
       <airline>
         <to_city>Stockholm</to_city>
@@ -333,7 +242,7 @@ describe RubySpeech::NLSML do
     context "with a single interpretation with a nomatch input" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
   <interpretation>
     <input>
        <nomatch/>
@@ -349,14 +258,9 @@ describe RubySpeech::NLSML do
     context "with multiple interpretations where one is a nomatch input" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
-  <interpretation confidence="60">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <model>
-      <group name="airline">
-        <string name="to_city"/>
-      </group>
-    </model>
     <instance>
       <airline>
         <to_city>Pittsburgh</to_city>
@@ -378,7 +282,7 @@ describe RubySpeech::NLSML do
     context "with a single interpretation with a noinput" do
       let :example_document do
         '''
-<result xmlns="http://www.w3c.org/2000/11/nlsml" grammar="http://flight">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
   <interpretation>
     <input>
        <noinput/>

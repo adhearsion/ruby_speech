@@ -73,7 +73,7 @@ module RubySpeech
       end
 
       def instance_elements(interpretation)
-        interpretation.xpath '(xf:instance|ns:instance|instance)', 'xf' => XFORMS_NAMESPACE, 'ns' => NLSML_NAMESPACE
+        interpretation.xpath 'ns:instance|instance', 'ns' => NLSML_NAMESPACE
       end
 
       def element_children_key_value(element)
@@ -96,7 +96,7 @@ module RubySpeech
 
       def interpretation_hash_for_interpretation(interpretation)
         {
-          confidence: interpretation['confidence'].to_f/100,
+          confidence: interpretation['confidence'].to_f,
           input: input_hash_for_interpretation(interpretation),
           instance: instance_hash_for_interpretation(interpretation),
           instances: instances_collection_for_interpretation(interpretation)
@@ -108,8 +108,8 @@ module RubySpeech
       end
 
       def interpretation_nodes
-        nodes = result.xpath '(ns:interpretation|interpretation)', 'ns' => NLSML_NAMESPACE
-        nodes.sort_by { |int| -int[:confidence].to_i }
+        nodes = result.xpath 'ns:interpretation|interpretation', 'ns' => NLSML_NAMESPACE
+        nodes.sort_by { |int| -int[:confidence].to_f }
       end
     end
   end

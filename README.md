@@ -171,25 +171,19 @@ matcher = RubySpeech::GRXML::Matcher.new grammar
 
 ### NLSML
 
-[Natural Language Semantics Markup Language](http://www.w3.org/TR/nl-spec/) is the format used by many Speech Recognition engines and natural language processors to add semantic information to human language. RubySpeech is capable of generating and parsing such documents.
+[Natural Language Semantics Markup Language](http://tools.ietf.org/html/draft-ietf-speechsc-mrcpv2-27#section-6.3.1) is the format used by many Speech Recognition engines and natural language processors to add semantic information to human language. RubySpeech is capable of generating and parsing such documents.
 
 It is possible to generate an NLSML document like so:
 
 ```ruby
 require 'ruby_speech'
 
-nlsml = RubySpeech::NLSML.draw(grammar: 'http://flight', 'xmlns:myApp' => 'foo') do
+nlsml = RubySpeech::NLSML.draw grammar: 'http://flight' do
   interpretation confidence: 0.6 do
     input "I want to go to Pittsburgh", mode: :speech
 
-    model do
-      group name: 'airline' do
-        string name: 'to_city'
-      end
-    end
-
     instance do
-      self['myApp'].airline do
+      airline do
         to_city 'Pittsburgh'
       end
     end
@@ -198,14 +192,8 @@ nlsml = RubySpeech::NLSML.draw(grammar: 'http://flight', 'xmlns:myApp' => 'foo')
   interpretation confidence: 0.4 do
     input "I want to go to Stockholm"
 
-    model do
-      group name: 'airline' do
-        string name: 'to_city'
-      end
-    end
-
     instance do
-      self['myApp'].airline do
+      airline do
         to_city "Stockholm"
       end
     end
@@ -219,32 +207,22 @@ becomes:
 
 ```xml
 <?xml version="1.0"?>
-<result xmlns:myApp="foo" xmlns:xf="http://www.w3.org/2000/xforms" grammar="http://flight">
-  <interpretation confidence="60">
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
     <input mode="speech">I want to go to Pittsburgh</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Pittsburgh</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
   </interpretation>
-  <interpretation confidence="40">
+  <interpretation confidence="0.4">
     <input>I want to go to Stockholm</input>
-    <xf:model>
-      <xf:group name="airline">
-        <xf:string name="to_city"/>
-      </xf:group>
-    </xf:model>
-    <xf:instance>
-      <myApp:airline>
-        <myApp:to_city>Stockholm</myApp:to_city>
-      </myApp:airline>
-    </xf:instance>
+    <instance>
+      <airline>
+        <to_city>Stockholm</to_city>
+      </airline>
+    </instance>
   </interpretation>
 </result>
 ```
@@ -333,4 +311,4 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 
 ## Copyright
 
-Copyright (c) 2011 Ben Langfeld. MIT licence (see LICENSE for details).
+Copyright (c) 2013 Ben Langfeld. MIT licence (see LICENSE for details).

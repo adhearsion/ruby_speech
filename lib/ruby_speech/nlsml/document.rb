@@ -3,11 +3,6 @@ require 'delegate'
 module RubySpeech
   module NLSML
     class Document < SimpleDelegator
-      def initialize(xml)
-        super
-        @xml = xml
-      end
-
       def grammar
         result['grammar']
       end

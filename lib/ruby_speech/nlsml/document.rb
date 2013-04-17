@@ -3,6 +3,14 @@ require 'delegate'
 module RubySpeech
   module NLSML
     class Document < SimpleDelegator
+      def initialize(xml)
+        unless xml.root.namespace
+          xml.root.default_namespace = NLSML_NAMESPACE
+          xml = Nokogiri::XML.parse xml.to_xml, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS
+        end
+        super
+      end
+
       def grammar
         result['grammar']
       end
@@ -36,19 +44,19 @@ module RubySpeech
       end
 
       def nomatch_elements
-        result.xpath 'ns:interpretation/ns:input/ns:nomatch|interpretation/input/nomatch', 'ns' => NLSML_NAMESPACE
+        result.xpath 'ns:interpretation/ns:input/ns:nomatch', 'ns' => NLSML_NAMESPACE
       end
 
       def noinput_elements
-        result.xpath 'ns:interpretation/ns:input/ns:noinput|interpretation/input/noinput', 'ns' => NLSML_NAMESPACE
+        result.xpath 'ns:interpretation/ns:input/ns:noinput', 'ns' => NLSML_NAMESPACE
       end
 
       def input_elements
-        result.xpath 'ns:interpretation/ns:input|interpretation/input', 'ns' => NLSML_NAMESPACE
+        result.xpath 'ns:interpretation/ns:input', 'ns' => NLSML_NAMESPACE
       end
 
       def input_hash_for_interpretation(interpretation)
-        input_element = interpretation.at_xpath '(ns:input|input)', 'ns' => NLSML_NAMESPACE
+        input_element = interpretation.at_xpath 'ns:input', 'ns' => NLSML_NAMESPACE
         { content: input_element.content }.tap do |h|
           h[:mode] = input_element['mode'].to_sym if input_element['mode']
         end
@@ -68,7 +76,7 @@ module RubySpeech
       end
 
       def instance_elements(interpretation)
-        interpretation.xpath 'ns:instance|instance', 'ns' => NLSML_NAMESPACE
+        interpretation.xpath 'ns:instance', 'ns' => NLSML_NAMESPACE
       end
 
       def element_children_key_value(element)
@@ -104,7 +112,7 @@ module RubySpeech
       end
 
       def interpretation_nodes
-        nodes = result.xpath 'ns:interpretation|interpretation', 'ns' => NLSML_NAMESPACE
+        nodes = result.xpath 'ns:interpretation', 'ns' => NLSML_NAMESPACE
         nodes.sort_by { |int| -int[:confidence].to_f }
       end
     end

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Ben Langfeld"]
   s.email       = ["ben@langfeld.me"]
   s.homepage    = "https://github.com/benlangfeld/ruby_speech"
-  s.summary     = %q{A ruby library for TTS & ASR document preparation}
+  s.summary     = %q{A Ruby library for TTS & ASR document preparation}
   s.description = %q{Prepare SSML and GRXML documents with ease}
 
   s.rubyforge_project = "ruby_speech"

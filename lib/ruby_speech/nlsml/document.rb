@@ -72,6 +72,7 @@ module RubySpeech
       end
 
       def element_children_key_value(element)
+        return element.children.first.content if element.children.first.is_a?(Nokogiri::XML::Text)
         element.children.inject({}) do |acc, child|
           acc[child.node_name.to_sym] = case child.children.count
           when 0

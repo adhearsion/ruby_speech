@@ -54,6 +54,31 @@ describe RubySpeech::NLSML do
 
       document.to_xml.should == expected_document
     end
+
+    context "with a string instance" do
+      let :example_document do
+        '''
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
+    <input mode="speech">I want to go to Pittsburgh</input>
+    <instance>I want to go to Pittsburgh</instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      it "should allow building a document" do
+        document = RubySpeech::NLSML.draw(grammar: 'http://flight') do
+          interpretation confidence: 0.6 do
+            input "I want to go to Pittsburgh", mode: :speech
+
+            instance "I want to go to Pittsburgh"
+          end
+        end
+
+        document.to_xml.should == expected_document
+      end
+    end
   end
 
   describe "parsing a document" do
@@ -132,6 +157,35 @@ describe RubySpeech::NLSML do
             instances: []
           }
         ]
+      end
+
+      its(:interpretations)     { should == expected_interpretations }
+      its(:best_interpretation) { should == expected_best_interpretation }
+    end
+
+    context "with a string instance" do
+      let :example_document do
+        '''
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
+    <input mode="speech">I want to go to Pittsburgh</input>
+    <instance>I want to go to Pittsburgh</instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      let(:expected_best_interpretation) do
+        {
+          confidence: 0.6,
+          input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+          instance: 'I want to go to Pittsburgh',
+          instances: ['I want to go to Pittsburgh']
+        }
+      end
+
+      let(:expected_interpretations) do
+        [expected_best_interpretation]
       end
 
       its(:interpretations)     { should == expected_interpretations }

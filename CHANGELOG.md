@@ -1,11 +1,11 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
   * Change: Comply with MRCPv2 flavour of NLSML
-  ** Confidence is now a float in the XML representation
-  ** Models are no longer used
-  ** XForms no longer used
-  ** Now have a true namespace
-  ** Instance is in the NLSML namespace
-  ** Must support string instances
+    * Confidence is now a float in the XML representation
+    * Models are no longer used
+    * XForms no longer used
+    * Now have a true namespace
+    * Instance is in the NLSML namespace
+    * Must support string instances
   * Change: Grammar matching now uses a Matcher rather than directly on the Grammar element
   * Feature: Grammar matching now uses native C/Java regexes with PCRE/java.util.regex for clean partial matching and SPEEEEEED
   * Bugfix: Item repeats now work correctly
@@ -30,11 +30,11 @@
 
 # 0.5.0 - 2012-01-03
   * Feature: Add a whole bunch more SSML elements:
-  ** p & s
-  ** mark
-  ** desc
-  ** sub
-  ** phoneme
+    * p & s
+    * mark
+    * desc
+    * sub
+    * phoneme
   * Feature: Added the ability to inline grammar rule references in both destructive and non-destructive modes
   * Feature: Added the ability to tokenize a grammar, turning all tokens into unambiguous `<token/>` elements
   * Feature: Added the ability to whitespace normalize a grammar

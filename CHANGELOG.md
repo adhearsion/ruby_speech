@@ -1,5 +1,8 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
 
+# [2.0.1](https://github.com/benlangfeld/ruby_speech/compare/v2.0.0...v2.0.1) - [2013-04-27](https://rubygems.org/gems/ruby_speech/versions/2.0.1)
+  * Bugfix: Build native C extension in the correct location
+
 # [2.0.0](https://github.com/benlangfeld/ruby_speech/compare/v1.1.0...v2.0.0) - [2013-04-27](https://rubygems.org/gems/ruby_speech/versions/2.0.0)
   * Change: Comply with MRCPv2 flavour of NLSML
     * Confidence is now a float in the XML representation

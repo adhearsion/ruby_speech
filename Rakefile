@@ -15,8 +15,20 @@ RSpec::Core::RakeTask.new(:rcov) do |spec|
   spec.rspec_opts = '--color'
 end
 
-task :default => :spec
-task :ci => ['ci:setup:rspec', :spec]
+task :default => [:compile, :spec]
+task :ci => ['ci:setup:rspec', :compile, :spec]
 
 require 'yard'
 YARD::Rake::YardocTask.new
+
+if RUBY_PLATFORM =~ /java/
+  require 'rake/javaextensiontask'
+  Rake::JavaExtensionTask.new 'ruby_speech' do |ext|
+    ext.lib_dir = 'lib/ruby_speech'
+  end
+else
+  require 'rake/extensiontask'
+  Rake::ExtensionTask.new 'ruby_speech' do |ext|
+    ext.lib_dir = 'lib/ruby_speech'
+  end
+end

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Ben Langfeld"]
   s.email       = ["ben@langfeld.me"]
   s.homepage    = "https://github.com/benlangfeld/ruby_speech"
-  s.summary     = %q{A ruby library for TTS & ASR document preparation}
+  s.summary     = %q{A Ruby library for TTS & ASR document preparation}
   s.description = %q{Prepare SSML and GRXML documents with ease}
 
   s.rubyforge_project = "ruby_speech"
@@ -17,6 +17,13 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  if RUBY_PLATFORM =~ /java/
+    s.platform = "java"
+    s.files << "lib/ruby_speech/ruby_speech.jar"
+  else
+    s.extensions = ['ext/ruby_speech/extconf.rb']
+  end
 
   s.add_runtime_dependency %q<niceogiri>, ["~> 1.1", ">= 1.1.1"]
   s.add_runtime_dependency %q<nokogiri>, ["~> 1.5", ">= 1.5.6"]
@@ -27,9 +34,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<ci_reporter>, [">= 1.6.3"]
   s.add_development_dependency %q<yard>, [">= 0.7.0"]
   s.add_development_dependency %q<rake>, [">= 0"]
-  s.add_development_dependency %q<mocha>, [">= 0"]
-  s.add_development_dependency %q<i18n>, [">= 0"]
   s.add_development_dependency %q<guard>, [">= 0.9.0"]
   s.add_development_dependency %q<guard-rspec>, [">= 0"]
   s.add_development_dependency %q<ruby_gntp>, [">= 0"]
+  s.add_development_dependency %q<guard-rake>, [">= 0"]
+  s.add_development_dependency %q<rake-compiler>, [">= 0"]
 end

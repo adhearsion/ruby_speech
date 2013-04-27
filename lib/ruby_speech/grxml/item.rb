@@ -139,27 +139,6 @@ module RubySpeech
           super
         end
       end
-
-      def potential_match?(other)
-        tokens = children
-        return false if other.length > max_input_length
-        other.chars.each_with_index do |digit, index|
-          index -= tokens.size until index < tokens.size if repeat
-          return false unless tokens[index].potential_match?(digit)
-        end
-        true
-      end
-
-      def max_input_length # :nodoc:
-        case repeat
-        when Range
-          children.size * repeat.max
-        when Integer
-          children.size * repeat
-        else
-          children.size
-        end
-      end
     end # Item
   end # GRXML
 end # RubySpeech

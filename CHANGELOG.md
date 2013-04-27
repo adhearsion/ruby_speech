@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [2.0.0](https://github.com/benlangfeld/ruby_speech/compare/v1.1.0...v2.0.0) - [2013-04-27](https://rubygems.org/gems/ruby_speech/versions/2.0.0)
   * Change: Comply with MRCPv2 flavour of NLSML
     * Confidence is now a float in the XML representation
     * Models are no longer used

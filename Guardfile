@@ -1,5 +1,5 @@
 guard 'rake', :task => 'compile' do
-  watch(%r{^ext/(.+)\.c$})
+  watch(%r{^ext/(.+)\.(c|java)$})
 end
 
 guard 'rspec', :cli => '--format documentation' do

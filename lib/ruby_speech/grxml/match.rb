@@ -8,7 +8,7 @@ module RubySpeech
       end
 
       def eql?(o)
-        o.is_a?(self.class) && [:mode, :confidence, :utterance, :interpretation].all? { |f| self.__send__(f) == o.__send__(f) }
+        o.instance_of?(self.class) && [:mode, :confidence, :utterance, :interpretation].all? { |f| self.__send__(f) == o.__send__(f) }
       end
       alias :== :eql?
     end

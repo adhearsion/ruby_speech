@@ -109,17 +109,14 @@ module RubySpeech
 
     def children(type = nil, attributes = nil)
       if type
-        expression = type.to_s
+        expression = namespace_href ? 'ns:' : ''
+        expression << type.to_s
 
         expression << '[' << attributes.inject([]) do |h, (key, value)|
-          h << "@#{key}='#{value}'"
+          h << "@#{namespace_href && Nokogiri.jruby? ? 'ns:' : ''}#{key}='#{value}'"
         end.join(',') << ']' if attributes
 
-        if namespace_href
-          xpath "ns:#{expression}", :ns => namespace_href
-        else
-          xpath expression
-        end
+        xpath expression, :ns => namespace_href
       else
         super()
       end.map { |c| self.class.import c }

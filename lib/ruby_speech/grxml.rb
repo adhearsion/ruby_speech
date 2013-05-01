@@ -15,6 +15,7 @@ module RubySpeech
 
     autoload :Match
     autoload :Matcher
+    autoload :MaxMatch
     autoload :NoMatch
     autoload :PotentialMatch
 

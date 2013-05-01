@@ -109,7 +109,7 @@ module RubySpeech
           ref.swap rule.nokogiri_children
         end
 
-        non_root_rules = xpath "./ns:rule[@id!='#{root}']", :ns => namespace_href
+        non_root_rules = xpath "./ns:rule[@#{namespace_href && Nokogiri.jruby? ? 'ns:' : ''}id!='#{root}']", :ns => namespace_href
         non_root_rules.remove
 
         self

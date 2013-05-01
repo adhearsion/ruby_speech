@@ -14,13 +14,7 @@ class SpeechDocMatcher
   end
 
   def subject=(s)
-    if s.is_a? Nokogiri::XML::Document
-      @subject = s
-    else
-      doc = Nokogiri::XML::Document.new
-      doc << s.to_xml
-      @subject = doc
-    end
+    @subject = Nokogiri::XML(s.to_xml)
   end
 
   def failure_message

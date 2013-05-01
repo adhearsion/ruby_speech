@@ -1,4 +1,8 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+  * Bugfix: Differentiate between GRXML match cases with are and are not maximal
+    * A Match can accept further input while still matching, while a a MaxMatch cannot.
+    * Matching implementation moved down to C/Java to avoid repeated regex compilation and confusing jumping about.
+  * Bugfix: Back to functioning on JRuby with latest Nokogiri release
 
 # [2.0.1](https://github.com/benlangfeld/ruby_speech/compare/v2.0.0...v2.0.1) - [2013-04-27](https://rubygems.org/gems/ruby_speech/versions/2.0.1)
   * Bugfix: Build native C extension in the correct location

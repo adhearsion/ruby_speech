@@ -38,7 +38,8 @@ static int is_match_end(pcre *compiled_regex, const char *input)
      If so, then this is not a match end.
    */
   sprintf(search_input, "%sZ", input);
-  for (int i = 0; i < 16; i++) {
+  int i;
+  for (i = 0; i < 16; i++) {
     int result;
     if (!*search) {
       search = search_set;
@@ -57,6 +58,10 @@ static VALUE method_find_match(VALUE self, VALUE buffer)
   VALUE GRXML       = rb_const_get(RubySpeech, rb_intern("GRXML"));
   VALUE NoMatch     = rb_const_get(GRXML, rb_intern("NoMatch"));
   pcre *compiled_regex;
+  int result = 0;
+  int ovector[OVECTOR_SIZE];
+  int workspace[WORKSPACE_SIZE];
+  char *input = StringValueCStr(buffer);
 
   Data_Get_Struct(rb_iv_get(self, "@regex"), pcre, compiled_regex);
 
@@ -64,10 +69,6 @@ static VALUE method_find_match(VALUE self, VALUE buffer)
     return rb_class_new_instance(0, NULL, NoMatch);
   }
 
-  int result = 0;
-  int ovector[OVECTOR_SIZE];
-  int workspace[WORKSPACE_SIZE];
-  char *input = StringValueCStr(buffer);
   result = pcre_dfa_exec(compiled_regex, NULL, input, (int)strlen(input), 0, PCRE_PARTIAL,
     ovector, sizeof(ovector) / sizeof(ovector[0]),
     workspace, sizeof(workspace) / sizeof(workspace[0]));

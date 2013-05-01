@@ -9,7 +9,7 @@ rvm:
   - ruby-head
 matrix:
   allow_failures:
-    - rvm: jruby-19mode
+    # - rvm: jruby-19mode
 before_install:
   - sudo apt-get install libpcre3 libpcre3-dev
 

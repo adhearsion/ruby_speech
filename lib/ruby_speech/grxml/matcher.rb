@@ -8,15 +8,12 @@ end
 module RubySpeech
   module GRXML
     class Matcher
-
-      BLANK_REGEX = //.freeze
-
-      attr_reader :grammar, :regex
+      attr_reader :grammar
 
       def initialize(grammar)
         @grammar = grammar
         prepare_grammar
-        @regex = /^#{regexp_content.join}$/
+        compile_regex regexp_content
       end
 
       ##
@@ -24,7 +21,7 @@ module RubySpeech
       #
       # @param [String] other the input string to check for a match with the grammar
       #
-      # @return [NoMatch, Match] depending on the result of a match attempt. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
+      # @return [NoMatch, PotentialMatch, Match, MaxMatch] depending on the result of a match attempt. A potential match indicates that the buffer is valid, but incomplete. A MaxMatch is differentiated from a Match in that it cannot accept further input. If a match can be found, it will be returned with appropriate mode/confidence/utterance and interpretation attributes
       #
       # @example A grammar that takes a 4 digit pin terminated by hash, or the *9 escape sequence
       #     ```ruby
@@ -85,14 +82,14 @@ module RubySpeech
       #       ```
       #
       def match(buffer)
-        buffer = buffer.dup
-
-        return check_potential_match(buffer) if regex == BLANK_REGEX
-
-        check_full_match(buffer) || check_potential_match(buffer) || NoMatch.new
+        find_match buffer.dup
       end
 
       private
+
+      def regexp_content
+        '^' + grammar.root_rule.children.map(&:regexp_content).join + '$'
+      end
 
       def prepare_grammar
         grammar.inline!
@@ -100,19 +97,12 @@ module RubySpeech
         grammar.normalize_whitespace
       end
 
-      def check_full_match(buffer)
-        match = regex.match buffer
-
-        return unless match
-
-        Match.new :mode           => grammar.mode,
-                  :confidence     => grammar.dtmf? ? 1 : 0,
-                  :utterance      => buffer,
-                  :interpretation => interpret_utterance(buffer)
-      end
-
-      def regexp_content
-        grammar.root_rule.children.map &:regexp_content
+      def match_for_buffer(buffer, maximal = false)
+        match_class = maximal ? MaxMatch : Match
+        match_class.new mode:     grammar.mode,
+                  confidence:     grammar.dtmf? ? 1 : 0,
+                  utterance:      buffer,
+                  interpretation: interpret_utterance(buffer)
       end
 
       def interpret_utterance(utterance)

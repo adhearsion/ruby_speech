@@ -109,10 +109,16 @@ module RubySpeech
         conversion = Hash.new { |hash, key| hash[key] = key }
         conversion['*'] = 'star'
         conversion['#'] = 'pound'
-
-        utterance.chars.inject [] do |array, digit|
+        find_tag(utterance) || utterance.chars.inject([]) do |array, digit|
           array << "dtmf-#{conversion[digit]}"
-        end.join ' '
+        end.join(' ')
+      end
+
+      def find_tag(utterance)
+        match = /#{regexp_content}/.match(utterance)
+        return if match.captures.all?(&:nil?)
+        last_capture_index = match.captures.size - 1 - match.captures.reverse.find_index { |item| !item.nil? }
+        match.names[last_capture_index]
       end
     end
   end

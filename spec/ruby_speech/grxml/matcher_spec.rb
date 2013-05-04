@@ -34,6 +34,41 @@ module RubySpeech
           end
         end
 
+        context "with a grammar with SISR tags" do
+          let :grammar do
+            RubySpeech::GRXML.draw mode: 'dtmf', root: 'options', tag_format: 'semantics/1.0-literals' do
+              rule id: 'options', scope: 'public' do
+                item do
+                  one_of do
+                    item do
+                      tag { 'foo' }
+                      '1'
+                    end
+                    item do
+                      tag { 'bar' }
+                      '2'
+                    end
+                    item do
+                      tag { 'baz' }
+                      '3'
+                    end
+                    item do
+                      tag { 'lala' }
+                      '4'
+                    end
+                  end
+                end
+              end
+            end
+          end
+
+          it "should return the literal tag interpretation" do
+            expected_match = GRXML::MaxMatch.new mode: :dtmf, confidence: 1,
+              utterance: '2', interpretation: 'bar'
+            subject.match('2').should == expected_match
+          end
+        end
+
         context "with a grammar that takes two specific digits" do
           let(:grammar) do
             GRXML.draw :mode => :dtmf, :root => 'digits' do

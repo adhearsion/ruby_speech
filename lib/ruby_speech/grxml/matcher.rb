@@ -8,6 +8,10 @@ end
 module RubySpeech
   module GRXML
     class Matcher
+      UTTERANCE_CONVERTER = Hash.new { |hash, key| hash[key] = key }
+      UTTERANCE_CONVERTER['*'] = 'star'
+      UTTERANCE_CONVERTER['#'] = 'pound'
+
       attr_reader :grammar
 
       def initialize(grammar)
@@ -106,11 +110,8 @@ module RubySpeech
       end
 
       def interpret_utterance(utterance)
-        conversion = Hash.new { |hash, key| hash[key] = key }
-        conversion['*'] = 'star'
-        conversion['#'] = 'pound'
         find_tag(utterance) || utterance.chars.inject([]) do |array, digit|
-          array << "dtmf-#{conversion[digit]}"
+          array << "dtmf-#{UTTERANCE_CONVERTER[digit]}"
         end.join(' ')
       end
 

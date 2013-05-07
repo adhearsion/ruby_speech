@@ -22,7 +22,7 @@ module RubySpeech
       include GenericElement
 
       def regexp_content # :nodoc:
-        children.map(&:regexp_content).join
+        "(#{children.map(&:regexp_content).join})"
       end
     end # Element
   end # GRXML

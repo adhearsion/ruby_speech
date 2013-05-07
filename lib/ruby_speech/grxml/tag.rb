@@ -20,6 +20,10 @@ module RubySpeech
         raise InvalidChildError, "A Tag can only accept Strings as children" unless VALID_CHILD_TYPES.include? arg.class
         super
       end
+
+      def regexp_content # :nodoc:
+        "?<#{content}>"
+      end
     end # Tag
   end # GRXML
 end # RubySpeech

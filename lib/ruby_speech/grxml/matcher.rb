@@ -119,7 +119,8 @@ module RubySpeech
         match = /#{regexp_content}/.match(utterance)
         return if match.captures.all?(&:nil?)
         last_capture_index = match.captures.size - 1 - match.captures.reverse.find_index { |item| !item.nil? }
-        match.names[last_capture_index]
+        group = match.names[last_capture_index]
+        group && group[1..-1]
       end
     end
   end

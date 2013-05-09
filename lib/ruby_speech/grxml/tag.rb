@@ -22,7 +22,7 @@ module RubySpeech
       end
 
       def regexp_content # :nodoc:
-        "?<#{content}>"
+        "?<t#{content}>"
       end
     end # Tag
   end # GRXML

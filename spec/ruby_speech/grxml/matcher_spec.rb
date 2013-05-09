@@ -41,7 +41,7 @@ module RubySpeech
                 item do
                   one_of do
                     item do
-                      tag { 'foo' }
+                      tag { '1' }
                       '1'
                     end
                     item do

@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [2.1.1](https://github.com/benlangfeld/ruby_speech/compare/v2.1.0...v2.1.1) - [2013-05-09](https://rubygems.org/gems/ruby_speech/versions/2.1.1)
   * Bugfix: Support numeric SISR literal tags
 
 # [2.1.0](https://github.com/benlangfeld/ruby_speech/compare/v2.0.2...v2.1.0) - [2013-05-07](https://rubygems.org/gems/ruby_speech/versions/2.1.0)

@@ -1,8 +1,9 @@
 require 'active_support/core_ext/class/attribute'
+require 'ruby_speech/xml/node'
 
 module RubySpeech
   module GRXML
-    class Element < Niceogiri::XML::Node
+    class Element < XML::Node
       def self.namespace
         GRXML_NAMESPACE
       end

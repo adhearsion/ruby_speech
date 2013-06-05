@@ -1,5 +1,8 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
 
+# [2.1.2](https://github.com/benlangfeld/ruby_speech/compare/v2.1.1...v2.1.2) - [2013-06-05](https://rubygems.org/gems/ruby_speech/versions/2.1.2)
+  * Bugfix: Allow wrapping a pre-parsed XML node nested arbitrary deeply as an NLSML document
+
 # [2.1.1](https://github.com/benlangfeld/ruby_speech/compare/v2.1.0...v2.1.1) - [2013-05-09](https://rubygems.org/gems/ruby_speech/versions/2.1.1)
   * Bugfix: Support numeric SISR literal tags
 

@@ -124,6 +124,41 @@ describe RubySpeech::NLSML do
       subject.should_not be == RubySpeech.parse(empty_result)
     end
 
+    context "when the XML is already parsed and is not the root of a document" do
+      let :example_document do
+        '''
+<foo>
+  <result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+    <interpretation confidence="0.6">
+      <input mode="speech">I want to go to Pittsburgh</input>
+      <instance>
+        <airline>
+          <to_city>Pittsburgh</to_city>
+        </airline>
+      </instance>
+    </interpretation>
+    <interpretation confidence="0.4">
+      <input>I want to go to Stockholm</input>
+      <instance>
+        <airline>
+          <to_city>Stockholm</to_city>
+        </airline>
+      </instance>
+    </interpretation>
+  </result>
+</foo>
+        '''
+      end
+
+      let(:node) { Nokogiri::XML(example_document).at_xpath('//mrcp:result', mrcp: "http://www.ietf.org/xml/ns/mrcpv2") }
+
+      subject do
+        RubySpeech::NLSML::Document.new node
+      end
+
+      its(:grammar) { should == 'http://flight' }
+    end
+
     context "with an interpretation that has no instance" do
       let :example_document do
         '''

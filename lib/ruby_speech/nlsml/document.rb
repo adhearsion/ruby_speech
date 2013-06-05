@@ -4,15 +4,16 @@ module RubySpeech
   module NLSML
     class Document < SimpleDelegator
       def initialize(xml)
-        unless xml.root.namespace
-          xml.root.default_namespace = NLSML_NAMESPACE
-          xml = Nokogiri::XML.parse xml.to_xml, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS
+        result = xml.respond_to?(:root) ? xml.root : xml
+        unless result.namespace
+          result.default_namespace = NLSML_NAMESPACE
+          result = Nokogiri::XML.parse(xml.to_xml, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root
         end
-        super
+        super result
       end
 
       def grammar
-        result['grammar']
+        self['grammar']
       end
 
       def interpretations
@@ -44,15 +45,15 @@ module RubySpeech
       end
 
       def nomatch_elements
-        result.xpath 'ns:interpretation/ns:input/ns:nomatch', 'ns' => NLSML_NAMESPACE
+        xpath 'ns:interpretation/ns:input/ns:nomatch', 'ns' => NLSML_NAMESPACE
       end
 
       def noinput_elements
-        result.xpath 'ns:interpretation/ns:input/ns:noinput', 'ns' => NLSML_NAMESPACE
+        xpath 'ns:interpretation/ns:input/ns:noinput', 'ns' => NLSML_NAMESPACE
       end
 
       def input_elements
-        result.xpath 'ns:interpretation/ns:input', 'ns' => NLSML_NAMESPACE
+        xpath 'ns:interpretation/ns:input', 'ns' => NLSML_NAMESPACE
       end
 
       def input_hash_for_interpretation(interpretation)
@@ -107,12 +108,8 @@ module RubySpeech
         }
       end
 
-      def result
-        root
-      end
-
       def interpretation_nodes
-        nodes = result.xpath 'ns:interpretation', 'ns' => NLSML_NAMESPACE
+        nodes = xpath 'ns:interpretation', 'ns' => NLSML_NAMESPACE
         nodes.sort_by { |int| -int[:confidence].to_f }
       end
     end

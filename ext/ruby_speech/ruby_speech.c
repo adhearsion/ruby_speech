@@ -33,12 +33,12 @@ static int is_match_end(pcre *compiled_regex, const char *input)
   char search_input[MAX_INPUT_SIZE + 2];
   const char *search_set = "0123456789#*ABCD";
   const char *search = strchr(search_set, input[input_size - 1]); /* start with last digit in input */
+  int i;
 
   /* For each digit in search_set, check if input + search_set digit is a potential match.
      If so, then this is not a match end.
    */
   sprintf(search_input, "%sZ", input);
-  int i;
   for (i = 0; i < 16; i++) {
     int result;
     if (!*search) {

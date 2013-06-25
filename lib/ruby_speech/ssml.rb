@@ -26,7 +26,7 @@ module RubySpeech
     def self.draw(*args, &block)
       document = Nokogiri::XML::Document.new
       Speak.new(document, *args).tap do |speak|
-        document.root = speak
+        document.root = speak.node
         block_return = speak.eval_dsl_block &block
         speak << block_return if block_return.is_a?(String)
       end

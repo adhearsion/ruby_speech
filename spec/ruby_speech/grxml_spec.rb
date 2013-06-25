@@ -30,13 +30,13 @@ module RubySpeech
       end
 
       it "should allow other GRXML elements to be inserted in the document" do
-        doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
+        drawn_doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
 
         expected_doc = GRXML::Grammar.new(doc, :mode => :voice, :root => 'main')
         rule = GRXML::Rule.new(doc, :id => "main")
         rule << "Hello Fred"
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should allow accessing methods defined outside the block" do
@@ -44,14 +44,14 @@ module RubySpeech
           'bar'
         end
 
-        doc = GRXML.draw do
+        drawn_doc = GRXML.draw do
           rule :id => foo
         end
 
         expected_doc = GRXML::Grammar.new doc
         rule = GRXML::Rule.new(doc, :id => foo)
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should raise error if given an empty rule" do
@@ -60,18 +60,18 @@ module RubySpeech
       end
 
       it "should allow nested block return values" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :scope => 'public', :id => :main do
             "Hello Fred"
           end
         end
         expected_doc = GRXML::Grammar.new doc
         expected_doc << GRXML::Rule.new(doc, :scope => :public, :id => :main, :content => "Hello Fred")
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should allow nested GRXML elements" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :id => :main, :scope => 'public' do
             string "Hello Fred. I like ninjas and pirates"
             one_of do
@@ -87,7 +87,7 @@ module RubySpeech
         rule << oneof
         expected_doc = GRXML::Grammar.new doc
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       # TODO: maybe turn a rule embedded in anthoer rule into a ruleref??
@@ -193,7 +193,7 @@ module RubySpeech
       end
 
       it "should properly escape string input" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule { string "I <3 nachos." }
           rule { "I <3 nachos." }
           rule { 'I <3 nachos.' }
@@ -202,14 +202,14 @@ module RubySpeech
         3.times do
           expected_doc << GRXML::Rule.new(doc, :native_content => "I <3 nachos.")
         end
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       # TODO: verfify rule is in document if named in a ruleref
       # TODO: ruleref must have named rule id
 
       it "should allow all permutations of possible nested GRXML elements" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :id => "hello" do
             string "HELLO?"
             item :weight => 2.5
@@ -257,7 +257,7 @@ module RubySpeech
         oneof << GRXML::Item.new(doc, :content => "single item")
         rule << oneof
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       describe "importing nested tags" do

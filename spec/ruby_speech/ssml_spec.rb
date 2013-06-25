@@ -38,25 +38,25 @@ module RubySpeech
       end
 
       it "should allow other SSML elements to be inserted in the document" do
-        doc = SSML.draw { voice :gender => :male, :name => 'fred' }
         expected_doc = SSML::Speak.new doc
         expected_doc << SSML::Voice.new(doc, :gender => :male, :name => 'fred')
-        doc.should == expected_doc
+        SSML.draw { voice :gender => :male, :name => 'fred' }.should == expected_doc
       end
 
       it "should allow nested block return values" do
+        expected_doc = SSML::Speak.new doc
+        expected_doc << SSML::Voice.new(doc, :gender => :male, :name => 'fred', :content => "Hi, I'm Fred.")
+
         doc = RubySpeech::SSML.draw do
           voice :gender => :male, :name => 'fred' do
             "Hi, I'm Fred."
           end
         end
-        expected_doc = SSML::Speak.new doc
-        expected_doc << SSML::Voice.new(doc, :gender => :male, :name => 'fred', :content => "Hi, I'm Fred.")
         doc.should == expected_doc
       end
 
       it "should allow nested SSML elements" do
-        doc = RubySpeech::SSML.draw do
+        drawn_doc = RubySpeech::SSML.draw do
           voice :gender => :male, :name => 'fred' do
             string "Hi, I'm Fred. The time is currently "
             say_as :interpret_as => 'date', :format => 'dmy' do
@@ -69,7 +69,7 @@ module RubySpeech
         voice << SSML::SayAs.new(doc, :interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
         expected_doc = SSML::Speak.new doc
         expected_doc << voice
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should allow accessing methods defined outside the block" do
@@ -77,12 +77,8 @@ module RubySpeech
           'bar'
         end
 
-        doc = SSML.draw do
-          string foo
-        end
-
         expected_doc = SSML::Speak.new doc, :content => foo
-        doc.should == expected_doc
+        SSML.draw { string foo }.should == expected_doc
       end
 
       describe "embedding" do
@@ -152,7 +148,7 @@ module RubySpeech
       end
 
       it "should properly escape string input" do
-        doc = RubySpeech::SSML.draw do
+        drawn_doc = RubySpeech::SSML.draw do
           voice { string "I <3 nachos." }
           voice { "I <3 nachos." }
         end
@@ -160,11 +156,11 @@ module RubySpeech
         2.times do
           expected_doc << SSML::Voice.new(doc, :native_content => "I <3 nachos.")
         end
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should allow all permutations of possible nested SSML elements" do
-        doc = RubySpeech::SSML.draw do
+        drawn_doc = RubySpeech::SSML.draw do
           string "Hello world."
           ssml_break
           audio :src => "hello" do
@@ -250,7 +246,7 @@ module RubySpeech
         voice << SSML::Prosody.new(doc, :rate => :fast, :content => "And yet so spritely!")
         voice << SSML::Voice.new(doc, :age => 12, :content => "And I'm young Fred")
         expected_doc << voice
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
     end
 

@@ -41,7 +41,7 @@ module RubySpeech
       # @param [XML::Node] node the node to import
       # @return the appropriate object based on the node name and namespace
       def import(node)
-        node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node)
+        node = Nokogiri::XML.parse(node, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS).root unless node.is_a?(Nokogiri::XML::Node) || node.is_a?(GenericElement)
         return node.content if node.is_a?(Nokogiri::XML::Text)
         klass = class_from_registration node.node_name
         if klass && klass != self
@@ -50,15 +50,18 @@ module RubySpeech
           new(node.document).inherit node
         end
       end
+    end
 
-      def new(doc, atts = {}, &block)
-        super(self.registered_name, doc) do |new_node|
-          new_node.build atts, &block
-        end
-      end
+    def initialize(doc, atts = nil, &block)
+      @doc = doc
+      build atts, &block if atts || block_given?
     end
 
     attr_writer :parent
+
+    def node
+      @node || create_node
+    end
 
     def parent
       @parent || super
@@ -66,11 +69,12 @@ module RubySpeech
 
     def inherit(node)
       self.parent = node.parent
-      super
+      @node = node
+      self
     end
 
     def build(atts, &block)
-      (self.class.defaults || {}).merge(atts).each_pair { |k, v| send :"#{k}=", v }
+      mass_assign atts
       block_return = eval_dsl_block &block
       string block_return if block_return.is_a?(String) && block_return.present?
     end
@@ -126,6 +130,21 @@ module RubySpeech
       end.map { |c| self.class.import c }
     end
 
+    def nokogiri_children
+      node.children
+    end
+
+    def <<(other)
+      case other
+      when GenericElement
+        super other.node
+      when String
+        string other
+      else
+        super other
+      end
+    end
+
     def embed(other)
       case other
       when String
@@ -145,7 +164,98 @@ module RubySpeech
       self << Nokogiri::XML::Text.new(other, document)
     end
 
+    def clone
+      GRXML.import to_xml
+    end
+
+    def traverse(&block)
+      nokogiri_children.each { |j| j.traverse &block }
+      block.call self
+    end
+
+    # Helper method to read an attribute
+    #
+    # @param [#to_sym] attr_name the name of the attribute
+    # @param [String, Symbol, nil] to_call the name of the method to call on
+    # the returned value
+    # @return nil or the value
+    def read_attr(attr_name, to_call = nil)
+      val = self[attr_name]
+      val && to_call ? val.__send__(to_call) : val
+    end
+
+    # Helper method to write a value to an attribute
+    #
+    # @param [#to_sym] attr_name the name of the attribute
+    # @param [#to_s] value the value to set the attribute to
+    def write_attr(attr_name, value, to_call = nil)
+      self[attr_name] = value && to_call ? value.__send__(to_call) : value
+    end
+
+    # Attach a namespace to the node
+    #
+    # @overload namespace=(ns)
+    #   Attach an already created XML::Namespace
+    #   @param [XML::Namespace] ns the namespace object
+    # @overload namespace=(ns)
+    #   Create a new namespace and attach it
+    #   @param [String] ns the namespace uri
+    def namespace=(namespaces)
+      case namespaces
+      when Nokogiri::XML::Namespace
+        super namespaces
+      when String
+        ns = self.add_namespace nil, namespaces
+        super ns
+      end
+    end
+
+    # Helper method to get the node's namespace
+    #
+    # @return [XML::Namespace, nil] The node's namespace object if it exists
+    def namespace_href
+      namespace.href if namespace
+    end
+
+    # The node as XML
+    #
+    # @return [String] XML representation of the node
+    def inspect
+      self.to_xml
+    end
+
+    def to_s
+      to_xml
+    end
+
+    # Check that a set of fields are equal between nodes
+    #
+    # @param [Node] other the other node to compare against
+    # @param [*#to_s] fields the set of fields to compare
+    # @return [Fixnum<-1,0,1>]
+    def eql?(o, *fields)
+      o.is_a?(self.class) && ([:content, :children] + fields).all? { |f| self.__send__(f) == o.__send__(f) }
+    end
+
+    # @private
+    def ==(o)
+      eql?(o)
+    end
+
+    def create_node
+      @node = Nokogiri::XML::Node.new self.class.registered_name, @doc
+      mass_assign self.class.defaults
+      @node
+    end
+
+    def mass_assign(attrs)
+      attrs.each_pair { |k, v| send :"#{k}=", v } if attrs
+    end
+
     def method_missing(method_name, *args, &block)
+      if node.respond_to?(method_name)
+        return node.send method_name, *args, &block
+      end
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
       if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
@@ -157,17 +267,8 @@ module RubySpeech
       end
     end
 
-    def clone
-      GRXML.import to_xml
-    end
-
-    def traverse(&block)
-      nokogiri_children.each { |j| j.traverse &block }
-      block.call self
-    end
-
-    def eql?(o, *args)
-      super o, :content, :children, *args
+    def respond_to_missing?(method_name, include_private = false)
+      node.respond_to?(method_name, include_private) || super
     end
   end # Element
 end # RubySpeech

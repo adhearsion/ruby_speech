@@ -75,7 +75,8 @@ module RubySpeech
       # @return [Rule] The root rule node for the document
       #
       def root_rule
-        rule_with_id root
+        element = rule_with_id root
+        self.class.import element if element
       end
 
       ##
@@ -106,10 +107,10 @@ module RubySpeech
       def inline!
         xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
           rule = rule_with_id ref[:uri].sub(/^#/, '')
-          ref.swap rule.nokogiri_children
+          ref.swap rule.children
         end
 
-        non_root_rules = xpath "./ns:rule[@#{namespace_href && Nokogiri.jruby? ? 'ns:' : nil}id!='#{root}']", :ns => namespace_href
+        non_root_rules = xpath "./ns:rule[@#{Nokogiri.jruby? ? 'ns:' : nil}id!='#{root}']", :ns => namespace_href
         non_root_rules.remove
 
         self
@@ -127,7 +128,7 @@ module RubySpeech
           next if [Token, Tag].include?(element_type)
 
           tokens = split_tokens(element).map do |string|
-            Token.new(document).tap { |token| token << string }
+            Token.new(document).tap { |token| token << string }.node
           end
 
           element.swap Nokogiri::XML::NodeSet.new(document, tokens)
@@ -143,10 +144,7 @@ module RubySpeech
           next if element === self
 
           imported_element = self.class.import element
-          next unless imported_element.respond_to? :normalize_whitespace
-
-          imported_element.normalize_whitespace
-          element.swap imported_element
+          imported_element.normalize_whitespace if imported_element.respond_to?(:normalize_whitespace)
         end
       end
 

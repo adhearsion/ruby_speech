@@ -150,18 +150,27 @@ module RubySpeech
       end
 
       it "should allow concatenation" do
-        pending "Broken pending node wrappers"
+        speak1 = SSML.draw do
+          voice :name => 'frank' do
+            "Hi, I'm Frank"
+          end
+        end
+        speak2 = SSML.draw do
+          string "Hello there"
+          voice :name => 'millie' do
+            "Hi, I'm Millie"
+          end
+        end
 
-        speak1 = Speak.new doc
-        speak1 << Voice.new(doc, :name => 'frank', :content => "Hi, I'm Frank")
-        speak2 = Speak.new doc
-        speak2 << "Hello there"
-        speak2 << Voice.new(doc, :name => 'millie', :content => "Hi, I'm Millie")
-
-        expected_concat = Speak.new doc
-        expected_concat << Voice.new(doc, :name => 'frank', :content => "Hi, I'm Frank")
-        expected_concat << "Hello there"
-        expected_concat << Voice.new(doc, :name => 'millie', :content => "Hi, I'm Millie")
+        expected_concat = SSML.draw do
+          voice :name => 'frank' do
+            "Hi, I'm Frank"
+          end
+          string "Hello there"
+          voice :name => 'millie' do
+            "Hi, I'm Millie"
+          end
+        end
 
         concat = (speak1 + speak2)
         concat.should == expected_concat

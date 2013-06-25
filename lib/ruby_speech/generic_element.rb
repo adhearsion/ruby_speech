@@ -102,9 +102,14 @@ module RubySpeech
     end
 
     def +(other)
-      self.class.new(Nokogiri::XML::Document.new, :base_uri => base_uri).tap do |new_element|
-        (self.children + other.children).each do |child|
-          new_element << child
+      self.class.new(Nokogiri::XML::Document.new).tap do |new_element|
+        if Nokogiri.jruby?
+          new_element.add_child self.nokogiri_children
+          new_element.add_child other.nokogiri_children
+        else
+          # TODO: This is yucky because it requires serialization
+          new_element.add_child self.nokogiri_children.to_xml
+          new_element.add_child other.nokogiri_children.to_xml
         end
       end
     end

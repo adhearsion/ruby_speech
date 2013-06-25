@@ -139,8 +139,6 @@ module RubySpeech
 
       describe "concat" do
         it "should allow concatenation" do
-          pending "Broken pending node wrappers"
-
           grammar1 = Grammar.new doc
           grammar1 << Rule.new(doc, :id => 'frank', :scope => 'public', :content => "Hi Frank")
           grammar2 = Grammar.new doc

@@ -1,3 +1,5 @@
+require 'ruby_speech/xml/language'
+
 module RubySpeech
   module GRXML
     ##
@@ -9,6 +11,7 @@ module RubySpeech
     #  The token element may include an optional xml:lang attribute to indicate the language of the contained token.
     #
     class Token < Element
+      include XML::Language
 
       register :token
 

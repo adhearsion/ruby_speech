@@ -1,24 +1,16 @@
 %w{
-  active_support/dependencies/autoload
   active_support/core_ext/object/blank
   active_support/core_ext/numeric/time
   active_support/core_ext/enumerable
-  niceogiri
+  nokogiri
+
+  ruby_speech/version
+  ruby_speech/ssml
+  ruby_speech/grxml
+  ruby_speech/nlsml
 }.each { |f| require f }
 
 module RubySpeech
-  extend ActiveSupport::Autoload
-
-  autoload :Version
-
-  eager_autoload do
-    autoload :GenericElement
-    autoload :SSML
-    autoload :GRXML
-    autoload :NLSML
-    autoload :XML
-  end
-
   def self.parse(string)
     document = Nokogiri::XML.parse string, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS
     namespace = document.root.namespace
@@ -32,5 +24,3 @@ module RubySpeech
     end
   end
 end
-
-ActiveSupport::Autoload.eager_autoload!

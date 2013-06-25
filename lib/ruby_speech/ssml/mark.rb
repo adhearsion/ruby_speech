@@ -1,3 +1,5 @@
+require 'ruby_speech/ssml/element'
+
 module RubySpeech
   module SSML
     ##

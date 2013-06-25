@@ -3,11 +3,15 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Voice do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:node_name) { should == 'voice' }
       its(:name) { should be_nil }
 
       describe "setting options in initializers" do
-        subject { Voice.new :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul" }
+        subject { Voice.new doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul" }
 
         its(:language)  { should == 'jp' }
         its(:gender)    { should == :male }
@@ -102,42 +106,42 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language, gender, age, variant, name are the same" do
-          Voice.new(:language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello").should == Voice.new(:language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello")
+          Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello").should == Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Voice.new(:content => "Hello").should_not == Voice.new(:content => "Hello there")
+            Voice.new(doc, :content => "Hello").should_not == Voice.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Voice.new(:language => "Hello").should_not == Voice.new(:language => "Hello there")
+            Voice.new(doc, :language => "Hello").should_not == Voice.new(doc, :language => "Hello there")
           end
         end
 
         describe "when the gender is different" do
           it "should not be equal" do
-            Voice.new(:gender => :male).should_not == Voice.new(:gender => :female)
+            Voice.new(doc, :gender => :male).should_not == Voice.new(doc, :gender => :female)
           end
         end
 
         describe "when the age is different" do
           it "should not be equal" do
-            Voice.new(:age => 20).should_not == Voice.new(:age => 30)
+            Voice.new(doc, :age => 20).should_not == Voice.new(doc, :age => 30)
           end
         end
 
         describe "when the variant is different" do
           it "should not be equal" do
-            Voice.new(:variant => 1).should_not == Voice.new(:variant => 2)
+            Voice.new(doc, :variant => 1).should_not == Voice.new(doc, :variant => 2)
           end
         end
 
         describe "when the name is different" do
           it "should not be equal" do
-            Voice.new(:name => "Hello").should_not == Voice.new(:name => "Hello there")
+            Voice.new(doc, :name => "Hello").should_not == Voice.new(doc, :name => "Hello there")
           end
         end
       end
@@ -148,47 +152,47 @@ module RubySpeech
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new }.should_not raise_error
+          lambda { subject << Audio.new(doc) }.should_not raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new }.should_not raise_error
+          lambda { subject << Break.new(doc) }.should_not raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new }.should_not raise_error
+          lambda { subject << Emphasis.new(doc) }.should_not raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new }.should_not raise_error
+          lambda { subject << Mark.new(doc) }.should_not raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new }.should_not raise_error
+          lambda { subject << P.new(doc) }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new }.should_not raise_error
+          lambda { subject << Phoneme.new(doc) }.should_not raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new }.should_not raise_error
+          lambda { subject << Prosody.new(doc) }.should_not raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
+          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new }.should_not raise_error
+          lambda { subject << Sub.new(doc) }.should_not raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new }.should_not raise_error
+          lambda { subject << S.new(doc) }.should_not raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new }.should_not raise_error
+          lambda { subject << Voice.new(doc) }.should_not raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do

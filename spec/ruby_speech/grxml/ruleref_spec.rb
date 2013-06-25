@@ -3,7 +3,9 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Ruleref do
-      subject { Ruleref.new :uri => '#testrule' }
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { Ruleref.new doc, :uri => '#testrule' }
 
       its(:name)  { should == 'ruleref' }
       its(:uri)   { should == '#testrule' }
@@ -23,7 +25,7 @@ module RubySpeech
       end
 
       describe "#special" do
-        subject { Ruleref.new }
+        subject { Ruleref.new doc }
 
         context "with reserved values" do
           it "with a valid value" do
@@ -47,7 +49,7 @@ module RubySpeech
 
       describe "only uri or special can be specified" do
         it "should raise an error" do
-          lambda { subject << Ruleref.new(:uri => '#test', :special => :NULL) }.should raise_error(ArgumentError, "A Ruleref can only take uri or special")
+          lambda { subject << Ruleref.new(doc, :uri => '#test', :special => :NULL) }.should raise_error(ArgumentError, "A Ruleref can only take uri or special")
         end
       end
     end # Ruleref

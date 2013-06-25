@@ -1,3 +1,6 @@
+require 'ruby_speech/ssml/element'
+require 'ruby_speech/xml/language'
+
 module RubySpeech
   module SSML
     ##
@@ -7,6 +10,23 @@ module RubySpeech
     # http://www.w3.org/TR/speech-synthesis/#S3.1.7
     #
     class S < Element
+
+      %w{
+        audio
+        break
+        desc
+        emphasis
+        mark
+        p
+        phoneme
+        prosody
+        say_as
+        speak
+        sub
+        voice
+      }.each { |f| require "ruby_speech/ssml/#{f}" }
+
+      include XML::Language
 
       register :s
 

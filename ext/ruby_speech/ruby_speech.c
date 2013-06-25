@@ -38,6 +38,9 @@ static int is_match_end(pcre *compiled_regex, const char *input)
   /* For each digit in search_set, check if input + search_set digit is a potential match.
      If so, then this is not a match end.
    */
+  if (strlen(input) > MAX_INPUT_SIZE) {
+    return 0;
+  }
   sprintf(search_input, "%sZ", input);
   for (i = 0; i < 16; i++) {
     int result;

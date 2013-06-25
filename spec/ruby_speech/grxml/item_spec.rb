@@ -3,7 +3,9 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Item do
-      subject { Item.new :weight => 1.1, :repeat => '1' }
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { Item.new doc, :weight => 1.1, :repeat => '1' }
 
       its(:name) { should == 'item' }
 
@@ -168,23 +170,23 @@ module RubySpeech
         end
 
         it "should accept OneOf" do
-          lambda { subject << OneOf.new }.should_not raise_error
+          lambda { subject << OneOf.new(doc) }.should_not raise_error
         end
 
         it "should accept Item" do
-          lambda { subject << Item.new }.should_not raise_error
+          lambda { subject << Item.new(doc) }.should_not raise_error
         end
 
         it "should accept Ruleref" do
-          lambda { subject << Ruleref.new }.should_not raise_error
+          lambda { subject << Ruleref.new(doc) }.should_not raise_error
         end
 
         it "should accept Tag" do
-          lambda { subject << Tag.new }.should_not raise_error
+          lambda { subject << Tag.new(doc) }.should_not raise_error
         end
 
         it "should accept Token" do
-          lambda { subject << Token.new }.should_not raise_error
+          lambda { subject << Token.new(doc) }.should_not raise_error
         end
       end
     end # Item

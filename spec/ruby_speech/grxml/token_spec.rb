@@ -3,6 +3,10 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Token do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'token' }
 
       it 'registers itself' do
@@ -37,12 +41,12 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content is the same" do
-          Token.new(:content => "hello").should == Token.new(:content => "hello")
+          Token.new(doc, :content => "hello").should == Token.new(doc, :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Token.new(:content => "Hello").should_not == Token.new(:content => "Hello there")
+            Token.new(doc, :content => "Hello").should_not == Token.new(doc, :content => "Hello there")
           end
         end
       end

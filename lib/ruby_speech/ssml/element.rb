@@ -1,8 +1,9 @@
 require 'active_support/core_ext/class/attribute'
+require 'ruby_speech/generic_element'
 
 module RubySpeech
   module SSML
-    class Element < Niceogiri::XML::Node
+    class Element
       def self.namespace
         SSML_NAMESPACE
       end
@@ -17,7 +18,9 @@ module RubySpeech
 
       include GenericElement
 
-      alias :to_doc :document
+      def to_doc
+        document
+      end
     end # Element
   end # SSML
 end # RubySpeech

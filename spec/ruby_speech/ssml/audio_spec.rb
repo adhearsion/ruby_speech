@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Audio do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'audio' }
 
       describe "setting options in initializers" do
-        subject { Audio.new :src => 'http://whatever.you-say-boss.com', :content => 'Hello' }
+        subject { Audio.new doc, :src => 'http://whatever.you-say-boss.com', :content => 'Hello' }
 
         its(:src)     { should == 'http://whatever.you-say-boss.com' }
         its(:content) { should == 'Hello' }
@@ -47,51 +51,51 @@ module RubySpeech
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new }.should_not raise_error
+          lambda { subject << Audio.new(doc) }.should_not raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new }.should_not raise_error
+          lambda { subject << Break.new(doc) }.should_not raise_error
         end
 
         it "should accept Desc" do
-          lambda { subject << Desc.new }.should_not raise_error
+          lambda { subject << Desc.new(doc) }.should_not raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new }.should_not raise_error
+          lambda { subject << Emphasis.new(doc) }.should_not raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new }.should_not raise_error
+          lambda { subject << Mark.new(doc) }.should_not raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new }.should_not raise_error
+          lambda { subject << P.new(doc) }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new }.should_not raise_error
+          lambda { subject << Phoneme.new(doc) }.should_not raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new }.should_not raise_error
+          lambda { subject << Prosody.new(doc) }.should_not raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
+          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new }.should_not raise_error
+          lambda { subject << Sub.new(doc) }.should_not raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new }.should_not raise_error
+          lambda { subject << S.new(doc) }.should_not raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new }.should_not raise_error
+          lambda { subject << Voice.new(doc) }.should_not raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
@@ -101,18 +105,18 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, and src are the same" do
-          Audio.new(:src => "one", :content => "Hello there").should == Audio.new(:src => "one", :content => "Hello there")
+          Audio.new(doc, :src => "one", :content => "Hello there").should == Audio.new(doc, :src => "one", :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Audio.new(:content => "Hello").should_not == Audio.new(:content => "Hello there")
+            Audio.new(doc, :content => "Hello").should_not == Audio.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the src is different" do
           it "should not be equal" do
-            Audio.new(:src => 'one').should_not == Audio.new(:src => 'two')
+            Audio.new(doc, :src => 'one').should_not == Audio.new(doc, :src => 'two')
           end
         end
       end

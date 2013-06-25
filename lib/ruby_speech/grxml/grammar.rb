@@ -121,7 +121,9 @@ module RubySpeech
           ref.swap rule.children
         end
 
-        non_root_rules = xpath "./ns:rule[@#{Nokogiri.jruby? ? 'ns:' : nil}id!='#{root}']", :ns => namespace_href
+        query = "./ns:rule[@id!='#{root}']"
+        query += "|./ns:rule[@ns:id!='#{root}']" if Nokogiri.jruby?
+        non_root_rules = xpath query, :ns => namespace_href
         non_root_rules.remove
 
         self

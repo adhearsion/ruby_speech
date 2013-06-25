@@ -3,6 +3,10 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Tag do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'tag' }
 
       it 'registers itself' do
@@ -21,12 +25,12 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content is the same" do
-          Tag.new(:content => "hello").should == Tag.new(:content => "hello")
+          Tag.new(doc, :content => "hello").should == Tag.new(doc, :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Tag.new(:content => "Hello").should_not == Tag.new(:content => "Hello there")
+            Tag.new(doc, :content => "Hello").should_not == Tag.new(doc, :content => "Hello there")
           end
         end
       end

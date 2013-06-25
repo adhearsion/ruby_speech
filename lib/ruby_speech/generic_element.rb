@@ -47,15 +47,13 @@ module RubySpeech
         if klass && klass != self
           klass.import node
         else
-          new.inherit node
+          new(node.document).inherit node
         end
       end
 
-      def new(atts = {}, &block)
-        super(self.registered_name, nil, self.namespace) do |new_node|
-          (self.defaults || {}).merge(atts).each_pair { |k, v| new_node.send :"#{k}=", v }
-          block_return = new_node.eval_dsl_block &block
-          new_node.string block_return if block_return.is_a?(String) && block_return.present?
+      def new(doc, atts = {}, &block)
+        super(self.registered_name, doc) do |new_node|
+          new_node.build atts, &block
         end
       end
     end
@@ -69,6 +67,12 @@ module RubySpeech
     def inherit(node)
       self.parent = node.parent
       super
+    end
+
+    def build(atts, &block)
+      (self.class.defaults || {}).merge(atts).each_pair { |k, v| send :"#{k}=", v }
+      block_return = eval_dsl_block &block
+      string block_return if block_return.is_a?(String) && block_return.present?
     end
 
     def version
@@ -94,7 +98,7 @@ module RubySpeech
     end
 
     def +(other)
-      self.class.new(:base_uri => base_uri).tap do |new_element|
+      self.class.new(Nokogiri::XML::Document.new, :base_uri => base_uri).tap do |new_element|
         (self.children + other.children).each do |child|
           new_element << child
         end
@@ -113,10 +117,10 @@ module RubySpeech
         expression << type.to_s
 
         expression << '[' << attributes.inject([]) do |h, (key, value)|
-          h << "@#{namespace_href && Nokogiri.jruby? ? 'ns:' : ''}#{key}='#{value}'"
+          h << "@#{key}='#{value}'"
         end.join(',') << ']' if attributes
 
-        xpath expression, :ns => namespace_href
+        xpath expression, :ns => self.class.namespace
       else
         super()
       end.map { |c| self.class.import c }
@@ -145,7 +149,7 @@ module RubySpeech
       const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
       if self.class.module.const_defined?(const_name)
         const = self.class.module.const_get const_name
-        embed const.new(*args, &block)
+        embed const.new(self.document, *args, &block)
       elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block
       else

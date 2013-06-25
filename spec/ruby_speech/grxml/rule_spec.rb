@@ -3,7 +3,9 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe Rule do
-      subject { Rule.new :id => 'one', :scope => 'public' }
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { Rule.new doc, :id => 'one', :scope => 'public' }
 
       its(:name) { should == 'rule' }
 
@@ -63,30 +65,30 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language, id, and scope are the same" do
-          Rule.new(:language => 'jp', :id => :main, :scope => :public, :content => "hello").should == Rule.new(:language => 'jp', :id => :main, :scope => :public, :content => "hello")
+          Rule.new(doc, :language => 'jp', :id => :main, :scope => :public, :content => "hello").should == Rule.new(doc, :language => 'jp', :id => :main, :scope => :public, :content => "hello")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Rule.new(:content => "Hello").should_not == Rule.new(:content => "Hello there")
+            Rule.new(doc, :content => "Hello").should_not == Rule.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Rule.new(:language => "jp").should_not == Rule.new(:language => "esperanto")
+            Rule.new(doc, :language => "jp").should_not == Rule.new(doc, :language => "esperanto")
           end
         end
 
         describe "when the id is different" do
           it "should not be equal" do
-            Rule.new(:id => :main).should_not == Rule.new(:id => :dtmf)
+            Rule.new(doc, :id => :main).should_not == Rule.new(doc, :id => :dtmf)
           end
         end
 
         describe "when the scope is different" do
           it "should not be equal" do
-            Rule.new(:scope => :public).should_not == Rule.new(:scope => :private)
+            Rule.new(doc, :scope => :public).should_not == Rule.new(doc, :scope => :private)
           end
         end
       end
@@ -97,28 +99,28 @@ module RubySpeech
         end
 
         it "should accept OneOf" do
-          lambda { subject << OneOf.new }.should_not raise_error
+          lambda { subject << OneOf.new(doc) }.should_not raise_error
         end
 
         it "should accept Item" do
-          lambda { subject << Item.new }.should_not raise_error
+          lambda { subject << Item.new(doc) }.should_not raise_error
         end
 
         it "should accept Ruleref" do
-          lambda { subject << Ruleref.new }.should_not raise_error
+          lambda { subject << Ruleref.new(doc) }.should_not raise_error
         end
 
         it "should accept Tag" do
-          lambda { subject << Tag.new }.should_not raise_error
+          lambda { subject << Tag.new(doc) }.should_not raise_error
         end
 
         it "should accept Token" do
-          lambda { subject << Token.new }.should_not raise_error
+          lambda { subject << Token.new(doc) }.should_not raise_error
         end
       end
 
       it "should raise ArgumentError with any other scope" do
-        lambda { Rule.new :id => 'one', :scope => 'invalid_scope' }.should raise_error(ArgumentError, "A Rule's scope can only be 'public' or 'private'")
+        lambda { Rule.new doc, :id => 'one', :scope => 'invalid_scope' }.should raise_error(ArgumentError, "A Rule's scope can only be 'public' or 'private'")
       end
     end # Rule
   end # GRXML

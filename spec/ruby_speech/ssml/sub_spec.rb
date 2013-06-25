@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Sub do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'sub' }
 
       describe "setting options in initializers" do
-        subject { Sub.new :alias => 'foo' }
+        subject { Sub.new doc, :alias => 'foo' }
 
         its(:alias) { should == 'foo' }
       end
@@ -27,18 +31,18 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content and alias are the same" do
-          Sub.new(:alias => 'jp', :content => "Hello there").should == Sub.new(:alias => 'jp', :content => "Hello there")
+          Sub.new(doc, :alias => 'jp', :content => "Hello there").should == Sub.new(doc, :alias => 'jp', :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Sub.new(:content => "Hello").should_not == Sub.new(:content => "Hello there")
+            Sub.new(doc, :content => "Hello").should_not == Sub.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the alias is different" do
           it "should not be equal" do
-            Sub.new(:alias => 'jp').should_not == Sub.new(:alias => 'en')
+            Sub.new(doc, :alias => 'jp').should_not == Sub.new(doc, :alias => 'en')
           end
         end
       end
@@ -49,7 +53,7 @@ module RubySpeech
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << Voice.new }.should raise_error(InvalidChildError, "A Sub can only accept Strings as children")
+          lambda { subject << Voice.new(doc) }.should raise_error(InvalidChildError, "A Sub can only accept Strings as children")
         end
       end
     end # Desc

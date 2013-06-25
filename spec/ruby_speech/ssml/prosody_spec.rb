@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Prosody do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'prosody' }
 
       describe "setting options in initializers" do
-        subject { Prosody.new :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud }
+        subject { Prosody.new doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud }
 
         its(:pitch)     { should == :medium }
         its(:contour)   { should == 'something' }
@@ -205,48 +209,48 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Prosody.new(:pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there").should == Prosody.new(:pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there")
+          Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there").should == Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Prosody.new(:content => "Hello").should_not == Prosody.new(:content => "Hello there")
+            Prosody.new(doc, :content => "Hello").should_not == Prosody.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the pitch is different" do
           it "should not be equal" do
-            Prosody.new(:pitch => :medium).should_not == Prosody.new(:pitch => :high)
+            Prosody.new(doc, :pitch => :medium).should_not == Prosody.new(doc, :pitch => :high)
           end
         end
 
         describe "when the contour is different" do
           it "should not be equal" do
-            Prosody.new(:contour => 'foo').should_not == Prosody.new(:contour => 'bar')
+            Prosody.new(doc, :contour => 'foo').should_not == Prosody.new(doc, :contour => 'bar')
           end
         end
 
         describe "when the range is different" do
           it "should not be equal" do
-            Prosody.new(:range => '20Hz').should_not == Prosody.new(:range => '30Hz')
+            Prosody.new(doc, :range => '20Hz').should_not == Prosody.new(doc, :range => '30Hz')
           end
         end
 
         describe "when the rate is different" do
           it "should not be equal" do
-            Prosody.new(:rate => 2).should_not == Prosody.new(:rate => 3)
+            Prosody.new(doc, :rate => 2).should_not == Prosody.new(doc, :rate => 3)
           end
         end
 
         describe "when the duration is different" do
           it "should not be equal" do
-            Prosody.new(:duration => 10.seconds).should_not == Prosody.new(:duration => 20.seconds)
+            Prosody.new(doc, :duration => 10.seconds).should_not == Prosody.new(doc, :duration => 20.seconds)
           end
         end
 
         describe "when the volume is different" do
           it "should not be equal" do
-            Prosody.new(:volume => :loud).should_not == Prosody.new(:volume => :soft)
+            Prosody.new(doc, :volume => :loud).should_not == Prosody.new(doc, :volume => :soft)
           end
         end
       end
@@ -257,47 +261,47 @@ module RubySpeech
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new }.should_not raise_error
+          lambda { subject << Audio.new(doc) }.should_not raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new }.should_not raise_error
+          lambda { subject << Break.new(doc) }.should_not raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new }.should_not raise_error
+          lambda { subject << Emphasis.new(doc) }.should_not raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new }.should_not raise_error
+          lambda { subject << Mark.new(doc) }.should_not raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new }.should_not raise_error
+          lambda { subject << P.new(doc) }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new }.should_not raise_error
+          lambda { subject << Phoneme.new(doc) }.should_not raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new }.should_not raise_error
+          lambda { subject << Prosody.new(doc) }.should_not raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new }.should_not raise_error
+          lambda { subject << S.new(doc) }.should_not raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
+          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new }.should_not raise_error
+          lambda { subject << Sub.new(doc) }.should_not raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new }.should_not raise_error
+          lambda { subject << Voice.new(doc) }.should_not raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do

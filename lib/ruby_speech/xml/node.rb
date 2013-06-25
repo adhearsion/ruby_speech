@@ -4,19 +4,6 @@ module RubySpeech
     # Base XML Node
     # All XML classes subclass Node - it allows the addition of helpers
     class Node < Nokogiri::XML::Node
-      # Create a new Node object
-      #
-      # @param [String, nil] name the element name
-      # @param [XML::Document, nil] doc the document to attach the node to. If
-      # not provided one will be created
-      # @return a new object with the name and namespace
-      def self.new(name = nil, doc = nil, ns = nil)
-        super(name.to_s, (doc || Nokogiri::XML::Document.new)).tap do |node|
-          node.document.root = node unless doc
-          node.namespace = ns if ns
-        end
-      end
-
       # Helper method to read an attribute
       #
       # @param [#to_sym] attr_name the name of the attribute
@@ -94,7 +81,7 @@ module RubySpeech
       # @return [self]
       def inherit(node)
         inherit_namespaces node
-        inherit_attrs node.attributes
+        inherit_attrs node
         inherit_children node
         self
       end
@@ -108,12 +95,12 @@ module RubySpeech
 
       # Inherit a set of attributes
       #
-      # @param [Hash] attrs a hash of attributes to set on the node
+      # @param [XML::Node] node the node to inherit
       # @return [self]
-      def inherit_attrs(attrs)
-        attrs.each do |name, value|
+      def inherit_attrs(node)
+        node.attributes.each do |name, value|
           attr_name = value.namespace && value.namespace.prefix ? [value.namespace.prefix, name].join(':') : name
-          self.write_attr attr_name, value
+          self.write_attr attr_name, (value.value || node[attr_name])
         end
         self
       end

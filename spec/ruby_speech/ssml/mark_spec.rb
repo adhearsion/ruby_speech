@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Mark do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:node_name) { should == 'mark' }
 
       describe "setting options in initializers" do
-        subject { Mark.new :name => 'foo' }
+        subject { Mark.new doc, :name => 'foo' }
 
         its(:name)  { should == 'foo' }
       end
@@ -39,12 +43,12 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the name is the same" do
-          Mark.new(:name => "foo").should == Mark.new(:name => "foo")
+          Mark.new(doc, :name => "foo").should == Mark.new(doc, :name => "foo")
         end
 
         describe "when the name is different" do
           it "should not be equal" do
-            Mark.new(:name => "foo").should_not == Mark.new(:name => "bar")
+            Mark.new(doc, :name => "foo").should_not == Mark.new(doc, :name => "bar")
           end
         end
       end

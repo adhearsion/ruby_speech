@@ -18,7 +18,7 @@ module RubySpeech
 
       register :grammar
 
-      self.defaults = { :version => '1.0', :language => "en-US" }
+      self.defaults = { :version => '1.0', :language => "en-US", namespace: GRXML_NAMESPACE }
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule, Tag].freeze
 
@@ -75,7 +75,7 @@ module RubySpeech
       # @return [Rule] The root rule node for the document
       #
       def root_rule
-        children(:rule, :id => root).first
+        rule_with_id root
       end
 
       ##
@@ -93,9 +93,9 @@ module RubySpeech
       ##
       # @return [Grammar] an inlined copy of self
       #
-      def inline
-        clone.inline!
-      end
+      # def inline
+      #   clone.inline!
+      # end
 
       ##
       # Replaces rulerefs in the document with a copy of the original rule.
@@ -104,12 +104,12 @@ module RubySpeech
       # @return self
       #
       def inline!
-        xpath("//ns:ruleref", :ns => namespace_href).each do |ref|
-          rule = children(:rule, :id => ref[:uri].sub(/^#/, '')).first
+        xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
+          rule = rule_with_id ref[:uri].sub(/^#/, '')
           ref.swap rule.nokogiri_children
         end
 
-        non_root_rules = xpath "./ns:rule[@#{namespace_href && Nokogiri.jruby? ? 'ns:' : ''}id!='#{root}']", :ns => namespace_href
+        non_root_rules = xpath "./ns:rule[@#{namespace_href && Nokogiri.jruby? ? 'ns:' : nil}id!='#{root}']", :ns => namespace_href
         non_root_rules.remove
 
         self
@@ -127,10 +127,10 @@ module RubySpeech
           next if [Token, Tag].include?(element_type)
 
           tokens = split_tokens(element).map do |string|
-            Token.new.tap { |token| token << string }
+            Token.new(document).tap { |token| token << string }
           end
 
-          element.swap Nokogiri::XML::NodeSet.new(Nokogiri::XML::Document.new, tokens)
+          element.swap Nokogiri::XML::NodeSet.new(document, tokens)
         end
       end
 
@@ -176,6 +176,12 @@ module RubySpeech
 
       def has_matching_root_rule?
         !root || root_rule
+      end
+
+      def rule_with_id(id)
+        query = "ns:rule[@id='#{id}']"
+        query += "|ns:rule[@ns:id='#{id}']" if Nokogiri.jruby?
+        at_xpath query, ns: GRXML_NAMESPACE
       end
 
       def split_tokens(element)

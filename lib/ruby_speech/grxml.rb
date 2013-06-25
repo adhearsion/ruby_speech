@@ -24,7 +24,9 @@ module RubySpeech
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'
 
     def self.draw(attributes = {}, &block)
-      Grammar.new(attributes).tap do |grammar|
+      document = Nokogiri::XML::Document.new
+      Grammar.new(document, attributes).tap do |grammar|
+        document.root = grammar
         block_return = grammar.eval_dsl_block &block
         grammar << block_return if block_return.is_a?(String)
       end.assert_has_matching_root_rule

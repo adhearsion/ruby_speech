@@ -10,7 +10,7 @@ module RubySpeech
 
       register :speak
 
-      self.defaults = { :version => '1.0', :language => "en-US" }
+      self.defaults = { :version => '1.0', :language => "en-US", namespace: SSML_NAMESPACE }
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, S, SayAs, Sub, Voice].freeze
 

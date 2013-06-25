@@ -3,6 +3,10 @@ require 'spec_helper'
 module RubySpeech
   module GRXML
     describe OneOf do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'one-of' }
 
       it 'registers itself' do
@@ -25,7 +29,7 @@ module RubySpeech
 
       describe "<<" do
         it "should accept Item" do
-          lambda { subject << Item.new }.should_not raise_error
+          lambda { subject << Item.new(doc) }.should_not raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
@@ -35,12 +39,12 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the language (when specified) is the same" do
-          OneOf.new(:language => "jp").should == OneOf.new(:language => "jp")
+          OneOf.new(doc, :language => "jp").should == OneOf.new(doc, :language => "jp")
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            OneOf.new(:language => "jp").should_not == OneOf.new(:content => "fr-CA")
+            OneOf.new(doc, :language => "jp").should_not == OneOf.new(doc, :content => "fr-CA")
           end
         end
       end

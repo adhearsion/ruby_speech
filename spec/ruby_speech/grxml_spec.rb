@@ -127,8 +127,6 @@ module RubySpeech
           end
 
           it "should embed the document" do
-            pending "Broken pending node wrappers"
-
             doc2.should == expected_doc
           end
 

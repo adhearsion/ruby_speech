@@ -105,9 +105,9 @@ module RubySpeech
       ##
       # @return [Grammar] an inlined copy of self
       #
-      # def inline
-      #   clone.inline!
-      # end
+      def inline
+        clone.inline!
+      end
 
       ##
       # Replaces rulerefs in the document with a copy of the original rule.

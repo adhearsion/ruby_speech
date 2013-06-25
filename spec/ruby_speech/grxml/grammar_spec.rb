@@ -212,7 +212,6 @@ module RubySpeech
         end
 
         it "should be possible in a non-destructive manner" do
-          pending "Currently broken"
           grammar.inline.should == inline_grammar
           grammar.should_not == inline_grammar
         end

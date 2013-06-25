@@ -324,24 +324,6 @@ module RubySpeech
         text = item.nokogiri_children.first
         text.parent.should == item
       end
-    end # draw
-
-    describe "manually created documents" do
-      let(:doc) { Nokogiri::XML::Document.new }
-
-      it "should be able to traverse up the tree" do
-        grammar = GRXML::Grammar.new doc
-        rule    = GRXML::Rule.new doc, :id => 'one'
-        item    = GRXML::Item.new doc
-        text    = Nokogiri::XML::Text.new 'foobar', grammar.document
-        item    << text
-        rule    << item
-        grammar << rule
-
-        text.parent.should == item
-        item.parent.should == rule
-        rule.parent.should == grammar
-      end
     end
   end # GRXML
 end # RubySpeech

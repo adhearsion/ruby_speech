@@ -1,3 +1,14 @@
+require 'ruby_speech/xml/language'
+
+%w{
+  rule
+  item
+  one_of
+  ruleref
+  tag
+  token
+}.each { |f| require "ruby_speech/grxml/#{f}" }
+
 module RubySpeech
   module GRXML
     ##

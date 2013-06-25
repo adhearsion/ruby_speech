@@ -18,14 +18,14 @@ module RubySpeech
                 '6'
               end
             end
-          end.should raise_error(InvalidChildError, "A GRXML document must have a rule matching the root rule name")
+          end.should raise_error(GRXML::InvalidChildError, "A GRXML document must have a rule matching the root rule name")
         end
       end
 
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
-          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
+          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(GRXML::InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 
@@ -148,7 +148,7 @@ module RubySpeech
             end
 
             it "should raise an exception" do
-              lambda { voice_doc }.should raise_error(InvalidChildError, "Embedded grammars must have the same mode")
+              lambda { voice_doc }.should raise_error(GRXML::InvalidChildError, "Embedded grammars must have the same mode")
             end
           end
         end

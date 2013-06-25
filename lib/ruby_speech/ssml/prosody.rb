@@ -13,6 +13,21 @@ module RubySpeech
     #
     class Prosody < Element
 
+      %w{
+        audio
+        break
+        desc
+        emphasis
+        mark
+        p
+        phoneme
+        s
+        say_as
+        speak
+        sub
+        voice
+      }.each { |f| require "ruby_speech/ssml/#{f}" }
+
       register :prosody
 
       VALID_PITCHES     = [:'x-low', :low, :medium, :high, :'x-high', :default].freeze

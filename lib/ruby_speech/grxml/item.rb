@@ -1,3 +1,5 @@
+require 'ruby_speech/xml/language'
+
 module RubySpeech
   module GRXML
     ##
@@ -26,6 +28,17 @@ module RubySpeech
     # xml:lang declares declaration declares the language of the grammar section for the item element just as xml:lang in the <grammar> element declares for the entire document
     #
     class Item < Element
+
+      %w{
+        rule
+        one_of
+        ruleref
+        tag
+        token
+      }.each { |f| require "ruby_speech/grxml/#{f}" }
+
+      include XML::Language
+
       Inf = 1.0 / 0.0
 
       register :item

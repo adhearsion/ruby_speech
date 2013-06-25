@@ -1,8 +1,5 @@
 require 'ruby_speech'
 
-include RubySpeech::GRXML
-include RubySpeech::XML::Language
-
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
 schema_file_path = File.expand_path File.join(__FILE__, '../../assets/synthesis.xsd')

@@ -1,3 +1,5 @@
+require 'ruby_speech/ssml/element'
+
 module RubySpeech
   module SSML
     ##
@@ -6,6 +8,21 @@ module RubySpeech
     # http://www.w3.org/TR/speech-synthesis/#S3.2.2
     #
     class Emphasis < Element
+
+      %w{
+        audio
+        break
+        desc
+        mark
+        p
+        phoneme
+        prosody
+        s
+        say_as
+        speak
+        sub
+        voice
+      }.each { |f| require "ruby_speech/ssml/#{f}" }
 
       register :emphasis
 

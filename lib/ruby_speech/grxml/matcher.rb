@@ -21,7 +21,7 @@ module RubySpeech
       def initialize(grammar)
         @grammar = grammar
         prepare_grammar
-        compile_regex regexp_content
+        compile_regex regexp_content.gsub(/\?<[\w\d\s]*>/, '')
       end
 
       ##

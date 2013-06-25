@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Break do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'break' }
 
       describe "setting options in initializers" do
-        subject { Break.new :strength => :strong, :time => 3.seconds }
+        subject { Break.new doc, :strength => :strong, :time => 3.seconds }
 
         its(:strength)  { should == :strong }
         its(:time)      { should == 3.seconds }
@@ -74,24 +78,24 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Break.new(:strength => :strong, :time => 1.second, :content => "Hello there").should == Break.new(:strength => :strong, :time => 1.second, :content => "Hello there")
+          Break.new(doc, :strength => :strong, :time => 1.second, :content => "Hello there").should == Break.new(doc, :strength => :strong, :time => 1.second, :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Break.new(:content => "Hello").should_not == Break.new(:content => "Hello there")
+            Break.new(doc, :content => "Hello").should_not == Break.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the strength is different" do
           it "should not be equal" do
-            Break.new(:strength => :strong).should_not == Break.new(:strength => :weak)
+            Break.new(doc, :strength => :strong).should_not == Break.new(doc, :strength => :weak)
           end
         end
 
         describe "when the time is different" do
           it "should not be equal" do
-            Break.new(:time => 1.second).should_not == Break.new(:time => 2.seconds)
+            Break.new(doc, :time => 1.second).should_not == Break.new(doc, :time => 2.seconds)
           end
         end
       end

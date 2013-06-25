@@ -1,3 +1,6 @@
+require 'ruby_speech/ssml/element'
+require 'ruby_speech/xml/language'
+
 module RubySpeech
   module SSML
     ##
@@ -6,6 +9,7 @@ module RubySpeech
     # http://www.w3.org/TR/speech-synthesis/#S3.2.2
     #
     class Desc < Element
+      include XML::Language
 
       register :desc
 

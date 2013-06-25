@@ -1,30 +1,26 @@
+require 'ruby_speech/grxml/matcher'
+require 'ruby_speech/grxml/element'
+
 module RubySpeech
   module GRXML
-    extend ActiveSupport::Autoload
-
-    eager_autoload do
-      autoload :Element
-      autoload :Grammar
-      autoload :Rule
-      autoload :Item
-      autoload :OneOf
-      autoload :Ruleref
-      autoload :Tag
-      autoload :Token
-    end
-
-    autoload :Match
-    autoload :Matcher
-    autoload :MaxMatch
-    autoload :NoMatch
-    autoload :PotentialMatch
-
     InvalidChildError = Class.new StandardError
 
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'
 
+    %w{
+      grammar
+      rule
+      item
+      one_of
+      ruleref
+      tag
+      token
+    }.each { |f| require "ruby_speech/grxml/#{f}" }
+
     def self.draw(attributes = {}, &block)
-      Grammar.new(attributes).tap do |grammar|
+      document = Nokogiri::XML::Document.new
+      Grammar.new(document, attributes).tap do |grammar|
+        document.root = grammar.node
         block_return = grammar.eval_dsl_block &block
         grammar << block_return if block_return.is_a?(String)
       end.assert_has_matching_root_rule
@@ -35,5 +31,3 @@ module RubySpeech
     end
   end # GRXML
 end # RubySpeech
-
-ActiveSupport::Autoload.eager_autoload!

@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [2.2.0](https://github.com/benlangfeld/ruby_speech/compare/v2.1.2...v2.2.0) - [2013-06-26](https://rubygems.org/gems/ruby_speech/versions/2.2.0)
   * Bugfix: Constant autoload in rbx C extensions doesn't work properly
   * Bugfix: No longer subclass or copy nodes, use delegation instead
   * Bugfix: Java 1.6 compatability

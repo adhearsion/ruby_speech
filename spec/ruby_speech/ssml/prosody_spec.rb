@@ -10,13 +10,13 @@ module RubySpeech
       its(:name) { should == 'prosody' }
 
       describe "setting options in initializers" do
-        subject { Prosody.new doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud }
+        subject { Prosody.new doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud }
 
         its(:pitch)     { should == :medium }
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10.seconds }
+        its(:duration)  { should == 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -35,7 +35,7 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10.seconds }
+        its(:duration)  { should == 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -154,14 +154,14 @@ module RubySpeech
 
       describe "#duration" do
         context "with a valid value" do
-          before { subject.duration = 3.seconds }
+          before { subject.duration = 3 }
 
-          its(:duration) { should == 3.seconds }
+          its(:duration) { should == 3 }
         end
 
         context "with a negative value" do
           it do
-            lambda { subject.duration = -3.seconds }.should raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
+            lambda { subject.duration = -3 }.should raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
           end
         end
 
@@ -209,7 +209,7 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there").should == Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10.seconds, :volume => :loud, :content => "Hello there")
+          Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there").should == Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there")
         end
 
         describe "when the content is different" do
@@ -244,7 +244,7 @@ module RubySpeech
 
         describe "when the duration is different" do
           it "should not be equal" do
-            Prosody.new(doc, :duration => 10.seconds).should_not == Prosody.new(doc, :duration => 20.seconds)
+            Prosody.new(doc, :duration => 10).should_not == Prosody.new(doc, :duration => 20)
           end
         end
 

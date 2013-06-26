@@ -10,10 +10,10 @@ module RubySpeech
       its(:name) { should == 'break' }
 
       describe "setting options in initializers" do
-        subject { Break.new doc, :strength => :strong, :time => 3.seconds }
+        subject { Break.new doc, :strength => :strong, :time => 3 }
 
         its(:strength)  { should == :strong }
-        its(:time)      { should == 3.seconds }
+        its(:time)      { should == 3 }
       end
 
       it 'registers itself' do
@@ -28,7 +28,7 @@ module RubySpeech
         it { should be_instance_of Break }
 
         its(:strength)  { should == :strong }
-        its(:time)      { should == 3.seconds }
+        its(:time)      { should == 3 }
       end
 
       describe "#strength" do
@@ -52,14 +52,14 @@ module RubySpeech
 
       describe "#time" do
         context "with a valid value" do
-          before { subject.time = 3.seconds }
+          before { subject.time = 3 }
 
-          its(:time) { should == 3.seconds }
+          its(:time) { should == 3 }
         end
 
         context "with a negative value" do
           it do
-            lambda { subject.time = -3.seconds }.should raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
+            lambda { subject.time = -3 }.should raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
           end
         end
 
@@ -78,7 +78,7 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Break.new(doc, :strength => :strong, :time => 1.second, :content => "Hello there").should == Break.new(doc, :strength => :strong, :time => 1.second, :content => "Hello there")
+          Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there").should == Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there")
         end
 
         describe "when the content is different" do
@@ -95,7 +95,7 @@ module RubySpeech
 
         describe "when the time is different" do
           it "should not be equal" do
-            Break.new(doc, :time => 1.second).should_not == Break.new(doc, :time => 2.seconds)
+            Break.new(doc, :time => 1).should_not == Break.new(doc, :time => 2)
           end
         end
       end

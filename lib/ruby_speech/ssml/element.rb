@@ -1,4 +1,3 @@
-require 'active_support/core_ext/class/attribute'
 require 'ruby_speech/generic_element'
 
 module RubySpeech

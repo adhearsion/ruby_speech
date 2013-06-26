@@ -105,7 +105,7 @@ module RubySpeech
 
       it "should allow creating child GRXML elements" do
         g = Grammar.new doc
-        g.Rule :id => :main, :scope => 'public'
+        g.rule :id => :main, :scope => 'public'
         expected_g = Grammar.new doc
         expected_g << Rule.new(doc, :id => :main, :scope => 'public')
         g.should == expected_g

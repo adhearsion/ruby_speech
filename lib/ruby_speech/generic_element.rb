@@ -76,7 +76,7 @@ module RubySpeech
     def build(atts, &block)
       mass_assign atts
       block_return = eval_dsl_block &block
-      string block_return if block_return.is_a?(String) && block_return.present?
+      string block_return if block_return.is_a?(String) && !block_return.length.zero?
     end
 
     def version
@@ -263,9 +263,9 @@ module RubySpeech
       if node.respond_to?(method_name)
         return node.send method_name, *args, &block
       end
-      const_name = method_name.to_s.sub('ssml', '').titleize.gsub(' ', '')
-      if self.class.module.const_defined?(const_name)
-        const = self.class.module.const_get const_name
+
+      const_name = method_name.to_s.sub('ssml_', '').gsub('_', '-')
+      if const = self.class.class_from_registration(const_name)
         embed const.new(self.document, *args, &block)
       elsif @block_binding && @block_binding.respond_to?(method_name)
         @block_binding.send method_name, *args, &block

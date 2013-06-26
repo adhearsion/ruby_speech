@@ -1,7 +1,4 @@
 %w{
-  active_support/core_ext/object/blank
-  active_support/core_ext/numeric/time
-  active_support/core_ext/enumerable
   nokogiri
 
   ruby_speech/version

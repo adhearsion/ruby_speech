@@ -150,6 +150,7 @@ module RubySpeech
 
           concat = grammar1 + grammar2
           concat.should == expected_concat
+          concat.document.root.should == concat
           concat.to_s.should_not include('default')
         end
       end

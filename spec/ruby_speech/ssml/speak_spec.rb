@@ -174,6 +174,7 @@ module RubySpeech
 
         concat = (speak1 + speak2)
         concat.should == expected_concat
+        concat.document.root.should == concat
         concat.to_s.should_not include('default')
       end
     end # Speak

@@ -102,7 +102,9 @@ module RubySpeech
     end
 
     def +(other)
-      self.class.new(Nokogiri::XML::Document.new).tap do |new_element|
+      new_doc = Nokogiri::XML::Document.new
+      self.class.new(new_doc).tap do |new_element|
+        new_doc.root = new_element.node
         if Nokogiri.jruby?
           new_element.add_child self.nokogiri_children
           new_element.add_child other.nokogiri_children

@@ -3,8 +3,11 @@ require 'spec_helper'
 module RubySpeech
   describe GRXML do
     describe "#draw" do
+      let(:doc) { Nokogiri::XML::Document.new }
+
       it "should create a GRXML document" do
-        GRXML.draw.should == GRXML::Grammar.new
+        GRXML.draw.should == GRXML::Grammar.new(doc)
+        GRXML.draw.document.xpath('ns:grammar', ns: 'http://www.w3.org/2001/06/grammar').size.should == 1
       end
 
       context "with a root rule name specified but not found" do
@@ -15,25 +18,25 @@ module RubySpeech
                 '6'
               end
             end
-          end.should raise_error(InvalidChildError, "A GRXML document must have a rule matching the root rule name")
+          end.should raise_error(GRXML::InvalidChildError, "A GRXML document must have a rule matching the root rule name")
         end
       end
 
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
-          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
+          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(GRXML::InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 
       it "should allow other GRXML elements to be inserted in the document" do
-        doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
+        drawn_doc = GRXML.draw(:mode => :voice, :root => 'main') { rule :id => :main, :content => "Hello Fred" }
 
-        expected_doc = GRXML::Grammar.new(:mode => :voice, :root => 'main')
-        rule = GRXML::Rule.new(:id => "main")
+        expected_doc = GRXML::Grammar.new(doc, :mode => :voice, :root => 'main')
+        rule = GRXML::Rule.new(doc, :id => "main")
         rule << "Hello Fred"
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should allow accessing methods defined outside the block" do
@@ -41,14 +44,14 @@ module RubySpeech
           'bar'
         end
 
-        doc = GRXML.draw do
+        drawn_doc = GRXML.draw do
           rule :id => foo
         end
 
-        expected_doc = GRXML::Grammar.new
-        rule = GRXML::Rule.new(:id => foo)
+        expected_doc = GRXML::Grammar.new doc
+        rule = GRXML::Rule.new(doc, :id => foo)
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       it "should raise error if given an empty rule" do
@@ -57,18 +60,18 @@ module RubySpeech
       end
 
       it "should allow nested block return values" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :scope => 'public', :id => :main do
             "Hello Fred"
           end
         end
-        expected_doc = GRXML::Grammar.new
-        expected_doc << GRXML::Rule.new(:scope => :public, :id => :main, :content => "Hello Fred")
-        doc.should == expected_doc
+        expected_doc = GRXML::Grammar.new doc
+        expected_doc << GRXML::Rule.new(doc, :scope => :public, :id => :main, :content => "Hello Fred")
+        drawn_doc.should == expected_doc
       end
 
       it "should allow nested GRXML elements" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :id => :main, :scope => 'public' do
             string "Hello Fred. I like ninjas and pirates"
             one_of do
@@ -77,14 +80,14 @@ module RubySpeech
             end
           end
         end
-        rule = GRXML::Rule.new(:id => :main, :scope => 'public', :content => "Hello Fred. I like ninjas and pirates")
-        oneof = GRXML::OneOf.new
-        oneof << GRXML::Item.new(:content => "ninja")
-        oneof << GRXML::Item.new(:content => "pirate")
+        rule = GRXML::Rule.new(doc, :id => :main, :scope => 'public', :content => "Hello Fred. I like ninjas and pirates")
+        oneof = GRXML::OneOf.new doc
+        oneof << GRXML::Item.new(doc, :content => "ninja")
+        oneof << GRXML::Item.new(doc, :content => "pirate")
         rule << oneof
-        expected_doc = GRXML::Grammar.new
+        expected_doc = GRXML::Grammar.new doc
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       # TODO: maybe turn a rule embedded in anthoer rule into a ruleref??
@@ -143,13 +146,13 @@ module RubySpeech
             end
 
             it "should raise an exception" do
-              lambda { voice_doc }.should raise_error(InvalidChildError, "Embedded grammars must have the same mode")
+              lambda { voice_doc }.should raise_error(GRXML::InvalidChildError, "Embedded grammars must have the same mode")
             end
           end
         end
 
         it "GRXML elements" do
-          element = GRXML::Item.new :content => "HELLO?"
+          element = GRXML::Item.new doc, :content => "HELLO?"
 
           doc = RubySpeech::GRXML.draw do
             rule :id => :main, :scope => 'public' do
@@ -188,23 +191,23 @@ module RubySpeech
       end
 
       it "should properly escape string input" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule { string "I <3 nachos." }
           rule { "I <3 nachos." }
           rule { 'I <3 nachos.' }
         end
-        expected_doc = GRXML::Grammar.new
+        expected_doc = GRXML::Grammar.new doc
         3.times do
-          expected_doc << GRXML::Rule.new(:native_content => "I <3 nachos.")
+          expected_doc << GRXML::Rule.new(doc, :native_content => "I <3 nachos.")
         end
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       # TODO: verfify rule is in document if named in a ruleref
       # TODO: ruleref must have named rule id
 
       it "should allow all permutations of possible nested GRXML elements" do
-        doc = RubySpeech::GRXML.draw do
+        drawn_doc = RubySpeech::GRXML.draw do
           rule :id => "hello" do
             string "HELLO?"
             item :weight => 2.5
@@ -229,43 +232,44 @@ module RubySpeech
             one_of { item { "single item" } }
           end
         end
-        expected_doc = GRXML::Grammar.new
-        rule = GRXML::Rule.new(:id => "hello", :content => "HELLO?")
-        rule << GRXML::Item.new(:weight => 2.5)
-        oneof = GRXML::OneOf.new
-        1.upto(2) { |d| oneof << GRXML::Item.new(:content => d.to_s) }
+        expected_doc = GRXML::Grammar.new doc
+        rule = GRXML::Rule.new(doc, :id => "hello", :content => "HELLO?")
+        rule << GRXML::Item.new(doc, :weight => 2.5)
+        oneof = GRXML::OneOf.new doc
+        1.upto(2) { |d| oneof << GRXML::Item.new(doc, :content => d.to_s) }
         rule << oneof
-        rule << GRXML::Ruleref.new(:uri => '#test')
-        rule << GRXML::Item.new(:content => "last")
+        rule << GRXML::Ruleref.new(doc, :uri => '#test')
+        rule << GRXML::Item.new(doc, :content => "last")
         expected_doc << rule
 
-        rule = GRXML::Rule.new(:id => "test", :content => "TESTING")
+        rule = GRXML::Rule.new(doc, :id => "test", :content => "TESTING")
         expected_doc << rule
 
-        rule = GRXML::Rule.new(:id => "hello2")
-        rule << GRXML::Item.new(:weight => 5.5, :content => "hello")
+        rule = GRXML::Rule.new(doc, :id => "hello2")
+        rule << GRXML::Item.new(doc, :weight => 5.5, :content => "hello")
         rule << "H...E...L...L...O?"
-        rule << GRXML::Token.new(:content => "test token")
-        rule << GRXML::Tag.new
-        rule << GRXML::Item.new
-        oneof = GRXML::OneOf.new
-        oneof << GRXML::Item.new(:content => "single item")
+        rule << GRXML::Token.new(doc, :content => "test token")
+        rule << GRXML::Tag.new(doc)
+        rule << GRXML::Item.new(doc)
+        oneof = GRXML::OneOf.new doc
+        oneof << GRXML::Item.new(doc, :content => "single item")
         rule << oneof
         expected_doc << rule
-        doc.should == expected_doc
+        drawn_doc.should == expected_doc
       end
 
       describe "importing nested tags" do
-        let(:item) { GRXML::Item.new(:weight => 1.5, :content => "Are you a pirate or ninja?") }
+        let(:doc) { Nokogiri::XML::Document.new }
+        let(:item) { GRXML::Item.new(doc, :weight => 1.5, :content => "Are you a pirate or ninja?") }
         let(:string) { "Hello Fred. I like pirates and ninjas " }
         let :rule do
-          GRXML::Rule.new(:id => :main, :scope => 'public', :content => string).tap do |rule|
+          GRXML::Rule.new(doc, :id => :main, :scope => 'public', :content => string).tap do |rule|
             rule << item
           end
         end
 
         let :document do
-          GRXML::Grammar.new.tap { |doc| doc << rule }.to_s
+          GRXML::Grammar.new(doc).tap { |doc| doc << rule }.to_s
         end
 
         let(:import) { GRXML.import document }
@@ -287,14 +291,14 @@ module RubySpeech
       end
 
       it "should allow finding direct children of a particular type, matching certain attributes" do
-        item = GRXML::Item.new
-        item1 = GRXML::Item.new :weight => 0.5
-        item11 = GRXML::Item.new :weight => 0.5
+        item = GRXML::Item.new doc
+        item1 = GRXML::Item.new doc, :weight => 0.5
+        item11 = GRXML::Item.new doc, :weight => 0.5
         item1 << item11
         item << item1
-        item2 = GRXML::Item.new :weight => 0.7
+        item2 = GRXML::Item.new doc, :weight => 0.7
         item << item2
-        tag = GRXML::Tag.new
+        tag = GRXML::Tag.new doc
         item << tag
 
         item.children(:item, :weight => 0.5).should == [item1]
@@ -317,22 +321,6 @@ module RubySpeech
 
         text = item.nokogiri_children.first
         text.parent.should == item
-      end
-    end # draw
-
-    describe "manually created documents" do
-      it "should be able to traverse up the tree" do
-        grammar = GRXML::Grammar.new
-        rule    = GRXML::Rule.new :id => 'one'
-        item    = GRXML::Item.new
-        text    = Nokogiri::XML::Text.new 'foobar', grammar.document
-        item    << text
-        rule    << item
-        grammar << rule
-
-        text.parent.should == item
-        item.parent.should == rule
-        rule.parent.should == grammar
       end
     end
   end # GRXML

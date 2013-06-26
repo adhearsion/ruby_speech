@@ -1,3 +1,7 @@
+require 'ruby_speech/grxml/match'
+require 'ruby_speech/grxml/no_match'
+require 'ruby_speech/grxml/potential_match'
+require 'ruby_speech/grxml/max_match'
 require 'ruby_speech/ruby_speech'
 
 if RUBY_PLATFORM =~ /java/
@@ -17,7 +21,7 @@ module RubySpeech
       def initialize(grammar)
         @grammar = grammar
         prepare_grammar
-        compile_regex regexp_content
+        compile_regex regexp_content.gsub(/\?<[\w\d\s]*>/, '')
       end
 
       ##

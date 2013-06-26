@@ -1,8 +1,31 @@
 # RubySpeech
 RubySpeech is a library for constructing and parsing Text to Speech (TTS) and Automatic Speech Recognition (ASR) documents such as [SSML](http://www.w3.org/TR/speech-synthesis), [GRXML](http://www.w3.org/TR/speech-grammar/) and [NLSML](http://www.w3.org/TR/nl-spec/). Such documents can be constructed to be processed by TTS and ASR engines, parsed as the result from such, or used in the implementation of such engines.
 
+## Dependencies
+
+### pcre (except on JRuby)
+
+#### On OSX with Homebrew
+```
+brew install pcre
+```
+
+#### On Ubuntu/Debian
+```
+sudo apt-get install libpcre3 libpcre3-dev
+```
+
+#### On CentOS
+```
+sudo yum install pcre-devel
+```
+
 ## Installation
     gem install ruby_speech
+
+## Ruby Version Compatability
+  * CRuby 1.9.3+ (1.9.2 is unofficially supported, but not regularly tested)
+  * JRuby 1.7+
 
 ## Library
 

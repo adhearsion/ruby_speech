@@ -25,9 +25,8 @@ Gem::Specification.new do |s|
     s.extensions = ['ext/ruby_speech/extconf.rb']
   end
 
-  s.add_runtime_dependency %q<niceogiri>, ["~> 1.1", ">= 1.1.2"]
-  s.add_runtime_dependency %q<nokogiri>, ["~> 1.5", ">= 1.5.6"]
-  s.add_runtime_dependency %q<activesupport>, [">= 3.0.7"]
+  s.add_runtime_dependency %q<nokogiri>, ["~> 1.6"]
+  s.add_runtime_dependency %q<activesupport>, [">= 3.0.7", "< 5.0.0"]
 
   s.add_development_dependency %q<bundler>, [">= 1.0.0"]
   s.add_development_dependency %q<rspec>, [">= 2.7"]

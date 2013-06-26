@@ -1,5 +1,13 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
 
+# [2.2.0](https://github.com/benlangfeld/ruby_speech/compare/v2.1.2...v2.2.0) - [2013-06-26](https://rubygems.org/gems/ruby_speech/versions/2.2.0)
+  * Bugfix: Constant autoload in rbx C extensions doesn't work properly
+  * Bugfix: No longer subclass or copy nodes, use delegation instead
+  * Bugfix: Java 1.6 compatability
+  * CS: Remove niceogiri dependency
+  * CS: Remove autoloading
+  * CS: Depend on activesupport less
+
 # [2.1.2](https://github.com/benlangfeld/ruby_speech/compare/v2.1.1...v2.1.2) - [2013-06-05](https://rubygems.org/gems/ruby_speech/versions/2.1.2)
   * Bugfix: Allow wrapping a pre-parsed XML node nested arbitrary deeply as an NLSML document
 

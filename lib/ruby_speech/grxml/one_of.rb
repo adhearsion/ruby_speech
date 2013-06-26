@@ -1,3 +1,6 @@
+require 'ruby_speech/xml/language'
+require 'ruby_speech/grxml/item'
+
 module RubySpeech
   module GRXML
     ##
@@ -13,6 +16,7 @@ module RubySpeech
     # FIXME: Ensure an 'item' element is in the oneof block... this may be at the final draw or when OneOf is called...
     #
     class OneOf < Element
+      include XML::Language
 
       register :'one-of'
 

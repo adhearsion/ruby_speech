@@ -3,10 +3,14 @@ require 'spec_helper'
 module RubySpeech
   module SSML
     describe Emphasis do
+      let(:doc) { Nokogiri::XML::Document.new }
+
+      subject { described_class.new doc }
+
       its(:name) { should == 'emphasis' }
 
       describe "setting options in initializers" do
-        subject { Emphasis.new :level => :strong }
+        subject { Emphasis.new doc, :level => :strong }
 
         its(:level) { should == :strong }
       end
@@ -44,18 +48,18 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content and level are the same" do
-          Emphasis.new(:level => :strong, :content => "Hello there").should == Emphasis.new(:level => :strong, :content => "Hello there")
+          Emphasis.new(doc, :level => :strong, :content => "Hello there").should == Emphasis.new(doc, :level => :strong, :content => "Hello there")
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Emphasis.new(:content => "Hello").should_not == Emphasis.new(:content => "Hello there")
+            Emphasis.new(doc, :content => "Hello").should_not == Emphasis.new(doc, :content => "Hello there")
           end
         end
 
         describe "when the level is different" do
           it "should not be equal" do
-            Emphasis.new(:level => :strong).should_not == Emphasis.new(:level => :reduced)
+            Emphasis.new(doc, :level => :strong).should_not == Emphasis.new(doc, :level => :reduced)
           end
         end
       end
@@ -66,39 +70,39 @@ module RubySpeech
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new }.should_not raise_error
+          lambda { subject << Audio.new(doc) }.should_not raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new }.should_not raise_error
+          lambda { subject << Break.new(doc) }.should_not raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new }.should_not raise_error
+          lambda { subject << Emphasis.new(doc) }.should_not raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new }.should_not raise_error
+          lambda { subject << Mark.new(doc) }.should_not raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new }.should_not raise_error
+          lambda { subject << Phoneme.new(doc) }.should_not raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new }.should_not raise_error
+          lambda { subject << Prosody.new(doc) }.should_not raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(:interpret_as => :foo) }.should_not raise_error
+          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new }.should_not raise_error
+          lambda { subject << Sub.new(doc) }.should_not raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new }.should_not raise_error
+          lambda { subject << Voice.new(doc) }.should_not raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do

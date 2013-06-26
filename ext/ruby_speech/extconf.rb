@@ -2,6 +2,8 @@ require 'mkmf'
 
 $LIBS << " -lpcre"
 
-abort "-----\n#{lib} is missing.\n-----" unless find_header('pcre.h')
+unless find_header('pcre.h')
+  abort "-----\nPCRE is missing. You must install it as per the README @ https://github.com/benlangfeld/ruby_speech\n-----"
+end
 
 create_makefile 'ruby_speech/ruby_speech'

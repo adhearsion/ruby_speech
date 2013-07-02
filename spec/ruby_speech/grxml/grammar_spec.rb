@@ -144,11 +144,16 @@ module RubySpeech
           grammar2 = Grammar.new doc
           grammar2 << Rule.new(doc, :id => 'millie', :scope => 'public', :content => "Hi Millie")
 
+          grammar1_string = grammar1.to_s
+          grammar2_string = grammar2.to_s
+
           expected_concat = Grammar.new doc
           expected_concat << Rule.new(doc, :id => 'frank', :scope => 'public', :content => "Hi Frank")
           expected_concat << Rule.new(doc, :id => 'millie', :scope => 'public', :content => "Hi Millie")
 
           concat = grammar1 + grammar2
+          grammar1.to_s.should == grammar1_string
+          grammar2.to_s.should == grammar2_string
           concat.should == expected_concat
           concat.document.root.should == concat
           concat.to_s.should_not include('default')

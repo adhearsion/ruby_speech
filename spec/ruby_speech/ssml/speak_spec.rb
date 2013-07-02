@@ -155,12 +155,15 @@ module RubySpeech
             "Hi, I'm Frank"
           end
         end
+        speak1_string = speak1.to_s
+
         speak2 = SSML.draw do
           string "Hello there"
           voice :name => 'millie' do
             "Hi, I'm Millie"
           end
         end
+        speak2_string = speak2.to_s
 
         expected_concat = SSML.draw do
           voice :name => 'frank' do
@@ -173,6 +176,8 @@ module RubySpeech
         end
 
         concat = (speak1 + speak2)
+        speak1.to_s.should == speak1_string
+        speak2.to_s.should == speak2_string
         concat.should == expected_concat
         concat.document.root.should == concat
         concat.to_s.should_not include('default')

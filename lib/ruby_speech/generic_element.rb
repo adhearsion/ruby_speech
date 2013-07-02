@@ -106,8 +106,8 @@ module RubySpeech
       self.class.new(new_doc).tap do |new_element|
         new_doc.root = new_element.node
         if Nokogiri.jruby?
-          new_element.add_child self.nokogiri_children
-          new_element.add_child other.nokogiri_children
+          new_element.add_child self.clone.nokogiri_children
+          new_element.add_child other.clone.nokogiri_children
         else
           # TODO: This is yucky because it requires serialization
           new_element.add_child self.nokogiri_children.to_xml

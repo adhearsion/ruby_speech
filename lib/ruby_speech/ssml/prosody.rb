@@ -56,9 +56,7 @@ module RubySpeech
       # @raises ArgumentError if p is not a string that contains 'Hz' or one of VALID_PITCHES
       #
       def pitch=(p)
-        hz = p.is_a?(String) && p.include?('Hz') && p.to_f > 0
-        raise ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", #{VALID_PITCHES.map(&:inspect).join ', '})" unless hz || VALID_PITCHES.include?(p)
-        self[:pitch] = p
+        set_frequency_attribute :pitch, p
       end
 
       ##
@@ -100,9 +98,7 @@ module RubySpeech
       # @raises ArgumentError if p is not a string that contains 'Hz' or one of VALID_PITCHES
       #
       def range=(p)
-        hz = p.is_a?(String) && p.include?('Hz') && p.to_f > 0
-        raise ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", #{VALID_PITCHES.map(&:inspect).join ', '})" unless hz || VALID_PITCHES.include?(p)
-        self[:range] = p
+        set_frequency_attribute :range, p
       end
 
       ##
@@ -145,8 +141,7 @@ module RubySpeech
       # @raises ArgumentError if t is not a positive numeric value
       #
       def duration=(t)
-        raise ArgumentError, "You must specify a valid duration (positive float value in seconds)" unless t.is_a?(Numeric) && t >= 0
-        self[:duration] = "#{t}s"
+        set_time_attribute :duration, t
       end
 
       ##
@@ -181,6 +176,14 @@ module RubySpeech
 
       def eql?(o)
         super o, :pitch, :contour, :range, :rate, :duration, :volume
+      end
+
+      private
+
+      def set_frequency_attribute(key, value)
+        hz = value.is_a?(String) && value.include?('Hz') && value.to_f > 0
+        raise ArgumentError, "You must specify a valid #{key} (\"[positive-number]Hz\", #{VALID_PITCHES.map(&:inspect).join ', '})" unless hz || VALID_PITCHES.include?(value)
+        self[key] = value
       end
     end # Prosody
   end # SSML

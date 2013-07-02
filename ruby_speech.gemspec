@@ -38,4 +38,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<ruby_gntp>, [">= 0"]
   s.add_development_dependency %q<guard-rake>, [">= 0"]
   s.add_development_dependency %q<rake-compiler>, [">= 0"]
+  s.add_development_dependency %q<coveralls>, [">= 0"]
 end

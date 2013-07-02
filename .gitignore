@@ -10,3 +10,4 @@ doc
 .*.swp
 vendor
 tmp/
+coverage

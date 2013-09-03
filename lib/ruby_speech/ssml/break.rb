@@ -45,8 +45,7 @@ module RubySpeech
       # @raises ArgumentError if t is nota positive numeric value
       #
       def time=(t)
-        raise ArgumentError, "You must specify a valid time (positive float value in seconds)" unless t.is_a?(Numeric) && t >= 0
-        self[:time] = "#{t}s"
+        set_time_attribute :time, t
       end
 
       def <<(*args)

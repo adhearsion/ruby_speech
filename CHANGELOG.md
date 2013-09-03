@@ -1,5 +1,8 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
 
+# [2.2.2](https://github.com/benlangfeld/ruby_speech/compare/v2.2.1...v2.2.2) - [2013-09-03](https://rubygems.org/gems/ruby_speech/versions/2.2.2)
+  * Bugfix: Fix an exception message to include object type
+
 # [2.2.1](https://github.com/benlangfeld/ruby_speech/compare/v2.2.0...v2.2.1) - [2013-07-02](https://rubygems.org/gems/ruby_speech/versions/2.2.1)
   * Bugfix: Ensure that concatenating documents doesn't mutate the originals on JRuby
 

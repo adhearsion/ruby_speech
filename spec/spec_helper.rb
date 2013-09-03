@@ -1,5 +1,8 @@
 require 'ruby_speech'
 
+require 'coveralls'
+Coveralls.wear!
+
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
 schema_file_path = File.expand_path File.join(__FILE__, '../../assets/synthesis.xsd')

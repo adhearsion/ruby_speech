@@ -50,7 +50,7 @@ static int is_match_end(pcre *compiled_regex, const char *input)
     search_input[input_size] = *search++;
     result = pcre_exec(compiled_regex, NULL, search_input, input_size + 1, 0, 0,
       ovector, sizeof(ovector) / sizeof(ovector[0]));
-    if (result > 0) return 0;
+    if (result > -1) return 0;
   }
   return 1;
 }

@@ -1,7 +1,7 @@
 module RubySpeech::GRXML::Builtins
   #
   # Create a grammar for interpreting a monetary value. Uses '*' as the decimal point.
-  # Matches any number of digits, followed by a '*' and exactly two more digits.
+  # Matches any number of digits, optionally followed by a '*' and up to two more digits.
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a monetary value.
   #
@@ -11,9 +11,11 @@ module RubySpeech::GRXML::Builtins
         item repeat: '0-' do
           ruleref uri: '#digit'
         end
-        item { '*' }
-        item repeat: '2' do
-          ruleref uri: '#digit'
+        item repeat: '0-1' do
+          item { '*' }
+          item repeat: '0-2' do
+            ruleref uri: '#digit'
+          end
         end
       end
 

@@ -118,7 +118,7 @@ module RubySpeech
       def inline!
         xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
           rule = rule_with_id ref[:uri].sub(/^#/, '')
-          ref.swap rule.children
+          ref.swap rule.dup.children
         end
 
         query = "./ns:rule[@id!='#{root}']"

@@ -1,4 +1,5 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+  * Feature: Allow generation of a currency grammar
   * Bugfix: Ensure that rule refs can be reused when inlining grammars
 
 # [2.2.2](https://github.com/benlangfeld/ruby_speech/compare/v2.2.1...v2.2.2) - [2013-09-03](https://rubygems.org/gems/ruby_speech/versions/2.2.2)

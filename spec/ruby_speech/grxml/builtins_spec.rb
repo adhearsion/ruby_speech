@@ -3,6 +3,28 @@ require 'spec_helper'
 describe RubySpeech::GRXML::Builtins do
   let(:matcher) { RubySpeech::GRXML::Matcher.new grammar }
 
+  describe "boolean" do
+    let(:grammar) { subject.boolean }
+
+    {
+      '1' => 'yes',
+      '2' => 'no',
+    }.each do |input, interpretation|
+      it "should max-match '#{input}'" do
+        matcher.match(input).should == RubySpeech::GRXML::MaxMatch.new(confidence: 1,
+          interpretation: interpretation,
+          mode: :dtmf,
+          utterance: input)
+      end
+    end
+
+    %w{0 3 10}.each do |input|
+      it "should not match '#{input}'" do
+        matcher.match(input).should == RubySpeech::GRXML::NoMatch.new
+      end
+    end
+  end
+
   describe "currency" do
     let(:grammar) { subject.currency }
 

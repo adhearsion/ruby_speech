@@ -1,5 +1,27 @@
 module RubySpeech::GRXML::Builtins
   #
+  # Create a grammar for interpreting a boolean response, where 1 is yes and two is no.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a boolean response.
+  #
+  def self.boolean
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'boolean' do
+      rule id: 'boolean', scope: 'public' do
+        one_of do
+          item do
+            tag { 'yes' }
+            '1'
+          end
+          item do
+            tag { 'no' }
+            '2'
+          end
+        end
+      end
+    end
+  end
+
+  #
   # Create a grammar for interpreting a monetary value. Uses '*' as the decimal point.
   # Matches any number of digits, optionally followed by a '*' and up to two more digits.
   #

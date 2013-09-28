@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe RubySpeech::GRXML::Builtins do
   let(:matcher) { RubySpeech::GRXML::Matcher.new grammar }
+  let(:result) { matcher.match input }
 
   describe "boolean" do
     let(:grammar) { subject.boolean }
@@ -10,17 +11,27 @@ describe RubySpeech::GRXML::Builtins do
       '1' => 'yes',
       '2' => 'no',
     }.each do |input, interpretation|
-      it "should max-match '#{input}'" do
-        matcher.match(input).should == RubySpeech::GRXML::MaxMatch.new(confidence: 1,
-          interpretation: interpretation,
-          mode: :dtmf,
-          utterance: input)
+      describe "with input '#{input}'" do
+        let(:input) { input }
+
+        it "should max-match" do
+          result.should be_a(RubySpeech::GRXML::MaxMatch)
+          result.utterance.should eql(input)
+        end
+
+        it "should return the correct interpretation" do
+          result.interpretation.should eql(interpretation)
+        end
       end
     end
 
     %w{0 3 10}.each do |input|
-      it "should not match '#{input}'" do
-        matcher.match(input).should == RubySpeech::GRXML::NoMatch.new
+      describe "with input '#{input}'" do
+        let(:input) { input }
+
+        it "should not match" do
+          result.should be_a(RubySpeech::GRXML::NoMatch)
+        end
       end
     end
   end
@@ -35,11 +46,17 @@ describe RubySpeech::GRXML::Builtins do
       '0*08'  => 'dtmf-0 dtmf-star dtmf-0 dtmf-8',
       '*59'   => 'dtmf-star dtmf-5 dtmf-9',
     }.each do |input, interpretation|
-      it "should max-match '#{input}'" do
-        matcher.match(input).should == RubySpeech::GRXML::MaxMatch.new(confidence: 1,
-          interpretation: interpretation,
-          mode: :dtmf,
-          utterance: input)
+      describe "with input '#{input}'" do
+        let(:input) { input }
+
+        it "should max-match" do
+          result.should be_a(RubySpeech::GRXML::MaxMatch)
+          result.utterance.should eql(input)
+        end
+
+        it "should return the correct interpretation" do
+          result.interpretation.should eql(interpretation)
+        end
       end
     end
 
@@ -50,17 +67,27 @@ describe RubySpeech::GRXML::Builtins do
       '123'   => 'dtmf-1 dtmf-2 dtmf-3',
       '123*'  => 'dtmf-1 dtmf-2 dtmf-3 dtmf-star',
     }.each do |input, interpretation|
-      it "should match '#{input}'" do
-        matcher.match(input).should == RubySpeech::GRXML::Match.new(confidence: 1,
-          interpretation: interpretation,
-          mode: :dtmf,
-          utterance: input)
+      describe "with input '#{input}'" do
+        let(:input) { input }
+
+        it "should match" do
+          result.should be_a(RubySpeech::GRXML::Match)
+          result.utterance.should eql(input)
+        end
+
+        it "should return the correct interpretation" do
+          result.interpretation.should eql(interpretation)
+        end
       end
     end
 
     %w{#}.each do |input|
-      it "should not match '#{input}'" do
-        matcher.match(input).should == RubySpeech::GRXML::NoMatch.new
+      describe "with input '#{input}'" do
+        let(:input) { input }
+
+        it "should not match" do
+          result.should be_a(RubySpeech::GRXML::NoMatch)
+        end
       end
     end
   end

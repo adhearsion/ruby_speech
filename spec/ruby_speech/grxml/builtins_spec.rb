@@ -8,8 +8,8 @@ describe RubySpeech::GRXML::Builtins do
     let(:grammar) { subject.boolean }
 
     {
-      '1' => 'yes',
-      '2' => 'no',
+      '1' => 'true',
+      '2' => 'false',
     }.each do |input, interpretation|
       describe "with input '#{input}'" do
         let(:input) { input }

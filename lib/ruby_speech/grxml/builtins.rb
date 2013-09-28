@@ -9,11 +9,11 @@ module RubySpeech::GRXML::Builtins
       rule id: 'boolean', scope: 'public' do
         one_of do
           item do
-            tag { 'yes' }
+            tag { 'true' }
             '1'
           end
           item do
-            tag { 'no' }
+            tag { 'false' }
             '2'
           end
         end

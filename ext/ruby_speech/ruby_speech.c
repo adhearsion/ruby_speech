@@ -82,7 +82,7 @@ static VALUE method_find_match(VALUE self, VALUE buffer)
     }
     return rb_funcall(self, rb_intern("match_for_buffer"), 1, buffer);
   }
-  if (result == PCRE_ERROR_PARTIAL) {
+  if (result == PCRE_ERROR_PARTIAL || (int)strlen(input) == 0) {
     VALUE PotentialMatch = rb_const_get(GRXML, rb_intern("PotentialMatch"));
     return rb_class_new_instance(0, NULL, PotentialMatch);
   }

@@ -27,6 +27,10 @@ module RubySpeech
             input.should == '6'
           end
 
+          it "should potentially match an empty buffer" do
+            subject.match('').should == GRXML::PotentialMatch.new
+          end
+
           %w{1 2 3 4 5 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
               subject.match(input).should == GRXML::NoMatch.new

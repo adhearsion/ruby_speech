@@ -11,8 +11,8 @@ module RubySpeech::GRXML::Builtins
   # @raise [ArgumentError] if the :y and :n options are the same
   #
   def self.boolean(options = {})
-    truthy_digit = (options[:y] || '1').to_s
-    falsy_digit = (options[:n] || '2').to_s
+    truthy_digit = (options[:y] || options['y'] || '1').to_s
+    falsy_digit = (options[:n] || options['n'] || '2').to_s
 
     raise ArgumentError, "Yes and no values cannot be the same" if truthy_digit == falsy_digit
 
@@ -37,7 +37,7 @@ module RubySpeech::GRXML::Builtins
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a date in the format yyyymmdd
   #
-  def self.date
+  def self.date(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'date' do
       rule id: 'date', scope: 'public' do
         item repeat: '8' do
@@ -64,9 +64,9 @@ module RubySpeech::GRXML::Builtins
   def self.digits(options = {})
     raise ArgumentError, "Cannot specify both absolute length and a length range" if options[:length] && (options[:minlength] || options[:maxlength])
 
-    minlength = options[:minlength] || 0
-    maxlength = options[:maxlength]
-    length = options[:length]
+    minlength = options[:minlength] || options['minlength'] || 0
+    maxlength = options[:maxlength] || options['maxlength']
+    length = options[:length] || options['length']
 
     repeat = length ? length : "#{minlength}-#{maxlength}"
 
@@ -87,7 +87,7 @@ module RubySpeech::GRXML::Builtins
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a monetary value.
   #
-  def self.currency
+  def self.currency(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'currency' do
       rule id: 'currency', scope: 'public' do
         item repeat: '0-' do
@@ -115,7 +115,7 @@ module RubySpeech::GRXML::Builtins
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a numeric value.
   #
-  def self.number
+  def self.number(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
       rule id: 'number', scope: 'public' do
         item repeat: '0-' do
@@ -142,7 +142,7 @@ module RubySpeech::GRXML::Builtins
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a phone number.
   #
-  def self.phone
+  def self.phone(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
       rule id: 'number', scope: 'public' do
         item repeat: '1-' do
@@ -160,7 +160,7 @@ module RubySpeech::GRXML::Builtins
   #
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a time.
   #
-  def self.time
+  def self.time(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'time' do
       rule id: 'time', scope: 'public' do
         item repeat: '1-4' do

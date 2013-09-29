@@ -2,6 +2,16 @@ require 'spec_helper'
 
 module RubySpeech
   describe GRXML do
+    describe ".from_uri" do
+      it "should fetch a simple builtin grammar by type" do
+        subject.from_uri("builtin:dtmf/phone").should == GRXML::Builtins.phone
+      end
+
+      it "should fetch a parameterized builtin grammar" do
+        subject.from_uri("builtin:dtmf/boolean?y=3;n=4").should == GRXML::Builtins.boolean(y: 3, n: 4)
+      end
+    end
+
     describe "#draw" do
       let(:doc) { Nokogiri::XML::Document.new }
 

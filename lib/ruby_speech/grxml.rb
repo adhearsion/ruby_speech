@@ -30,5 +30,24 @@ module RubySpeech
     def self.import(other)
       Element.import other
     end
+
+    URI_REGEX = /builtin:dtmf\/(?<type>\w*)(\?)?(?<query>(\w*=\w*;?)*)?/.freeze
+
+    #
+    # Fetch a builtin grammar by URI
+    #
+    # @param [String] uri The builtin grammar URI of the form "builtin:dtmf/type?param=value"
+    #
+    # @return [RubySpeech::GRXML::Grammar] a grammar from the builtin set
+    #
+    def self.from_uri(uri)
+      match = uri.match(URI_REGEX)
+      query = {}
+      match[:query].split(';').each do |s|
+        key, value = s.split('=')
+        query[key] = value
+      end
+      grammar = Builtins.send match[:type], query
+    end
   end # GRXML
 end # RubySpeech

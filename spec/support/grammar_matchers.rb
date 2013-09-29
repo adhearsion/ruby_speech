@@ -25,7 +25,7 @@ end
 RSpec::Matchers.define :match do |input|
   match do |grammar|
     @result = RubySpeech::GRXML::Matcher.new(grammar).match(input)
-    @result.is_a?(RubySpeech::GRXML::Match) && @result.interpretation == @interpretation
+    @result.is_a?(RubySpeech::GRXML::Match) && (@interpretation ? @result.interpretation == @interpretation : true)
   end
 
   chain :and_interpret_as do |interpretation|
@@ -53,7 +53,7 @@ end
 RSpec::Matchers.define :max_match do |input|
   match do |grammar|
     @result = RubySpeech::GRXML::Matcher.new(grammar).match(input)
-    @result.is_a?(RubySpeech::GRXML::MaxMatch) && @result.interpretation == @interpretation
+    @result.is_a?(RubySpeech::GRXML::MaxMatch) && (@interpretation ? @result.interpretation == @interpretation : true)
   end
 
   chain :and_interpret_as do |interpretation|

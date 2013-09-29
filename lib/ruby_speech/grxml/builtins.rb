@@ -136,4 +136,39 @@ module RubySpeech::GRXML::Builtins
       end
     end
   end
+
+  #
+  # Create a grammar for interpreting a phone number. Uses '*' to represent 'x' for a number with an extension.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a phone number.
+  #
+  def self.phone
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
+      rule id: 'number', scope: 'public' do
+        item repeat: '1-' do
+          one_of do
+            0.upto(9) { |d| item { d.to_s } }
+            item { '*' }
+          end
+        end
+      end
+    end
+  end
+
+  #
+  # Create a grammar for interpreting a time.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a time.
+  #
+  def self.time
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'time' do
+      rule id: 'time', scope: 'public' do
+        item repeat: '1-4' do
+          one_of do
+            0.upto(9) { |d| item { d.to_s } }
+          end
+        end
+      end
+    end
+  end
 end

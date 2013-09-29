@@ -136,4 +136,29 @@ describe RubySpeech::GRXML::Builtins do
 
     it { should not_match('#') }
   end
+
+  describe "phone" do
+    subject(:grammar) { described_class.phone }
+
+    it { should match('0').and_interpret_as('dtmf-0') }
+    it { should match('0123').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3') }
+    it { should match('0123*456').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-4 dtmf-5 dtmf-6') }
+    it { should match('0123*456*789').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-4 dtmf-5 dtmf-6 dtmf-star dtmf-7 dtmf-8 dtmf-9') }
+
+    it { should not_match('') }
+    it { should not_match('#') }
+  end
+
+  describe "time" do
+    subject(:grammar) { described_class.time }
+
+    it { should max_match('1235').and_interpret_as('dtmf-1 dtmf-2 dtmf-3 dtmf-5') }
+
+    it { should match('12').and_interpret_as('dtmf-1 dtmf-2') }
+    it { should match('4').and_interpret_as('dtmf-4') }
+    it { should match('123').and_interpret_as('dtmf-1 dtmf-2 dtmf-3') }
+
+    it { should not_match('*') }
+    it { should not_match('#') }
+  end
 end

@@ -33,6 +33,55 @@ module RubySpeech::GRXML::Builtins
   end
 
   #
+  # Create a grammar for interpreting a date.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a date in the format yyyymmdd
+  #
+  def self.date
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'date' do
+      rule id: 'date', scope: 'public' do
+        item repeat: '8' do
+          one_of do
+            0.upto(9) { |d| item { d.to_s } }
+          end
+        end
+      end
+    end
+  end
+
+  #
+  # Create a grammar for interpreting a string of digits.
+  #
+  # @param [Hash] options Options to parameterize the grammar
+  # @option options [#to_i] :minlength Minimum length for the string of digits.
+  # @option options [#to_i] :maxlength Maximum length for the string of digits.
+  # @option options [#to_i] :length Absolute length for the string of digits.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a boolean response.
+  #
+  # @raise [ArgumentError] if any of the length attributes logically conflict
+  #
+  def self.digits(options = {})
+    raise ArgumentError, "Cannot specify both absolute length and a length range" if options[:length] && (options[:minlength] || options[:maxlength])
+
+    minlength = options[:minlength] || 0
+    maxlength = options[:maxlength]
+    length = options[:length]
+
+    repeat = length ? length : "#{minlength}-#{maxlength}"
+
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'digits' do
+      rule id: 'digits', scope: 'public' do
+        item repeat: repeat do
+          one_of do
+            0.upto(9) { |d| item { d.to_s } }
+          end
+        end
+      end
+    end
+  end
+
+  #
   # Create a grammar for interpreting a monetary value. Uses '*' as the decimal point.
   # Matches any number of digits, optionally followed by a '*' and up to two more digits.
   #
@@ -47,6 +96,34 @@ module RubySpeech::GRXML::Builtins
         item repeat: '0-1' do
           item { '*' }
           item repeat: '0-2' do
+            ruleref uri: '#digit'
+          end
+        end
+      end
+
+      rule id: 'digit' do
+        one_of do
+          0.upto(9) { |d| item { d.to_s } }
+        end
+      end
+    end
+  end
+
+  #
+  # Create a grammar for interpreting a numeric value. Uses '*' as the decimal point.
+  # Matches any number of digits, optionally followed by a '*' and any number more digits.
+  #
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a numeric value.
+  #
+  def self.number
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
+      rule id: 'number', scope: 'public' do
+        item repeat: '0-' do
+          ruleref uri: '#digit'
+        end
+        item repeat: '0-1' do
+          item { '*' }
+          item repeat: '0-' do
             ruleref uri: '#digit'
           end
         end

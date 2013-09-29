@@ -10,6 +10,23 @@ describe RubySpeech::GRXML::Builtins do
     it { should not_match('0') }
     it { should not_match('3') }
     it { should not_match('10') }
+
+    context "with the true/false digits parameterized" do
+      subject { described_class.boolean y: 3, n: 7 }
+
+      it { should max_match('3').and_interpret_as('true') }
+      it { should max_match('7').and_interpret_as('false') }
+
+      it { should not_match('1') }
+      it { should not_match('2') }
+      it { should not_match('4') }
+
+      context "both the same" do
+        it "should raise ArgumentError" do
+          expect { described_class.boolean y: '1', n: 1 }.to raise_error(ArgumentError, /same/)
+        end
+      end
+    end
   end
 
   describe "currency" do

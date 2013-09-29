@@ -1,6 +1,6 @@
 module RubySpeech::GRXML::Builtins
   #
-  # Create a grammar for interpreting a boolean response, where 1 is yes and two is no.
+  # Create a grammar for interpreting a boolean response, where 1 is true and two is false.
   #
   # @param [Hash] options Options to parameterize the grammar
   # @option options [#to_s] :y The positive/truthy/affirmative digit

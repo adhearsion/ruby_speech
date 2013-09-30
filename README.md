@@ -137,7 +137,7 @@ which becomes
 
 #### Built-in grammars
 
-There are some grammars pre-defined which are available from the `RubySpeech::GRXML::Builtins` module like so.
+There are some grammars pre-defined which are available from the `RubySpeech::GRXML::Builtins` module like so:
 
 ```ruby
 require 'ruby_speech'
@@ -174,7 +174,16 @@ which yields
   </rule>
 </grammar>
 ```
-These grammars can be used just like any you would manually create, and there's nothing special about them except that they are already defined for you.
+
+These grammars come from the VoiceXML specification, and can be used as indicated there (including parameterisation). They can be used just like any you would manually create, and there's nothing special about them except that they are already defined for you. A full list of available grammars can be found in [the API documentation](http://rubydoc.info/gems/ruby_speech/RubySpeech/GRXML/Builtins).
+
+These grammars are also available via URI like so:
+
+```ruby
+require 'ruby_speech'
+
+RubySpeech::GRXML.from_uri('builtin:dtmf/boolean?y=3;n=4')
+```
 
 #### Grammar matching
 

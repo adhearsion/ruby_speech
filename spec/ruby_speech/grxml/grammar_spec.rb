@@ -185,6 +185,8 @@ module RubySpeech
                   item :repeat => '4' do
                     ruleref :uri => '#digits'
                   end
+                  item { '*' }
+                  item { ruleref uri: '#digits' }
                   "#"
                 end
                 item do
@@ -201,6 +203,12 @@ module RubySpeech
               one_of do
                 item do
                   item :repeat => '4' do
+                    one_of do
+                      0.upto(9) { |d| item { d.to_s } }
+                    end
+                  end
+                  item { '*' }
+                  item do
                     one_of do
                       0.upto(9) { |d| item { d.to_s } }
                     end

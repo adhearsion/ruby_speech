@@ -2,6 +2,36 @@ require 'spec_helper'
 
 module RubySpeech
   describe GRXML do
+    describe ".from_uri" do
+      context "with a builtin URI" do
+        it "should fetch a simple builtin grammar by type" do
+          subject.from_uri("builtin:dtmf/phone").should == GRXML::Builtins.phone
+        end
+
+        it "should fetch a parameterized builtin grammar" do
+          subject.from_uri("builtin:dtmf/boolean?y=3;n=4").should == GRXML::Builtins.boolean(y: 3, n: 4)
+        end
+
+        context "for speech" do
+          it "should raise ArgumentError" do
+            expect { subject.from_uri("builtin:speech/phone") }.to raise_error(ArgumentError, /Only DTMF/)
+          end
+        end
+
+        context "that doesn't exist" do
+          it "should raise ArgumentError" do
+            expect { subject.from_uri("builtin:dtmf/foobar") }.to raise_error(ArgumentError, /invalid/)
+          end
+        end
+      end
+
+      context "with an http URI" do
+        it "should raise ArgumentError" do
+          expect { subject.from_uri("http://foo.com/grammar.grxml") }.to raise_error(ArgumentError, /builtin/)
+        end
+      end
+    end
+
     describe "#draw" do
       let(:doc) { Nokogiri::XML::Document.new }
 

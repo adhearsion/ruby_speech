@@ -135,6 +135,47 @@ which becomes
 </grammar>
 ```
 
+#### Built-in grammars
+
+There are some grammars pre-defined which are available from the `RubySpeech::GRXML::Builtins` module like so.
+
+```ruby
+require 'ruby_speech'
+
+RubySpeech::GRXML::Builtins.currency
+```
+
+which yields
+
+```xml
+<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" mode="dtmf" root="currency">
+  <rule id="currency" scope="public">
+    <item repeat="0-">
+      <ruleref uri="#digit"/>
+    </item>
+    <item>*</item>
+    <item repeat="2">
+      <ruleref uri="#digit"/>
+    </item>
+  </rule>
+  <rule id="digit">
+    <one-of>
+      <item>0</item>
+      <item>1</item>
+      <item>2</item>
+      <item>3</item>
+      <item>4</item>
+      <item>5</item>
+      <item>6</item>
+      <item>7</item>
+      <item>8</item>
+      <item>9</item>
+    </one-of>
+  </rule>
+</grammar>
+```
+These grammars can be used just like any you would manually create, and there's nothing special about them except that they are already defined for you.
+
 #### Grammar matching
 
 It is possible to match some arbitrary input against a GRXML grammar, like so:

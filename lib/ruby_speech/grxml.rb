@@ -8,6 +8,7 @@ module RubySpeech
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'
 
     %w{
+      builtins
       grammar
       rule
       item
@@ -28,6 +29,29 @@ module RubySpeech
 
     def self.import(other)
       Element.import other
+    end
+
+    URI_REGEX = /builtin:(?<class>.*)\/(?<type>\w*)(\?)?(?<query>(\w*=\w*;?)*)?/.freeze
+
+    #
+    # Fetch a builtin grammar by URI
+    #
+    # @param [String] uri The builtin grammar URI of the form "builtin:dtmf/type?param=value"
+    #
+    # @return [RubySpeech::GRXML::Grammar] a grammar from the builtin set
+    #
+    def self.from_uri(uri)
+      match = uri.match(URI_REGEX)
+      raise ArgumentError, "Only builtin grammars are supported" unless match
+      raise ArgumentError, "Only DTMF builtins are supported" unless match[:class] == 'dtmf'
+      type = match[:type]
+      query = {}
+      match[:query].split(';').each do |s|
+        key, value = s.split('=')
+        query[key] = value
+      end
+      raise ArgumentError, "#{type} is an invalid builtin grammar" unless Builtins.respond_to?(type)
+      Builtins.send type, query
     end
   end # GRXML
 end # RubySpeech

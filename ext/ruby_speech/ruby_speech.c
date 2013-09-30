@@ -50,7 +50,7 @@ static int is_match_end(pcre *compiled_regex, const char *input)
     search_input[input_size] = *search++;
     result = pcre_exec(compiled_regex, NULL, search_input, input_size + 1, 0, 0,
       ovector, sizeof(ovector) / sizeof(ovector[0]));
-    if (result > 0) return 0;
+    if (result > -1) return 0;
   }
   return 1;
 }
@@ -82,7 +82,7 @@ static VALUE method_find_match(VALUE self, VALUE buffer)
     }
     return rb_funcall(self, rb_intern("match_for_buffer"), 1, buffer);
   }
-  if (result == PCRE_ERROR_PARTIAL) {
+  if (result == PCRE_ERROR_PARTIAL || (int)strlen(input) == 0) {
     VALUE PotentialMatch = rb_const_get(GRXML, rb_intern("PotentialMatch"));
     return rb_class_new_instance(0, NULL, PotentialMatch);
   }

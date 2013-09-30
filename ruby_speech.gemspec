@@ -10,6 +10,8 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/benlangfeld/ruby_speech"
   s.summary     = %q{A Ruby library for TTS & ASR document preparation}
   s.description = %q{Prepare SSML and GRXML documents with ease}
+  
+  s.license = 'MIT'
 
   s.rubyforge_project = "ruby_speech"
 

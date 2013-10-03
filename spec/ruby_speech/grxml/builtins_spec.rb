@@ -143,11 +143,11 @@ describe RubySpeech::GRXML::Builtins do
     it { should match('0').and_interpret_as('dtmf-0') }
     it { should match('0123').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3') }
     it { should match('0123*456').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-4 dtmf-5 dtmf-6') }
-    it { should match('0123*456*789').and_interpret_as('dtmf-0 dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-4 dtmf-5 dtmf-6 dtmf-star dtmf-7 dtmf-8 dtmf-9') }
 
     it { should potentially_match('') }
 
     it { should not_match('#') }
+    it { should not_match('0123*456*789') }
   end
 
   describe "time" do

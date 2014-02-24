@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [2.3.1](https://github.com/benlangfeld/ruby_speech/compare/v2.3.0...v2.3.1) - [2014-02-24](https://rubygems.org/gems/ruby_speech/versions/2.3.1)
   * Bugfix: Phone number grammar should only allow a single instance of '*'/'x'
   * Bugfix: Concatenating documents containing strings across the border inserts appropriate spacing (#21).
 

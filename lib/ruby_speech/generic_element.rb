@@ -105,12 +105,16 @@ module RubySpeech
       new_doc = Nokogiri::XML::Document.new
       self.class.new(new_doc).tap do |new_element|
         new_doc.root = new_element.node
+        string_types = [String, Nokogiri::XML::Text]
+        include_spacing = string_types.include?(self.nokogiri_children.last.class) && string_types.include?(other.nokogiri_children.first.class)
         if Nokogiri.jruby?
           new_element.add_child self.clone.nokogiri_children
+          new_element << " " if include_spacing
           new_element.add_child other.clone.nokogiri_children
         else
           # TODO: This is yucky because it requires serialization
           new_element.add_child self.nokogiri_children.to_xml
+          new_element << " " if include_spacing
           new_element.add_child other.nokogiri_children.to_xml
         end
       end

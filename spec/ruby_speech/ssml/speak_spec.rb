@@ -182,6 +182,27 @@ module RubySpeech
         concat.document.root.should == concat
         concat.to_s.should_not include('default')
       end
+
+      context "when concatenating" do
+        describe "simple strings" do
+          it "inserts a space between them" do
+            speak1 = SSML.draw do
+              string "Hi, my name"
+            end
+
+            speak2 = SSML.draw do
+              string "is Frank"
+            end
+
+            expected_concat = SSML.draw do
+              string "Hi, my name is Frank"
+            end
+
+            concat = (speak1 + speak2)
+            concat.should == expected_concat
+          end
+        end
+      end
     end # Speak
   end # SSML
 end # RubySpeech

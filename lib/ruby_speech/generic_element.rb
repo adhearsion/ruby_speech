@@ -107,10 +107,15 @@ module RubySpeech
         new_doc.root = new_element.node
         if Nokogiri.jruby?
           new_element.add_child self.clone.nokogiri_children
+          new_element << " "
           new_element.add_child other.clone.nokogiri_children
         else
           # TODO: This is yucky because it requires serialization
           new_element.add_child self.nokogiri_children.to_xml
+          string_types = [String, Nokogiri::XML::Text]
+          if string_types.include?(self.nokogiri_children.last.class) && string_types.include?(other.nokogiri_children.first.class)
+            new_element << " "
+          end
           new_element.add_child other.nokogiri_children.to_xml
         end
       end

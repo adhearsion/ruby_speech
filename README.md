@@ -259,7 +259,7 @@ require 'ruby_speech'
 
 nlsml = RubySpeech::NLSML.draw grammar: 'http://flight' do
   interpretation confidence: 0.6 do
-    input "I want to go to Pittsburgh", mode: :speech
+    input "I want to go to Pittsburgh", mode: :voice
 
     instance do
       airline do
@@ -288,7 +288,7 @@ becomes:
 <?xml version="1.0"?>
 <result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
   <interpretation confidence="0.6">
-    <input mode="speech">I want to go to Pittsburgh</input>
+    <input mode="voice">I want to go to Pittsburgh</input>
     <instance>
       <airline>
         <to_city>Pittsburgh</to_city>
@@ -315,7 +315,7 @@ document.match? # => true
 document.interpretations # => [
       {
         confidence: 0.6,
-        input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+        input: { mode: :voice, content: 'I want to go to Pittsburgh' },
         instance: { airline: { to_city: 'Pittsburgh' } }
       },
       {
@@ -326,7 +326,7 @@ document.interpretations # => [
     ]
 document.best_interpretation # => {
           confidence: 0.6,
-          input: { mode: :speech, content: 'I want to go to Pittsburgh' },
+          input: { mode: :voice, content: 'I want to go to Pittsburgh' },
           instance: { airline: { to_city: 'Pittsburgh' } }
         }
 ```

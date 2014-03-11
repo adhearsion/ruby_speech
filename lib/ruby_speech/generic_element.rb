@@ -172,7 +172,7 @@ module RubySpeech
     end
 
     def string(other)
-      self << Nokogiri::XML::Text.new(other, document)
+      self << Nokogiri::XML::Text.new(other.to_s, document)
     end
 
     def clone

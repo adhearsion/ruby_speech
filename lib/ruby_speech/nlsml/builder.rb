@@ -5,11 +5,12 @@ module RubySpeech
 
       def initialize(options = {}, &block)
         options = {'xmlns' => NLSML_NAMESPACE}.merge(options)
-        @document = Nokogiri::XML::Builder.new do |builder|
+        xml_doc = Nokogiri::XML::Builder.new do |builder|
           builder.result options do |r|
             apply_block r, &block
           end
         end.doc
+        @document = RubySpeech::NLSML::Document.new xml_doc
       end
 
       def interpretation(*args, &block)

@@ -55,6 +55,22 @@ describe RubySpeech::NLSML do
       document.to_xml.should == expected_document
     end
 
+    it "should return a structured/parsed document" do
+      document = RubySpeech::NLSML.draw(grammar: 'http://flight') do
+        interpretation confidence: 0.6 do
+          input "I want to go to Pittsburgh", mode: :speech
+
+          instance do
+            airline do
+              to_city 'Pittsburgh'
+            end
+          end
+        end
+      end
+
+      document.should be_match
+    end
+
     context "with a string instance" do
       let :example_document do
         '''

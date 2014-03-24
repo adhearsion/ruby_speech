@@ -38,6 +38,10 @@ module RubySpeech
         noinput_elements.any?
       end
 
+      def to_xml
+        document.to_xml
+      end
+
       private
 
       def nomatch?

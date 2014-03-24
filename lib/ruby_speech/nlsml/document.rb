@@ -58,6 +58,7 @@ module RubySpeech
 
       def input_hash_for_interpretation(interpretation)
         input_element = interpretation.at_xpath 'ns:input', 'ns' => NLSML_NAMESPACE
+        return unless input_element
         { content: input_element.content }.tap do |h|
           h[:mode] = input_element['mode'].to_sym if input_element['mode']
         end

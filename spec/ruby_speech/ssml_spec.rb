@@ -81,6 +81,30 @@ module RubySpeech
         SSML.draw { string foo }.should == expected_doc
       end
 
+      describe 'cloning' do
+        context 'SSML documents' do
+          let :original do
+            RubySpeech::SSML.draw do
+              string "Hi, I'm Fred."
+            end
+          end
+
+          subject { original.clone }
+
+          it 'should match the contents of the original document' do
+            subject.to_s.should == original.to_s
+          end
+
+          it 'should match the class of the original document' do
+            subject.class.should == original.class
+          end
+
+          it 'should be equal to the original document' do
+            subject.should == original
+          end
+        end
+      end
+
       describe "embedding" do
         it "SSML documents" do
           doc1 = RubySpeech::SSML.draw do

@@ -242,7 +242,7 @@ module RubySpeech
             string "HELLO?"
             item :weight => 2.5
             one_of do
-              item { "1" }
+              item { string 1 }
               item { "2" }
             end
             ruleref :uri => '#test'

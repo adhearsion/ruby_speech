@@ -55,6 +55,22 @@ describe RubySpeech::NLSML do
       document.to_xml.should == expected_document
     end
 
+    it "should return a structured/parsed document" do
+      document = RubySpeech::NLSML.draw(grammar: 'http://flight') do
+        interpretation confidence: 0.6 do
+          input "I want to go to Pittsburgh", mode: :speech
+
+          instance do
+            airline do
+              to_city 'Pittsburgh'
+            end
+          end
+        end
+      end
+
+      document.should be_match
+    end
+
     context "with a string instance" do
       let :example_document do
         '''
@@ -192,6 +208,38 @@ describe RubySpeech::NLSML do
             instances: []
           }
         ]
+      end
+
+      its(:interpretations)     { should == expected_interpretations }
+      its(:best_interpretation) { should == expected_best_interpretation }
+    end
+
+    context "with an interpretation that has no input" do
+      let :example_document do
+        '''
+<result xmlns="http://www.ietf.org/xml/ns/mrcpv2" grammar="http://flight">
+  <interpretation confidence="0.6">
+    <instance>
+      <airline>
+        <to_city>Pittsburgh</to_city>
+      </airline>
+    </instance>
+  </interpretation>
+</result>
+        '''
+      end
+
+      let(:expected_best_interpretation) do
+        {
+          confidence: 0.6,
+          input: nil,
+          instance: { airline: { to_city: 'Pittsburgh' } },
+          instances: [{ airline: { to_city: 'Pittsburgh' } }]
+        }
+      end
+
+      let(:expected_interpretations) do
+        [expected_best_interpretation]
       end
 
       its(:interpretations)     { should == expected_interpretations }

@@ -172,11 +172,11 @@ module RubySpeech
     end
 
     def string(other)
-      self << Nokogiri::XML::Text.new(other, document)
+      self << Nokogiri::XML::Text.new(other.to_s, document)
     end
 
     def clone
-      GRXML.import to_xml
+      self.class.import to_xml
     end
 
     def traverse(&block)

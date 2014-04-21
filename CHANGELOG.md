@@ -1,4 +1,6 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+
+# [2.3.2](https://github.com/benlangfeld/ruby_speech/compare/v2.3.1...v2.3.2) - [2014-04-21](https://rubygems.org/gems/ruby_speech/versions/2.3.2)
   * Bugfix: String nodes should take non-strings and cast to a string (`#to_s`)
   * Bugfix: Cleanly handle NLSML with no input tag
   * Bugfix: Drawing an NLSML doc should return something structured/parsed

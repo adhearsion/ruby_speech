@@ -176,7 +176,7 @@ module RubySpeech
     end
 
     def clone
-      GRXML.import to_xml
+      self.class.import to_xml
     end
 
     def traverse(&block)

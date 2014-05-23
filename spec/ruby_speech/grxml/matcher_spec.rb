@@ -516,6 +516,50 @@ module RubySpeech
           end
         end
 
+        context "with a grammar that takes a a specific digit repeated within a range" do
+          let(:grammar) do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                item :repeat => 0..3 do
+                  '6'
+                end
+              end
+            end
+          end
+
+          {
+            '' => '',
+            '6' => 'dtmf-6',
+            '66' => 'dtmf-6 dtmf-6',
+          }.each_pair do |input, interpretation|
+            it "should match '#{input}'" do
+              expected_match = GRXML::Match.new :mode           => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => interpretation
+              subject.match(input).should == expected_match
+            end
+          end
+
+          {
+            '666' => 'dtmf-6 dtmf-6 dtmf-6',
+          }.each_pair do |input, interpretation|
+            it "should maximally match '#{input}'" do
+              expected_match = GRXML::MaxMatch.new :mode        => :dtmf,
+                                                :confidence     => 1,
+                                                :utterance      => input,
+                                                :interpretation => interpretation
+              subject.match(input).should == expected_match
+            end
+          end
+
+          %w{6666 7}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
         context "with a grammar that takes a a specific digit repeated within a range, followed by specific digit" do
           let(:grammar) do
             GRXML.draw :mode => :dtmf, :root => 'digits' do

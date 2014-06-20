@@ -72,13 +72,32 @@ module RubySpeech
         drawn_doc.should == expected_doc
       end
 
-      it "should allow accessing methods defined outside the block" do
-        def foo
-          'bar'
+      context 'accessing methods defined outside the block' do
+        it 'should be allowed at the top level' do
+          def foo
+            'bar'
+          end
+
+          expected_doc = SSML::Speak.new doc, content: foo
+          SSML.draw { string foo }.should == expected_doc
         end
 
-        expected_doc = SSML::Speak.new doc, :content => foo
-        SSML.draw { string foo }.should == expected_doc
+        it 'should be allowed inside a nested block' do
+          def foo
+            'bar'
+          end
+
+          drawn_doc = SSML.draw do
+            phoneme alphabet: 'x-sampa', ph: 'b}r' do
+              string foo
+            end
+          end
+
+          expected_doc = SSML::Speak.new doc
+          phoneme = SSML::Phoneme.new doc, alphabet: 'x-sampa', ph: 'b}r', content: foo
+          expected_doc << phoneme
+          drawn_doc.should == expected_doc
+        end
       end
 
       describe 'cloning' do

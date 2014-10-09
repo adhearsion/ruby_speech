@@ -48,9 +48,10 @@ static int is_match_end(pcre *compiled_regex, const char *input)
       search = search_set;
     }
     search_input[input_size] = *search++;
-    result = pcre_exec(compiled_regex, NULL, search_input, input_size + 1, 0, 0,
+    result = pcre_exec(compiled_regex, NULL, search_input, input_size + 1, 0, PCRE_PARTIAL,
       ovector, sizeof(ovector) / sizeof(ovector[0]));
     if (result > -1) return 0;
+    if (result == PCRE_ERROR_PARTIAL) return 0;
   }
   return 1;
 }

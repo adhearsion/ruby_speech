@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/benlangfeld/ruby_speech"
   s.summary     = %q{A Ruby library for TTS & ASR document preparation}
   s.description = %q{Prepare SSML and GRXML documents with ease}
-  
+
   s.license = 'MIT'
 
   s.rubyforge_project = "ruby_speech"
@@ -31,8 +31,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency %q<activesupport>, [">= 3.0.7", "< 5.0.0"]
 
   s.add_development_dependency %q<bundler>, [">= 1.0.0"]
-  s.add_development_dependency %q<rspec>, [">= 2.7"]
-  s.add_development_dependency %q<ci_reporter>, [">= 1.6.3"]
+  s.add_development_dependency %q<rspec>, ["~> 2.7"]
+  s.add_development_dependency %q<ci_reporter>, ["~> 1.6"]
   s.add_development_dependency %q<yard>, [">= 0.7.0"]
   s.add_development_dependency %q<rake>, [">= 0"]
   s.add_development_dependency %q<guard>, [">= 0.9.0"]

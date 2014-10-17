@@ -310,6 +310,20 @@ module RubySpeech
 
             pending 'should raise an Exception'
           end
+
+          context 'with an invalid-reference' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  ruleref uri: '#lost'
+                end
+              end.inline
+            end
+
+            it 'should raise a descriptive exception' do
+              expect { subject }.to raise_error ArgumentError, 'The Ruleref "#lost" is referenced but not defined'
+            end
+          end
         end
       end
 

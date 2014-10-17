@@ -1,4 +1,5 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+  * Bugfix: Rulerefs referenced n-levels deep under Rulerefs should be expanded.
 
 # [2.3.2](https://github.com/benlangfeld/ruby_speech/compare/v2.3.1...v2.3.2) - [2014-04-21](https://rubygems.org/gems/ruby_speech/versions/2.3.2)
   * Bugfix: String nodes should take non-strings and cast to a string (`#to_s`)

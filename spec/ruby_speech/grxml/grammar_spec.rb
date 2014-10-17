@@ -232,6 +232,70 @@ module RubySpeech
           grammar.inline!.should == inline_grammar
           grammar.should == inline_grammar
         end
+
+        context 'nested' do
+          let :expected_doc do
+            RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+              rule :id => :main, :scope => 'public' do
+                string "How about an oatmeal cookie?  You'll feel better."
+              end
+            end
+          end
+
+          context '1 level deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+
+          context '2 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+
+          context '3 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  ruleref uri: '#rabbit_hole4'
+                end
+                rule id: 'rabbit_hole4' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+        end
       end
 
       describe "#tokenize!" do

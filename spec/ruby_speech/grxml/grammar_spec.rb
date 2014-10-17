@@ -295,6 +295,21 @@ module RubySpeech
 
             it { should eq expected_doc }
           end
+
+          context 'in a self-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  ruleref uri: '#paradox'
+                end
+                rule id: 'paradox' do
+                  ruleref uri: '#paradox'
+                end
+              end.inline
+            end
+
+            pending 'should raise an Exception'
+          end
         end
       end
 

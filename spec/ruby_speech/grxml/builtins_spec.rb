@@ -134,7 +134,11 @@ describe RubySpeech::GRXML::Builtins do
     it { should match('123*').and_interpret_as('dtmf-1 dtmf-2 dtmf-3 dtmf-star') }
     it { should match('123*2342').and_interpret_as('dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-2 dtmf-3 dtmf-4 dtmf-2') }
 
+    it { should potentially_match('*') }
+
     it { should not_match('#') }
+    it { should not_match('**') }
+    it { should not_match('0123*456*789') }
   end
 
   describe "phone" do

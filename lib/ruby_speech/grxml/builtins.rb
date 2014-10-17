@@ -118,14 +118,28 @@ module RubySpeech::GRXML::Builtins
   def self.number(options = nil)
     RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
       rule id: 'number', scope: 'public' do
-        item repeat: '0-' do
+        one_of do
+          item { ruleref uri: '#less_than_one' }
+          item { ruleref uri: '#one_or_more' }
+        end
+      end
+
+      rule id: 'less_than_one' do
+        item { '*' }
+        item repeat: '1-' do
+          ruleref uri: '#digit'
+        end
+      end
+
+      rule id: 'one_or_more' do
+        item repeat: '1-' do
           ruleref uri: '#digit'
         end
         item repeat: '0-1' do
-          item { '*' }
-          item repeat: '0-' do
-            ruleref uri: '#digit'
-          end
+          '*'
+        end
+        item repeat: '0-' do
+          ruleref uri: '#digit'
         end
       end
 

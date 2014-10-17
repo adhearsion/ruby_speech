@@ -234,68 +234,6 @@ module RubySpeech
         end
 
         context 'nested' do
-          let :expected_doc do
-            RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-              rule :id => :main, :scope => 'public' do
-                string "How about an oatmeal cookie?  You'll feel better."
-              end
-            end
-          end
-
-          context '1 level deep' do
-            subject do
-              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-                rule :id => :main, :scope => 'public' do
-                  ruleref uri: '#rabbit_hole2'
-                end
-                rule id: 'rabbit_hole2' do
-                  string "How about an oatmeal cookie?  You'll feel better."
-                end
-              end.inline
-            end
-
-            it { should eq expected_doc }
-          end
-
-          context '2 levels deep' do
-            subject do
-              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-                rule :id => :main, :scope => 'public' do
-                  ruleref uri: '#rabbit_hole2'
-                end
-                rule id: 'rabbit_hole2' do
-                  ruleref uri: '#rabbit_hole3'
-                end
-                rule id: 'rabbit_hole3' do
-                  string "How about an oatmeal cookie?  You'll feel better."
-                end
-              end.inline
-            end
-
-            it { should eq expected_doc }
-          end
-
-          context '3 levels deep' do
-            subject do
-              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-                rule :id => :main, :scope => 'public' do
-                  ruleref uri: '#rabbit_hole2'
-                end
-                rule id: 'rabbit_hole2' do
-                  ruleref uri: '#rabbit_hole3'
-                end
-                rule id: 'rabbit_hole3' do
-                  ruleref uri: '#rabbit_hole4'
-                end
-                rule id: 'rabbit_hole4' do
-                  string "How about an oatmeal cookie?  You'll feel better."
-                end
-              end.inline
-            end
-
-            it { should eq expected_doc }
-          end
-
           context 'in a self-referencial infinite loop' do
             subject do
               RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
@@ -305,10 +243,12 @@ module RubySpeech
                 rule id: 'paradox' do
                   ruleref uri: '#paradox'
                 end
-              end.inline
+              end
             end
 
-            pending 'should raise an Exception'
+            it 'should be rejected with an error' do
+              expect { subject.inline }.to raise_error ArgumentError, /Max ruleref recursion level of 25 has been exceeded./
+            end
           end
 
           context 'with an invalid-reference' do
@@ -322,6 +262,78 @@ module RubySpeech
 
             it 'should raise a descriptive exception' do
               expect { subject }.to raise_error ArgumentError, 'The Ruleref "#lost" is referenced but not defined'
+            end
+          end
+
+          context 'deeply' do
+            before :each do
+              subject.root = 'main'
+              subject << Rule.new(doc, :id => 'main', :scope => 'public') do
+                ruleref uri: '#level0'
+              end
+
+              levels.times do |i|
+                next_ref = i + 1
+                subject << if next_ref < levels
+                   Rule.new(doc, :id => "level#{i}") do
+                    ruleref uri: "#level#{next_ref}"
+                  end
+                else
+                  Rule.new(doc, :id => "level#{i}") do
+                    string "How about an oatmeal cookie?  You'll feel better."
+                  end
+                end
+              end
+            end
+
+            after :each do
+              ENV['RUBYSPEECH_MAX_RULE_NESTING'] = nil
+            end
+
+            let :expected_doc do
+              RubySpeech::GRXML.draw root: 'main' do
+                rule :id => :main, :scope => 'public' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end
+            end
+
+            context '25 levels deep' do
+              let(:levels) { 25 }
+
+              it 'should equal the expected doc' do
+                expect(subject.inline).to eq expected_doc
+              end
+            end
+
+            context '26 levels deep' do
+              let(:levels) { 26 }
+
+              it 'should be rejected with an error' do
+                expect { subject.inline }.to raise_error ArgumentError, /Max ruleref recursion level of 25 has been exceeded./
+              end
+            end
+
+            context 'with RUBYSPEECH_MAX_RULE_NESTING=100' do
+              before :each do
+                ENV['RUBYSPEECH_MAX_RULE_NESTING'] = '100'
+              end
+
+              context '100 levels deep' do
+                let(:levels) { 100 }
+
+                it 'should equal the expected doc' do
+                  expect(subject.inline).to eq expected_doc
+                end
+              end
+
+              context '101 levels deep' do
+                let(:levels) { 101 }
+
+                it 'should be rejected with an error' do
+                  expect { subject.inline }.to raise_error ArgumentError, /Max ruleref recursion level of 100 has been exceeded./
+                end
+              end
             end
           end
         end

@@ -32,6 +32,7 @@ module RubySpeech
       self.defaults = { :version => '1.0', :language => "en-US", namespace: GRXML_NAMESPACE }
 
       VALID_CHILD_TYPES = [Nokogiri::XML::Element, Nokogiri::XML::Text, Rule, Tag].freeze
+      MAX_RULE_NESTING_DEFAULT = 25.freeze
 
       ##
       #
@@ -116,12 +117,17 @@ module RubySpeech
       # @return self
       #
       def inline!
-        loop do
+        (self.class.max_rule_nesting + 1).times do |i|
           rule = nil
+          j = 0
           xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
+            if ([i,j].max + 1) > self.class.max_rule_nesting
+              raise ArgumentError, "Max ruleref recursion level of #{self.class.max_rule_nesting} has been exceeded."
+            end
             rule = rule_with_id ref[:uri].sub(/^#/, '')
             raise ArgumentError, "The Ruleref \"#{ref[:uri]}\" is referenced but not defined" unless rule
             ref.swap rule.dup.children
+            j += 1
           end
           break unless rule
         end
@@ -189,6 +195,10 @@ module RubySpeech
       end
 
       private
+
+      def self.max_rule_nesting
+        (ENV['RUBYSPEECH_MAX_RULE_NESTING'] || MAX_RULE_NESTING_DEFAULT).to_i
+      end
 
       def has_matching_root_rule?
         !root || root_rule

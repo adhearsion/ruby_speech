@@ -124,7 +124,7 @@ module RubySpeech
             if ([i,j].max + 1) > self.class.max_rule_nesting
               raise ArgumentError, "Max ruleref recursion level of #{self.class.max_rule_nesting} has been exceeded."
             end
-            rule = rule_with_id ref[:uri].sub(/^#/, '')
+            rule = rule_with_id ref[:uri].sub(/^#/, "")
             raise ArgumentError, "The Ruleref \"#{ref[:uri]}\" is referenced but not defined" unless rule
             ref.swap rule.dup.children
             j += 1
@@ -197,7 +197,7 @@ module RubySpeech
       private
 
       def self.max_rule_nesting
-        (ENV['RUBYSPEECH_MAX_RULE_NESTING'] || MAX_RULE_NESTING_DEFAULT).to_i
+        (ENV["RUBYSPEECH_MAX_RULE_NESTING"] || MAX_RULE_NESTING_DEFAULT).to_i
       end
 
       def has_matching_root_rule?

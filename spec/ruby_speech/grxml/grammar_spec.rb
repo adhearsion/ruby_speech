@@ -237,7 +237,7 @@ module RubySpeech
           context 'in a self-referencial infinite loop' do
             subject do
               RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-                rule :id => :main, :scope => 'public' do
+                rule id: :main, scope: 'public' do
                   ruleref uri: '#paradox'
                 end
                 rule id: 'paradox' do
@@ -254,7 +254,7 @@ module RubySpeech
           context 'with an invalid-reference' do
             subject do
               RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
-                rule :id => :main, :scope => 'public' do
+                rule id: :main, scope: 'public' do
                   ruleref uri: '#lost'
                 end
               end.inline
@@ -268,18 +268,18 @@ module RubySpeech
           context 'deeply' do
             before :each do
               subject.root = 'main'
-              subject << Rule.new(doc, :id => 'main', :scope => 'public') do
+              subject << Rule.new(doc, id: 'main', scope: 'public') do
                 ruleref uri: '#level0'
               end
 
               levels.times do |i|
                 next_ref = i + 1
                 subject << if next_ref < levels
-                   Rule.new(doc, :id => "level#{i}") do
+                   Rule.new(doc, id: "level#{i}") do
                     ruleref uri: "#level#{next_ref}"
                   end
                 else
-                  Rule.new(doc, :id => "level#{i}") do
+                  Rule.new(doc, id: "level#{i}") do
                     string "How about an oatmeal cookie?  You'll feel better."
                   end
                 end
@@ -292,7 +292,7 @@ module RubySpeech
 
             let :expected_doc do
               RubySpeech::GRXML.draw root: 'main' do
-                rule :id => :main, :scope => 'public' do
+                rule id: :main, scope: 'public' do
                   string "How about an oatmeal cookie?  You'll feel better."
                 end
               end

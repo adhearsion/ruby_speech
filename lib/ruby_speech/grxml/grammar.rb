@@ -120,7 +120,7 @@ module RubySpeech
         (self.class.max_rule_nesting + 1).times do |i|
           rule = nil
           j = 0
-          xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
+          xpath("//ns:ruleref", ns: GRXML_NAMESPACE).each do |ref|
             if ([i,j].max + 1) > self.class.max_rule_nesting
               raise ArgumentError, "Max ruleref recursion level of #{self.class.max_rule_nesting} has been exceeded."
             end

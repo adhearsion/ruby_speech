@@ -149,6 +149,24 @@ module RubySpeech
           it "with a negative value" do
             lambda { subject.rate = -100 }.should raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
           end
+
+          describe "with a percentage" do
+            before { subject.rate = "22.5%" }
+
+            its(:rate) { should == "22.5%" }
+          end
+
+          describe "with a percentage and a plus sign" do
+            before { subject.rate = "+22.5%" }
+
+            its(:rate) { should == "+22.5%" }
+          end
+
+          describe "with a percentage and a minus sign" do
+            before { subject.rate = "-22.5%" }
+
+            its(:rate) { should == "-22.5%" }
+          end
         end
       end
 

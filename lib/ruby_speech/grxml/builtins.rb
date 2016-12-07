@@ -57,7 +57,7 @@ module RubySpeech::GRXML::Builtins
   # @option options [#to_i] :maxlength Maximum length for the string of digits.
   # @option options [#to_i] :length Absolute length for the string of digits.
   #
-  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a boolean response.
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting an integer response.
   #
   # @raise [ArgumentError] if any of the length attributes logically conflict
   #

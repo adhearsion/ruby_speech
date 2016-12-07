@@ -126,17 +126,26 @@ module RubySpeech::GRXML::Builtins
 
       rule id: 'less_than_one' do
         item { '*' }
-        item repeat: '1-' do
-          ruleref uri: '#digit'
+        item do
+          ruleref uri: '#digit_series'
         end
       end
 
       rule id: 'one_or_more' do
-        item repeat: '1-' do
-          ruleref uri: '#digit'
+        item do
+          ruleref uri: '#digit_series'
         end
         item repeat: '0-1' do
-          ruleref uri: '#less_than_one'
+          item { '*' }
+          item repeat: '0-1' do
+            ruleref uri: '#digit_series'
+          end
+        end
+      end
+
+      rule id: 'digit_series' do
+        item repeat: '1-' do
+          ruleref uri: '#digit'
         end
       end
 

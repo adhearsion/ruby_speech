@@ -136,10 +136,7 @@ module RubySpeech::GRXML::Builtins
           ruleref uri: '#digit'
         end
         item repeat: '0-1' do
-          '*'
-        end
-        item repeat: '0-' do
-          ruleref uri: '#digit'
+          ruleref uri: '#less_than_one'
         end
       end
 

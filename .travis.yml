@@ -12,6 +12,7 @@ matrix:
     - rvm: ruby-head
 before_install:
   - sudo apt-get install libpcre3 libpcre3-dev
+  - gem install bundler
 
 notifications:
   irc: "irc.freenode.org#adhearsion"

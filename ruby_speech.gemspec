@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<rspec>, ["~> 2.7"]
   s.add_development_dependency %q<ci_reporter>, ["~> 1.6"]
   s.add_development_dependency %q<yard>, [">= 0.7.0"]
-  s.add_development_dependency %q<rake>, [">= 0"]
+  s.add_development_dependency %q<rake>, ["< 11.0"]
   s.add_development_dependency %q<guard>, [">= 0.9.0"]
   s.add_development_dependency %q<guard-rspec>, [">= 0"]
   s.add_development_dependency %q<listen>, ["< 3.1.0"]

@@ -31,7 +31,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency %q<activesupport>, [">= 3.0.7", "< 5.0.0"]
 
   s.add_development_dependency %q<bundler>, [">= 1.0.0"]
-  s.add_development_dependency %q<rspec>, ["~> 2.7"]
+  s.add_development_dependency %q<rspec>, ["~> 2.99.0"]
+  s.add_development_dependency %q<rspec-its>, [">= 0"]
   s.add_development_dependency %q<ci_reporter>, ["~> 1.6"]
   s.add_development_dependency %q<yard>, [">= 0.7.0"]
   s.add_development_dependency %q<rake>, ["< 11.0"]

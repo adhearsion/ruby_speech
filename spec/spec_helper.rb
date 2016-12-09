@@ -1,4 +1,10 @@
-require 'ruby_speech'
+# encoding: utf-8
+# frozen_string_literal: true
+
+%w{
+  ruby_speech
+  rspec/its
+}.each { |f| require f }
 
 require 'coveralls'
 Coveralls.wear!

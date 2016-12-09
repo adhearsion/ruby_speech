@@ -1,18 +1,39 @@
 language: ruby
 
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - jruby
-  - rbx
-  - ruby-head
 matrix:
+  include:
+    - rvm: 1.9.3
+    - rvm: 2.0.0
+    - rvm: 2.1.0
+    - rvm: 2.2.0
+    - rvm: 2.3.0
+    - rvm: rbx-2
+    - rvm: rbx-3
+    - rvm: ruby-head
+    - rvm: jruby-1.7
+      jdk: openjdk7
+    - rvm: jruby-1.7
+      jdk: oraclejdk7
+    - rvm: jruby-1.7
+      jdk: oraclejdk8
+    - rvm: jruby-head
+      jdk: openjdk7
+    - rvm: jruby-head
+      jdk: oraclejdk7
+    - rvm: jruby-head
+      jdk: oraclejdk8
+    - rvm: jruby-9.0.4.0
+      jdk: openjdk7
+    - rvm: jruby-9.0.4.0
+      jdk: oraclejdk7
+    - rvm: jruby-9.0.4.0
+      jdk: oraclejdk8
   allow_failures:
     - rvm: ruby-head
 before_install:
   - sudo apt-get install libpcre3 libpcre3-dev
   - gem install bundler
+before_script: export JRUBY_OPTS="--server -J-Xss1024k -J-Xmx652m -J-XX:+UseConcMarkSweepGC"
 
 notifications:
   irc: "irc.freenode.org#adhearsion"

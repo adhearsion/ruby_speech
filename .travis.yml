@@ -29,6 +29,8 @@ matrix:
     - rvm: jruby-9.0.4.0
       jdk: oraclejdk8
   allow_failures:
+    - rvm: rbx-2
+    - rvm: rbx-3
     - rvm: ruby-head
 sudo: false
 addons:

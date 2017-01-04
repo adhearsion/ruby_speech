@@ -118,9 +118,12 @@ module RubySpeech
       def inline!
         loop do
           rule = nil
-          xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
+          xpath("//ns:ruleref", ns: GRXML_NAMESPACE).each do |ref|
             rule = rule_with_id ref[:uri].sub(/^#/, '')
-            raise ArgumentError, "The Ruleref \"#{ref[:uri]}\" is referenced but not defined" unless rule
+            unless rule
+              raise ArgumentError,
+                "The Ruleref \"#{ref[:uri]}\" is referenced but not defined"
+            end
             ref.swap rule.dup.children
           end
           break unless rule

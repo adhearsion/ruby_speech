@@ -124,31 +124,19 @@ describe RubySpeech::GRXML::Builtins do
 
     it { should match("0").and_interpret_as "dtmf-0" }
     it { should match("123").and_interpret_as "dtmf-1 dtmf-2 dtmf-3" }
+    it { should match("1*01").and_interpret_as dtmf_seq %w(1 star 0 1) }
+    it { should match("01*00").and_interpret_as dtmf_seq %w(0 1 star 0 0) }
     it do
-      should match("1*01").and_interpret_as "dtmf-1 dtmf-star dtmf-0 dtmf-1"
+      should match("100000000000*00")
+        .and_interpret_as dtmf_seq %w(1 0 0 0 0 0 0 0 0 0 0 0 star 0 0)
     end
-    it do
-      should match("01*00").and_interpret_as(
-        %w(0 1 star 0 0).map { |d| "dtmf-#{d}" }.join " ")
-    end
-    it do
-      should match("100000000000*00").and_interpret_as(
-        %w(1 0 0 0 0 0 0 0 0 0 0 0 star 0 0).map { |d| "dtmf-#{d}" }.join " ")
-    end
-    it do
-      should match("0*08").and_interpret_as "dtmf-0 dtmf-star dtmf-0 dtmf-8"
-    end
+    it { should match("0*08").and_interpret_as dtmf_seq %w(0 star 0 8) }
     it { should match("*59").and_interpret_as "dtmf-star dtmf-5 dtmf-9" }
     it { should match("0*0").and_interpret_as "dtmf-0 dtmf-star dtmf-0" }
+    it { should match("10*5").and_interpret_as dtmf_seq %w(1 0 star 5) }
+    it { should match("123*").and_interpret_as dtmf_seq %w(1 2 3 star) }
     it do
-      should match("10*5").and_interpret_as "dtmf-1 dtmf-0 dtmf-star dtmf-5"
-    end
-    it do
-      should match("123*").and_interpret_as "dtmf-1 dtmf-2 dtmf-3 dtmf-star"
-    end
-    it do
-      should match("123*2342").and_interpret_as(
-        "dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-2 dtmf-3 dtmf-4 dtmf-2")
+      should match("123*2342").and_interpret_as dtmf_seq %w(1 2 3 star 2 3 4 2)
     end
 
     it { should potentially_match "*" }

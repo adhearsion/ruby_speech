@@ -321,8 +321,7 @@ module RubySpeech
             end
 
             it "should raise a descriptive exception" do
-              expect { subject }.to
-                raise_error ArgumentError,
+              expect { subject }.to raise_error ArgumentError,
                 'The Ruleref "#lost" is referenced but not defined'
             end
           end

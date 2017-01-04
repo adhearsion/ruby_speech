@@ -57,7 +57,8 @@ module RubySpeech::GRXML::Builtins
   # @option options [#to_i] :maxlength Maximum length for the string of digits.
   # @option options [#to_i] :length Absolute length for the string of digits.
   #
-  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting an integer response.
+  # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting an integer
+  #                                      response.
   #
   # @raise [ArgumentError] if any of the length attributes logically conflict
   #
@@ -126,34 +127,20 @@ module RubySpeech::GRXML::Builtins
 
       rule id: "less_than_one" do
         item { "*" }
-        item do
-          ruleref uri: "#digit_series"
-        end
+        item { ruleref uri: "#digit_series" }
       end
 
       rule id: "one_or_more" do
-        item do
-          ruleref uri: "#digit_series"
-        end
+        item { ruleref uri: "#digit_series" }
         item repeat: "0-1" do
           item { "*" }
-          item repeat: "0-1" do
-            ruleref uri: "#digit_series"
-          end
+          item(repeat: "0-1") { ruleref uri: "#digit_series" }
         end
       end
 
-      rule id: "digit_series" do
-        item repeat: "1-" do
-          ruleref uri: "#digit"
-        end
-      end
+      rule(id: "digit_series") { item(repeat: "1-") { ruleref uri: "#digit" } }
 
-      rule id: "digit" do
-        one_of do
-          0.upto(9) { |d| item { d.to_s } }
-        end
-      end
+      rule(id: "digit") { one_of { 0.upto(9) { |d| item { d.to_s } } } }
     end
   end
 

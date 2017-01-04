@@ -2,12 +2,9 @@
 # frozen_string_literal: true
 
 %w{
-  ruby_speech
   rspec/its
+  coveralls
 }.each { |f| require f }
-
-require 'coveralls'
-Coveralls.wear!
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
@@ -26,3 +23,6 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.treat_symbols_as_metadata_keys_with_true_values = true
 end
+
+Coveralls.wear!
+require "ruby_speech"

@@ -1,15 +1,15 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
+require "coveralls"
+Coveralls.wear!
+
 %w{
   rspec/its
-  coveralls
+  ruby_speech
 }.each { |f| require f }
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
-
-Coveralls.wear!
-require "ruby_speech"
 
 schema_file_path = File.expand_path File.join(__FILE__, '../../assets/synthesis.xsd')
 puts "Loading the SSML Schema from #{schema_file_path}..."

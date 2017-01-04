@@ -2,12 +2,17 @@
 # frozen_string_literal: true
 
 %w{
-  ruby_speech
-  rspec/its
+  simplecov
+  coveralls
 }.each { |f| require f }
 
-require 'coveralls'
-Coveralls.wear!
+SimpleCov.formatters << SimpleCov::Formatter::HTMLFormatter
+SimpleCov.start
+
+%w{
+  rspec/its
+  ruby_speech
+}.each { |f| require f }
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 

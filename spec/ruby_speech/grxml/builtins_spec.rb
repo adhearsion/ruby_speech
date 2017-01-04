@@ -128,12 +128,12 @@ describe RubySpeech::GRXML::Builtins do
       should match("1*01").and_interpret_as "dtmf-1 dtmf-star dtmf-0 dtmf-1"
     end
     it do
-      should match("01*00").and_interpret_as
-        %w(0 1 star 0 0).map { |d| "dtmf-#{d}" }.join " "
+      should match("01*00").and_interpret_as(
+        %w(0 1 star 0 0).map { |d| "dtmf-#{d}" }.join " ")
     end
     it do
-      should match("100000000000*00").and_interpret_as
-        %w(1 0 0 0 0 0 0 0 0 0 0 0 star 0 0).map { |d| "dtmf-#{d}" }.join " "
+      should match("100000000000*00").and_interpret_as(
+        %w(1 0 0 0 0 0 0 0 0 0 0 0 star 0 0).map { |d| "dtmf-#{d}" }.join " ")
     end
     it do
       should match("0*08").and_interpret_as "dtmf-0 dtmf-star dtmf-0 dtmf-8"
@@ -147,8 +147,8 @@ describe RubySpeech::GRXML::Builtins do
       should match("123*").and_interpret_as "dtmf-1 dtmf-2 dtmf-3 dtmf-star"
     end
     it do
-      should match("123*2342").and_interpret_as
-        "dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-2 dtmf-3 dtmf-4 dtmf-2"
+      should match("123*2342").and_interpret_as(
+        "dtmf-1 dtmf-2 dtmf-3 dtmf-star dtmf-2 dtmf-3 dtmf-4 dtmf-2")
     end
 
     it { should potentially_match "*" }

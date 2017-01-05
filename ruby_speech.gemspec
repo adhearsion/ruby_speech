@@ -43,7 +43,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency %q<guard-rake>, [">= 0"]
   s.add_development_dependency %q<rake-compiler>, [">= 0"]
   s.add_development_dependency %q<coveralls>, [">= 0"]
-  s.add_development_dependency %q<simplecov>, [">= 0"]
 
   if RUBY_VERSION < '2.0'
     s.add_development_dependency %q<term-ansicolor>, ["< 1.3.1"]

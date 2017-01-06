@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #
 # Convert a simple DTMF string from "1 star 2" to "dtmf-1 dtmf-star dtmf-2".

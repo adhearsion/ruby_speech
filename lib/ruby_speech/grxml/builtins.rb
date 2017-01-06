@@ -117,30 +117,30 @@ module RubySpeech::GRXML::Builtins
   # @return [RubySpeech::GRXML::Grammar] a grammar for interpreting a numeric value.
   #
   def self.number(options = nil)
-    RubySpeech::GRXML.draw mode: :dtmf, root: "number" do
-      rule id: "number", scope: "public" do
+    RubySpeech::GRXML.draw mode: :dtmf, root: 'number' do
+      rule id: 'number', scope: 'public' do
         one_of do
-          item { ruleref uri: "#less_than_one" }
-          item { ruleref uri: "#one_or_more" }
+          item { ruleref uri: '#less_than_one' }
+          item { ruleref uri: '#one_or_more' }
         end
       end
 
-      rule id: "less_than_one" do
-        item { "*" }
-        item { ruleref uri: "#digit_series" }
+      rule id: 'less_than_one' do
+        item { '*' }
+        item { ruleref uri: '#digit_series' }
       end
 
-      rule id: "one_or_more" do
-        item { ruleref uri: "#digit_series" }
-        item repeat: "0-1" do
-          item { "*" }
-          item(repeat: "0-1") { ruleref uri: "#digit_series" }
+      rule id: 'one_or_more' do
+        item { ruleref uri: '#digit_series' }
+        item repeat: '0-1' do
+          item { '*' }
+          item(repeat: '0-1') { ruleref uri: '#digit_series' }
         end
       end
 
-      rule(id: "digit_series") { item(repeat: "1-") { ruleref uri: "#digit" } }
+      rule(id: 'digit_series') { item(repeat: '1-') { ruleref uri: '#digit' } }
 
-      rule(id: "digit") { one_of { 0.upto(9) { |d| item { d.to_s } } } }
+      rule(id: 'digit') { one_of { 0.upto(9) { |d| item { d.to_s } } } }
     end
   end
 

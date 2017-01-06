@@ -9,5 +9,5 @@
 #                  Example: "dtmf-1 dtmf-star dtmf-2".
 #
 def dtmf_seq(sequence)
-  sequence.map { |d| "dtmf-#{d}" }.join " "
+  sequence.map { |d| "dtmf-#{d}" }.join ' '
 end

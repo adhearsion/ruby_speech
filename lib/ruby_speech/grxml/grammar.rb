@@ -113,6 +113,9 @@ module RubySpeech
       # Replaces rulerefs in the document with a copy of the original rule.
       # Removes all top level rules except the root rule
       #
+      # @raises [MissingReferenceError] if a ruleref references a rule that is
+      #                                 not defined.
+      #
       # @return self
       #
       def inline!
@@ -121,8 +124,8 @@ module RubySpeech
           xpath('//ns:ruleref', ns: GRXML_NAMESPACE).each do |ref|
             rule = rule_with_id ref[:uri].sub(/^#/, '')
             unless rule
-              raise ArgumentError,
-                    "The Ruleref '#{ref[:uri]}' is referenced but not defined"
+              raise MissingReferenceError,
+                    "Ruleref '#{ref[:uri]}' is referenced but not defined"
             end
             ref.swap rule.dup.children
           end

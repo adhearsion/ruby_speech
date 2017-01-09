@@ -40,7 +40,7 @@ addons:
     - libpcre3-dev
 before_install:
   - gem install bundler
-before_script: export JRUBY_OPTS="--server -J-Xss1024k -J-Xmx652m -J-XX:+UseConcMarkSweepGC"
+before_script: export JRUBY_OPTS="--server --debug -J-Xss1024k -J-Xmx652m -J-XX:+UseConcMarkSweepGC"
 
 notifications:
   irc: "irc.freenode.org#adhearsion"

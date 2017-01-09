@@ -308,7 +308,46 @@ module RubySpeech
               end.inline
             end
 
-            pending 'should raise an Exception'
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
+          end
+
+          context 'in a cross-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#007'
+                end
+                rule id: '007' do
+                  one_of do
+                    item do
+                      ruleref uri: '#bond'
+                    end
+                  end
+                end
+                rule id: 'bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#james_bond'
+                    end
+                  end
+                end
+                rule id: 'james_bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#007'
+                    end
+                  end
+                end
+              end.inline
+            end
+
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
           end
 
           context 'with an invalid-reference' do

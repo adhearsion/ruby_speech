@@ -5,6 +5,7 @@ module RubySpeech
   module GRXML
     InvalidChildError = Class.new StandardError
     MissingReferenceError = Class.new StandardError
+    ReferentialLoopError = Class.new StandardError
 
     GRXML_NAMESPACE = 'http://www.w3.org/2001/06/grammar'
 

@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/ruby_speech.png)](https://rubygems.org/gems/ruby_speech)
 [![Build Status](https://secure.travis-ci.org/adhearsion/ruby_speech.png?branch=develop)](http://travis-ci.org/adhearsion/ruby_speech)
 [![Dependency Status](https://gemnasium.com/adhearsion/ruby_speech.png?travis)](https://gemnasium.com/adhearsion/ruby_speech)
-[![Code Climate](https://codeclimate.com/github/benlangfeld/ruby_speech.png)](https://codeclimate.com/github/benlangfeld/ruby_speech)
+[![Code Climate](https://codeclimate.com/github/adhearsion/ruby_speech.png)](https://codeclimate.com/github/adhearsion/ruby_speech)
 [![Coverage Status](https://coveralls.io/repos/adhearsion/ruby_speech/badge.png?branch=develop)](https://coveralls.io/r/adhearsion/ruby_speech)
 
 # RubySpeech

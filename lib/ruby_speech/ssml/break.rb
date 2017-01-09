@@ -50,7 +50,6 @@ module RubySpeech
 
       def <<(*args)
         raise InvalidChildError, "A Break cannot contain children"
-        super
       end
 
       def eql?(o)

@@ -227,6 +227,41 @@ module RubySpeech
           end
         end
 
+        context "with a grammar that takes a double digit and a single digit that is a partial match" do
+          let(:grammar) do
+            GRXML.draw :mode => :dtmf, :root => 'digits' do
+              rule :id => 'digits' do
+                one_of do
+                  item { '6' }
+                  item { '6 7' }
+                end
+              end
+            end
+          end
+
+          it "should maximally match '6 7'" do
+            expected_match = GRXML::MaxMatch.new :mode        => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '67',
+                                              :interpretation => 'dtmf-6 dtmf-7'
+            subject.match('67').should == expected_match
+          end
+
+          it "should match '6'" do
+            expected_match = GRXML::Match.new :mode        => :dtmf,
+                                              :confidence     => 1,
+                                              :utterance      => '6',
+                                              :interpretation => 'dtmf-6'
+            subject.match('6').should == expected_match
+          end
+
+          %w{* # 1 2 3 4 5 8 9 10 66 26 61}.each do |input|
+            it "should not match '#{input}'" do
+              subject.match(input).should == GRXML::NoMatch.new
+            end
+          end
+        end
+
         context "with a grammar that takes a double digit alternative" do
           let(:grammar) do
             GRXML.draw :mode => :dtmf, :root => 'digits' do

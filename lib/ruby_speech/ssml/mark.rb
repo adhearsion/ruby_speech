@@ -34,7 +34,6 @@ module RubySpeech
 
       def <<(*args)
         raise InvalidChildError, "A Mark cannot contain children"
-        super
       end
 
       def eql?(o)

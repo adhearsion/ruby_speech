@@ -6,7 +6,7 @@ require 'ruby_speech/ruby_speech'
 
 if RUBY_PLATFORM =~ /java/
   require 'jruby'
-  com.benlangfeld.ruby_speech.RubySpeechService.new.basicLoad(JRuby.runtime)
+  com.adhearsion.ruby_speech.RubySpeechService.new.basicLoad(JRuby.runtime)
 end
 
 module RubySpeech

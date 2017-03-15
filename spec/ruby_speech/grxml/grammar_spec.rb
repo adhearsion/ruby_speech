@@ -232,6 +232,140 @@ module RubySpeech
           grammar.inline!.should == inline_grammar
           grammar.should == inline_grammar
         end
+
+        context 'nested' do
+          let :expected_doc do
+            RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+              rule id: :main, scope: 'public' do
+                string "How about an oatmeal cookie?  You'll feel better."
+              end
+            end
+          end
+
+          context '1 level deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+
+          context '2 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+
+          context '3 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  ruleref uri: '#rabbit_hole4'
+                end
+                rule id: 'rabbit_hole4' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { should eq expected_doc }
+          end
+
+          context 'in a self-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#paradox'
+                end
+                rule id: 'paradox' do
+                  ruleref uri: '#paradox'
+                end
+              end.inline
+            end
+
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
+          end
+
+          context 'in a cross-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#007'
+                end
+                rule id: '007' do
+                  one_of do
+                    item do
+                      ruleref uri: '#bond'
+                    end
+                  end
+                end
+                rule id: 'bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#james_bond'
+                    end
+                  end
+                end
+                rule id: 'james_bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#007'
+                    end
+                  end
+                end
+              end.inline
+            end
+
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
+          end
+
+          context 'with an invalid-reference' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#lost'
+                end
+              end.inline
+            end
+
+            it 'should raise a descriptive exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::MissingReferenceError,
+                                "Ruleref '#lost' is referenced but not defined"
+            end
+          end
+        end
       end
 
       describe "#tokenize!" do

@@ -69,19 +69,39 @@ module RubySpeech
         drawn_doc.should == expected_doc
       end
 
-      it "should allow accessing methods defined outside the block" do
-        def foo
-          'bar'
+      context 'accessing methods defined outside the block' do
+
+        it 'should be allowed at the top level' do
+          def foo
+            'bar'
+          end
+          drawn_doc = GRXML.draw do
+            rule id: foo
+          end
+
+          expected_doc = GRXML::Grammar.new doc
+          rule = GRXML::Rule.new(doc, id: foo)
+          expected_doc << rule
+          drawn_doc.should == expected_doc
         end
 
-        drawn_doc = GRXML.draw do
-          rule :id => foo
-        end
+        it 'should be allowed inside nested blocks' do
+          def foo
+            'bar'
+          end
+          drawn_doc = GRXML.draw do
+            rule id: 'root' do
+              item { foo }
+            end
+          end
 
-        expected_doc = GRXML::Grammar.new doc
-        rule = GRXML::Rule.new(doc, :id => foo)
-        expected_doc << rule
-        drawn_doc.should == expected_doc
+          expected_doc = GRXML::Grammar.new doc
+          rule = GRXML::Rule.new(doc, id: 'root')
+          item = GRXML::Item.new(doc, content: foo)
+          rule << item
+          expected_doc << rule
+          drawn_doc.should == expected_doc
+        end
       end
 
       it "should raise error if given an empty rule" do

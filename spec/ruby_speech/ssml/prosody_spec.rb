@@ -16,7 +16,7 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -35,7 +35,7 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -174,7 +174,7 @@ module RubySpeech
         context "with a valid value" do
           before { subject.duration = 3 }
 
-          its(:duration) { should == 3 }
+          its(:duration) { should eql 3 }
         end
 
         context "with a negative value" do

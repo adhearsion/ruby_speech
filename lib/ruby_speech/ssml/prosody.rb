@@ -134,7 +134,8 @@ module RubySpeech
       # @return [Integer]
       #
       def duration
-        read_attr :duration, :to_i
+        value = get_time_attribute :duration
+        value.round if value
       end
 
       ##

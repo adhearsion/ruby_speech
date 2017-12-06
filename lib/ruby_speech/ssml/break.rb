@@ -36,7 +36,7 @@ module RubySpeech
       # @return [Float]
       #
       def time
-        read_attr :time, :to_f
+        get_time_attribute :time
       end
 
       ##

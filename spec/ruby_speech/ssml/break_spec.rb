@@ -21,14 +21,28 @@ module RubySpeech
       end
 
       describe "from a document" do
-        let(:document) { '<break strength="strong" time="3"/>' }
-
         subject { Element.import document }
 
-        it { should be_instance_of Break }
+        context 'with time of 3' do
+          let(:document) { '<break strength="strong" time="3"/>' }
 
-        its(:strength)  { should == :strong }
-        its(:time)      { should == 3 }
+          it { should be_instance_of Break }
+
+          its(:strength)  { should == :strong }
+          its(:time)      { should eql 3.0 }
+        end
+
+        context 'with time of 4s' do
+          let(:document) { '<break time="4s"/>' }
+
+          its(:time)      { should eql 4.0 }
+        end
+
+        context 'with time of 5555ms' do
+          let(:document) { '<break time="5555ms"/>' }
+
+          its(:time)      { should eql 5.555 }
+        end
       end
 
       describe "#strength" do
@@ -51,10 +65,16 @@ module RubySpeech
       end
 
       describe "#time" do
-        context "with a valid value" do
+        context "with a valid whole seconds value of 3" do
           before { subject.time = 3 }
 
-          its(:time) { should == 3 }
+          its(:time) { should eql 3.0 }
+        end
+
+        context "with a valid fractional seconds value of 3.5" do
+          before { subject.time = 3.5 }
+
+          its(:time) { should eql 3.5 }
         end
 
         context "with a negative value" do

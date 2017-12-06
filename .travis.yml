@@ -13,20 +13,12 @@ matrix:
     - rvm: jruby-1.7
       jdk: openjdk7
     - rvm: jruby-1.7
-      jdk: oraclejdk7
-    - rvm: jruby-1.7
       jdk: oraclejdk8
     - rvm: jruby-head
-      jdk: openjdk7
-    - rvm: jruby-head
-      jdk: oraclejdk7
-    - rvm: jruby-head
       jdk: oraclejdk8
-    - rvm: jruby-9.0.4.0
+    - rvm: jruby-9.1.13.0
       jdk: openjdk7
-    - rvm: jruby-9.0.4.0
-      jdk: oraclejdk7
-    - rvm: jruby-9.0.4.0
+    - rvm: jruby-9.1.13.0
       jdk: oraclejdk8
   allow_failures:
     - rvm: rbx-2
@@ -40,7 +32,7 @@ addons:
     - libpcre3-dev
 before_install:
   - gem install bundler
-before_script: export JRUBY_OPTS="--server --debug -J-Xss1024k -J-Xmx652m -J-XX:+UseConcMarkSweepGC"
+env: JRUBY_OPTS="--server --debug -J-Xss1024k -J-Xmx652m -J-XX:+UseConcMarkSweepGC"
 
 notifications:
   irc: "irc.freenode.org#adhearsion"

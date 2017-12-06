@@ -18,9 +18,9 @@ matrix:
       jdk: openjdk7
     - rvm: jruby-head
       jdk: oraclejdk8
-    - rvm: jruby-9.0.4.0
+    - rvm: jruby-9.1.13.0
       jdk: openjdk7
-    - rvm: jruby-9.0.4.0
+    - rvm: jruby-9.1.13.0
       jdk: oraclejdk8
   allow_failures:
     - rvm: rbx-2

@@ -113,17 +113,39 @@ module RubySpeech
       # Replaces rulerefs in the document with a copy of the original rule.
       # Removes all top level rules except the root rule
       #
+      # @raises [MissingReferenceError] if a ruleref references a rule that is
+      #                                 not defined.
+      # @raises [ReferentialLoopError] if rulerefs create a referencial cycle.
+      #
       # @return self
       #
       def inline!
-        xpath("//ns:ruleref", :ns => GRXML_NAMESPACE).each do |ref|
-          rule = rule_with_id ref[:uri].sub(/^#/, '')
-          ref.swap rule.dup.children
+        previous_uris = {}
+        loop do
+          rule = nil
+          uris = {}
+          xpath('//ns:ruleref', ns: GRXML_NAMESPACE).each do |ref|
+            uri = ref[:uri].sub(/^#/, '')
+            uris[uri] = 1
+            rule = rule_with_id uri
+            unless rule
+              raise MissingReferenceError,
+                    "Ruleref '##{uri}' is referenced but not defined"
+            end
+            ref.swap rule.dup.children
+          end
+          break unless rule
+          if previous_uris.keys.eql? uris.keys
+            raise ReferentialLoopError,
+                  'GRXML document contains cycles with ruleref(s): ' <<
+                  uris.keys.join(', ')
+          end
+          previous_uris = uris
         end
 
         query = "./ns:rule[@id!='#{root}']"
         query += "|./ns:rule[@ns:id!='#{root}']" if Nokogiri.jruby?
-        non_root_rules = xpath query, :ns => namespace_href
+        non_root_rules = xpath query, ns: namespace_href
         non_root_rules.remove
 
         self

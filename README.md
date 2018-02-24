@@ -1,8 +1,8 @@
 [![Gem Version](https://badge.fury.io/rb/ruby_speech.png)](https://rubygems.org/gems/ruby_speech)
-[![Build Status](https://secure.travis-ci.org/benlangfeld/ruby_speech.png?branch=develop)](http://travis-ci.org/benlangfeld/ruby_speech)
-[![Dependency Status](https://gemnasium.com/benlangfeld/ruby_speech.png?travis)](https://gemnasium.com/benlangfeld/ruby_speech)
-[![Code Climate](https://codeclimate.com/github/benlangfeld/ruby_speech.png)](https://codeclimate.com/github/benlangfeld/ruby_speech)
-[![Coverage Status](https://coveralls.io/repos/benlangfeld/ruby_speech/badge.png?branch=develop)](https://coveralls.io/r/benlangfeld/ruby_speech)
+[![Build Status](https://secure.travis-ci.org/adhearsion/ruby_speech.png?branch=develop)](http://travis-ci.org/adhearsion/ruby_speech)
+[![Dependency Status](https://gemnasium.com/adhearsion/ruby_speech.png?travis)](https://gemnasium.com/adhearsion/ruby_speech)
+[![Code Climate](https://codeclimate.com/github/adhearsion/ruby_speech.png)](https://codeclimate.com/github/adhearsion/ruby_speech)
+[![Coverage Status](https://coveralls.io/repos/adhearsion/ruby_speech/badge.png?branch=develop)](https://coveralls.io/r/adhearsion/ruby_speech)
 
 # RubySpeech
 RubySpeech is a library for constructing and parsing Text to Speech (TTS) and Automatic Speech Recognition (ASR) documents such as [SSML](http://www.w3.org/TR/speech-synthesis), [GRXML](http://www.w3.org/TR/speech-grammar/) and [NLSML](http://www.w3.org/TR/nl-spec/). Such documents can be constructed to be processed by TTS and ASR engines, parsed as the result from such, or used in the implementation of such engines.
@@ -331,7 +331,7 @@ document.best_interpretation # => {
         }
 ```
 
-Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_speech/master/frames) for more
+Check out the [YARD documentation](http://rdoc.info/github/adhearsion/ruby_speech/master/frames) for more
 
 ## Features:
 ### SSML
@@ -374,10 +374,10 @@ Check out the [YARD documentation](http://rdoc.info/github/benlangfeld/ruby_spee
 * `<lexicon/>`
 
 ## Links:
-* [Source](https://github.com/benlangfeld/ruby_speech)
+* [Source](https://github.com/adhearsion/ruby_speech)
 * [Documentation](http://rdoc.info/gems/ruby_speech/frames)
-* [Bug Tracker](https://github.com/benlangfeld/ruby_speech/issues)
-* [CI](https://travis-ci.org/#!/benlangfeld/ruby_speech)
+* [Bug Tracker](https://github.com/adhearsion/ruby_speech/issues)
+* [CI](https://travis-ci.org/#!/adhearsion/ruby_speech)
 
 ## Note on Patches/Pull Requests
 

@@ -102,27 +102,29 @@ module RubySpeech
       end
 
       ##
-      # A change in the speaking rate for the contained text. Legal values are: a relative change or "x-slow", "slow", "medium", "fast", "x-fast", or "default". Labels "x-slow" through "x-fast" represent a sequence of monotonically non-decreasing speaking rates. When a number is used to specify a relative change it acts as a multiplier of the default rate. For example, a value of 1 means no change in speaking rate, a value of 2 means a speaking rate twice the default rate, and a value of 0.5 means a speaking rate of half the default rate. The default rate for a voice depends on the language and dialect and on the personality of the voice. The default rate for a voice should be such that it is experienced as a normal speaking rate for the voice when reading aloud text. Since voices are processor-specific, the default rate will be as well.
+      # A change in the speaking rate for the contained text. Legal values are: a relative change or "x-slow", "slow", "medium", "fast", "x-fast", or "default". Labels "x-slow" through "x-fast" represent a sequence of monotonically non-decreasing speaking rates. When a number is used to specify a relative change it acts as a multiplier of the default rate. For example, a value of 1 means no change in speaking rate, a value of 2 means a speaking rate twice the default rate, and a value of 0.5 means a speaking rate of half the default rate. Further, changes can be specified as percentages (e.g. '10%' or '+15%'), but these are the only string entries permitted. The default rate for a voice depends on the language and dialect and on the personality of the voice. The default rate for a voice should be such that it is experienced as a normal speaking rate for the voice when reading aloud text. Since voices are processor-specific, the default rate will be as well.
       #
-      # @return [Symbol, Float]
+      # @return [Symbol, Float, String]
       #
       def rate
         value = read_attr :rate
         return unless value
         if VALID_RATES.include?(value.to_sym)
           value.to_sym
+        elsif value.include? "%"
+          value
         else
           value.to_f
         end
       end
 
       ##
-      # @param [Symbol, Numeric] v
+      # @param [Symbol, Numeric, String] v
       #
       # @raises ArgumentError if v is not either a positive Numeric or one of VALID_RATES
       #
       def rate=(v)
-        raise ArgumentError, "You must specify a valid rate ([positive-number](multiplier), #{VALID_RATES.map(&:inspect).join ', '})" unless (v.is_a?(Numeric) && v >= 0) || VALID_RATES.include?(v)
+        raise ArgumentError, "You must specify a valid rate ([positive-number](multiplier), #{VALID_RATES.map(&:inspect).join ', '})" unless (v.is_a?(Numeric) && v >= 0) || VALID_RATES.include?(v) || (v.is_a?(String) && v.include?("%"))
         self[:rate] = v
       end
 
@@ -132,7 +134,8 @@ module RubySpeech
       # @return [Integer]
       #
       def duration
-        read_attr :duration, :to_i
+        value = get_time_attribute :duration
+        value.round if value
       end
 
       ##

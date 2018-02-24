@@ -1,7 +1,13 @@
-require 'ruby_speech'
+# encoding: utf-8
+# frozen_string_literal: true
 
-require 'coveralls'
+require "coveralls"
 Coveralls.wear!
+
+%w{
+  rspec/its
+  ruby_speech
+}.each { |f| require f }
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 

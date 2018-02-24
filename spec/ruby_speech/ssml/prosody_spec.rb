@@ -16,7 +16,7 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -35,7 +35,7 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -149,6 +149,24 @@ module RubySpeech
           it "with a negative value" do
             lambda { subject.rate = -100 }.should raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
           end
+
+          describe "with a percentage" do
+            before { subject.rate = "22.5%" }
+
+            its(:rate) { should == "22.5%" }
+          end
+
+          describe "with a percentage and a plus sign" do
+            before { subject.rate = "+22.5%" }
+
+            its(:rate) { should == "+22.5%" }
+          end
+
+          describe "with a percentage and a minus sign" do
+            before { subject.rate = "-22.5%" }
+
+            its(:rate) { should == "-22.5%" }
+          end
         end
       end
 
@@ -156,7 +174,7 @@ module RubySpeech
         context "with a valid value" do
           before { subject.duration = 3 }
 
-          its(:duration) { should == 3 }
+          its(:duration) { should eql 3 }
         end
 
         context "with a negative value" do

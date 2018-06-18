@@ -16,7 +16,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:emphasis).should == Emphasis
+        expect(Element.class_from_registration(:emphasis)).to eq(Emphasis)
       end
 
       describe "from a document" do
@@ -24,7 +24,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Emphasis }
+        it { is_expected.to be_instance_of Emphasis }
 
         its(:level) { should == :strong }
       end
@@ -35,78 +35,78 @@ module RubySpeech
         its(:level) { should == :strong }
 
         it "with a valid level" do
-          lambda { subject.level = :strong }.should_not raise_error
-          lambda { subject.level = :moderate }.should_not raise_error
-          lambda { subject.level = :none }.should_not raise_error
-          lambda { subject.level = :reduced }.should_not raise_error
+          expect { subject.level = :strong }.not_to raise_error
+          expect { subject.level = :moderate }.not_to raise_error
+          expect { subject.level = :none }.not_to raise_error
+          expect { subject.level = :reduced }.not_to raise_error
         end
 
         it "with an invalid level" do
-          lambda { subject.level = :something }.should raise_error(ArgumentError, "You must specify a valid level (:strong, :moderate, :none, :reduced)")
+          expect { subject.level = :something }.to raise_error(ArgumentError, "You must specify a valid level (:strong, :moderate, :none, :reduced)")
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content and level are the same" do
-          Emphasis.new(doc, :level => :strong, :content => "Hello there").should == Emphasis.new(doc, :level => :strong, :content => "Hello there")
+          expect(Emphasis.new(doc, :level => :strong, :content => "Hello there")).to eq(Emphasis.new(doc, :level => :strong, :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Emphasis.new(doc, :content => "Hello").should_not == Emphasis.new(doc, :content => "Hello there")
+            expect(Emphasis.new(doc, :content => "Hello")).not_to eq(Emphasis.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the level is different" do
           it "should not be equal" do
-            Emphasis.new(doc, :level => :strong).should_not == Emphasis.new(doc, :level => :reduced)
+            expect(Emphasis.new(doc, :level => :strong)).not_to eq(Emphasis.new(doc, :level => :reduced))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new(doc) }.should_not raise_error
+          expect { subject << Audio.new(doc) }.not_to raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new(doc) }.should_not raise_error
+          expect { subject << Break.new(doc) }.not_to raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new(doc) }.should_not raise_error
+          expect { subject << Emphasis.new(doc) }.not_to raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new(doc) }.should_not raise_error
+          expect { subject << Mark.new(doc) }.not_to raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new(doc) }.should_not raise_error
+          expect { subject << Phoneme.new(doc) }.not_to raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new(doc) }.should_not raise_error
+          expect { subject << Prosody.new(doc) }.not_to raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
+          expect { subject << SayAs.new(doc, :interpret_as => :foo) }.not_to raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new(doc) }.should_not raise_error
+          expect { subject << Sub.new(doc) }.not_to raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new(doc) }.should_not raise_error
+          expect { subject << Voice.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "An Emphasis can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "An Emphasis can only accept String, Audio, Break, Emphasis, Mark, Phoneme, Prosody, SayAs, Sub, Voice as children")
         end
       end
     end # Emphasis

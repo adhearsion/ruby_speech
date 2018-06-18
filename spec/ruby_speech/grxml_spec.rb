@@ -5,11 +5,11 @@ module RubySpeech
     describe ".from_uri" do
       context "with a builtin URI" do
         it "should fetch a simple builtin grammar by type" do
-          subject.from_uri("builtin:dtmf/phone").should == GRXML::Builtins.phone
+          expect(subject.from_uri("builtin:dtmf/phone")).to eq(GRXML::Builtins.phone)
         end
 
         it "should fetch a parameterized builtin grammar" do
-          subject.from_uri("builtin:dtmf/boolean?y=3;n=4").should == GRXML::Builtins.boolean(y: 3, n: 4)
+          expect(subject.from_uri("builtin:dtmf/boolean?y=3;n=4")).to eq(GRXML::Builtins.boolean(y: 3, n: 4))
         end
 
         context "for speech" do
@@ -36,26 +36,26 @@ module RubySpeech
       let(:doc) { Nokogiri::XML::Document.new }
 
       it "should create a GRXML document" do
-        GRXML.draw.should == GRXML::Grammar.new(doc)
-        GRXML.draw.document.xpath('ns:grammar', ns: 'http://www.w3.org/2001/06/grammar').size.should == 1
+        expect(GRXML.draw).to eq(GRXML::Grammar.new(doc))
+        expect(GRXML.draw.document.xpath('ns:grammar', ns: 'http://www.w3.org/2001/06/grammar').size).to eq(1)
       end
 
       context "with a root rule name specified but not found" do
         it "should raise an error" do
-          lambda do
+          expect do
             GRXML.draw :root => 'foo' do
               rule :id => 'bar' do
                 '6'
               end
             end
-          end.should raise_error(GRXML::InvalidChildError, "A GRXML document must have a rule matching the root rule name")
+          end.to raise_error(GRXML::InvalidChildError, "A GRXML document must have a rule matching the root rule name")
         end
       end
 
       # TODO: Maybe GRXML#draw should create a Rule to pass the string
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
-          lambda { GRXML.draw { "Hello Fred" }}.should raise_error(GRXML::InvalidChildError, "A Grammar can only accept Rule and Tag as children")
+          expect { GRXML.draw { "Hello Fred" }}.to raise_error(GRXML::InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 
@@ -66,7 +66,7 @@ module RubySpeech
         rule = GRXML::Rule.new(doc, :id => "main")
         rule << "Hello Fred"
         expected_doc << rule
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       it "should allow accessing methods defined outside the block" do
@@ -81,12 +81,12 @@ module RubySpeech
         expected_doc = GRXML::Grammar.new doc
         rule = GRXML::Rule.new(doc, :id => foo)
         expected_doc << rule
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       it "should raise error if given an empty rule" do
         pending 'Reject empty rules -- http://www.w3.org/TR/2002/CR-speech-grammar-20020626/#S3.1 http://www.w3.org/Voice/2003/srgs-ir/test/rule-no-empty.grxml'
-        lambda { GRXML.draw { rule :id => 'main' }}.should raise_error
+        expect { GRXML.draw { rule :id => 'main' }}.to raise_error
       end
 
       it "should allow nested block return values" do
@@ -97,7 +97,7 @@ module RubySpeech
         end
         expected_doc = GRXML::Grammar.new doc
         expected_doc << GRXML::Rule.new(doc, :scope => :public, :id => :main, :content => "Hello Fred")
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       it "should allow nested GRXML elements" do
@@ -117,7 +117,7 @@ module RubySpeech
         rule << oneof
         expected_doc = GRXML::Grammar.new doc
         expected_doc << rule
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       # TODO: maybe turn a rule embedded in anthoer rule into a ruleref??
@@ -157,7 +157,7 @@ module RubySpeech
           end
 
           it "should embed the document" do
-            doc2.should == expected_doc
+            expect(doc2).to eq(expected_doc)
           end
 
           context "of different modes (dtmf in voice or vice-versa)" do
@@ -176,7 +176,7 @@ module RubySpeech
             end
 
             it "should raise an exception" do
-              lambda { voice_doc }.should raise_error(GRXML::InvalidChildError, "Embedded grammars must have the same mode")
+              expect { voice_doc }.to raise_error(GRXML::InvalidChildError, "Embedded grammars must have the same mode")
             end
           end
         end
@@ -198,7 +198,7 @@ module RubySpeech
             end
           end
 
-          doc.should == expected_doc
+          expect(doc).to eq(expected_doc)
         end
 
         it "strings" do
@@ -216,7 +216,7 @@ module RubySpeech
             end
           end
 
-          doc.should == expected_doc
+          expect(doc).to eq(expected_doc)
         end
       end
 
@@ -230,7 +230,7 @@ module RubySpeech
         3.times do
           expected_doc << GRXML::Rule.new(doc, :native_content => "I <3 nachos.")
         end
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       # TODO: verfify rule is in document if named in a ruleref
@@ -285,7 +285,7 @@ module RubySpeech
         oneof << GRXML::Item.new(doc, :content => "single item")
         rule << oneof
         expected_doc << rule
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       describe "importing nested tags" do
@@ -307,10 +307,10 @@ module RubySpeech
         subject { import }
 
         it "should work" do
-          lambda { subject }.should_not raise_error
+          expect { subject }.not_to raise_error
         end
 
-        it { should be_a GRXML::Grammar }
+        it { is_expected.to be_a GRXML::Grammar }
 
         its(:children) { should == [rule] }
 
@@ -331,7 +331,7 @@ module RubySpeech
         tag = GRXML::Tag.new doc
         item << tag
 
-        item.children(:item, :weight => 0.5).should == [item1]
+        expect(item.children(:item, :weight => 0.5)).to eq([item1])
       end
 
       it "should be able to traverse up the tree" do
@@ -344,13 +344,13 @@ module RubySpeech
         end
 
         rule = grammar.children.first
-        rule.parent.should == grammar
+        expect(rule.parent).to eq(grammar)
 
         item = rule.children.first
-        item.parent.should == rule
+        expect(item.parent).to eq(rule)
 
         text = item.nokogiri_children.first
-        text.parent.should == item
+        expect(text.parent).to eq(item)
       end
     end
   end # GRXML

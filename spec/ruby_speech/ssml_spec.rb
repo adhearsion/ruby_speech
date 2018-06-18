@@ -7,40 +7,40 @@ module RubySpeech
 
       it "should create an SSML document" do
         expected_doc = SSML::Speak.new doc
-        SSML.draw.should == expected_doc
-        SSML.draw.document.xpath('ns:speak', ns: 'http://www.w3.org/2001/10/synthesis').size.should == 1
+        expect(SSML.draw).to eq(expected_doc)
+        expect(SSML.draw.document.xpath('ns:speak', ns: 'http://www.w3.org/2001/10/synthesis').size).to eq(1)
       end
 
       it "can draw with a language" do
         expected_doc = SSML::Speak.new doc, language: 'pt-BR'
-        SSML.draw(language: 'pt-BR').should == expected_doc
+        expect(SSML.draw(language: 'pt-BR')).to eq(expected_doc)
       end
 
       describe "when the return value of the block is a string" do
         it "should be inserted into the document" do
           expected_doc = SSML::Speak.new(doc, :content => "Hi, I'm Fred")
-          SSML.draw { "Hi, I'm Fred" }.should == expected_doc
+          expect(SSML.draw { "Hi, I'm Fred" }).to eq(expected_doc)
         end
       end
 
       describe "when the return value of the block is not a string" do
         it "should not be inserted into the document" do
           expected_doc = SSML::Speak.new doc
-          SSML.draw { :foo }.should == expected_doc
+          expect(SSML.draw { :foo }).to eq(expected_doc)
         end
       end
 
       describe "when inserting a string" do
         it "should work" do
           expected_doc = SSML::Speak.new(doc, :content => "Hi, I'm Fred")
-          SSML.draw { string "Hi, I'm Fred" }.should == expected_doc
+          expect(SSML.draw { string "Hi, I'm Fred" }).to eq(expected_doc)
         end
       end
 
       it "should allow other SSML elements to be inserted in the document" do
         expected_doc = SSML::Speak.new doc
         expected_doc << SSML::Voice.new(doc, :gender => :male, :name => 'fred')
-        SSML.draw { voice :gender => :male, :name => 'fred' }.should == expected_doc
+        expect(SSML.draw { voice :gender => :male, :name => 'fred' }).to eq(expected_doc)
       end
 
       it "should allow nested block return values" do
@@ -52,7 +52,7 @@ module RubySpeech
             "Hi, I'm Fred."
           end
         end
-        doc.should == expected_doc
+        expect(doc).to eq(expected_doc)
       end
 
       it "should allow nested SSML elements" do
@@ -69,7 +69,7 @@ module RubySpeech
         voice << SSML::SayAs.new(doc, :interpret_as => 'date', :format => 'dmy', :content => "01/02/1960")
         expected_doc = SSML::Speak.new doc
         expected_doc << voice
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       it "should allow accessing methods defined outside the block" do
@@ -78,7 +78,7 @@ module RubySpeech
         end
 
         expected_doc = SSML::Speak.new doc, :content => foo
-        SSML.draw { string foo }.should == expected_doc
+        expect(SSML.draw { string foo }).to eq(expected_doc)
       end
 
       describe 'cloning' do
@@ -92,15 +92,15 @@ module RubySpeech
           subject { original.clone }
 
           it 'should match the contents of the original document' do
-            subject.to_s.should == original.to_s
+            expect(subject.to_s).to eq(original.to_s)
           end
 
           it 'should match the class of the original document' do
-            subject.class.should == original.class
+            expect(subject.class).to eq(original.class)
           end
 
           it 'should be equal to the original document' do
-            subject.should == original
+            expect(subject).to eq(original)
           end
         end
       end
@@ -129,7 +129,7 @@ module RubySpeech
             end
           end
 
-          doc2.should == expected_doc
+          expect(doc2).to eq(expected_doc)
         end
 
         it "SSML elements" do
@@ -149,7 +149,7 @@ module RubySpeech
             end
           end
 
-          doc.should == expected_doc
+          expect(doc).to eq(expected_doc)
         end
 
         it "strings" do
@@ -167,7 +167,7 @@ module RubySpeech
             end
           end
 
-          doc.should == expected_doc
+          expect(doc).to eq(expected_doc)
         end
       end
 
@@ -180,7 +180,7 @@ module RubySpeech
         2.times do
           expected_doc << SSML::Voice.new(doc, :native_content => "I <3 nachos.")
         end
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
 
       it "should allow all permutations of possible nested SSML elements" do
@@ -270,7 +270,7 @@ module RubySpeech
         voice << SSML::Prosody.new(doc, :rate => :fast, :content => "And yet so spritely!")
         voice << SSML::Voice.new(doc, :age => 12, :content => "And I'm young Fred")
         expected_doc << voice
-        drawn_doc.should == expected_doc
+        expect(drawn_doc).to eq(expected_doc)
       end
     end
 
@@ -293,10 +293,10 @@ module RubySpeech
       subject { import }
 
       it "should work" do
-        lambda { subject }.should_not raise_error
+        expect { subject }.not_to raise_error
       end
 
-      it { should be_a SSML::Speak }
+      it { is_expected.to be_a SSML::Speak }
 
       its(:children) { should == [voice] }
 

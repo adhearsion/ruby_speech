@@ -1,4 +1,5 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
+  * Feature: Loosen and bump Nokogiri version to ~>1.8, >=1.8.3
 
 # [2.4.0](https://github.com/benlangfeld/ruby_speech/compare/v2.3.2...v2.4.0) - [2018-02-23](https://rubygems.org/gems/ruby_speech/versions/2.4.0)
   * Feature: Permit percentage rate values for prosody tags

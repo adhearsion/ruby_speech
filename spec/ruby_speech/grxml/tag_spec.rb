@@ -10,7 +10,7 @@ module RubySpeech
       its(:name) { should == 'tag' }
 
       it 'registers itself' do
-        Element.class_from_registration(:tag).should == Tag
+        expect(Element.class_from_registration(:tag)).to eq(Tag)
       end
 
       describe "from a document" do
@@ -18,26 +18,26 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Tag }
+        it { is_expected.to be_instance_of Tag }
 
         its(:content) { should == 'hello' }
       end
 
       describe "comparing objects" do
         it "should be equal if the content is the same" do
-          Tag.new(doc, :content => "hello").should == Tag.new(doc, :content => "hello")
+          expect(Tag.new(doc, :content => "hello")).to eq(Tag.new(doc, :content => "hello"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Tag.new(doc, :content => "Hello").should_not == Tag.new(doc, :content => "Hello there")
+            expect(Tag.new(doc, :content => "Hello")).not_to eq(Tag.new(doc, :content => "Hello there"))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
       end
     end # Tag

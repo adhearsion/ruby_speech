@@ -25,6 +25,8 @@ if RUBY_PLATFORM =~ /java/
   require 'rake/javaextensiontask'
   Rake::JavaExtensionTask.new 'ruby_speech' do |ext|
     ext.lib_dir = 'lib/ruby_speech'
+    ext.source_version = '1.6'
+    ext.target_version = '1.6'
   end
 else
   require 'rake/extensiontask'

@@ -13,7 +13,7 @@ module RubySpeech
       its(:repeat)  { should == 1 }
 
       it 'registers itself' do
-        Element.class_from_registration(:item).should == Item
+        expect(Element.class_from_registration(:item)).to eq(Item)
       end
 
       describe "everything from a document" do
@@ -21,7 +21,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Item }
+        it { is_expected.to be_instance_of Item }
 
         its(:weight)  { should == 1.1 }
         its(:repeat)  { should == 1 }
@@ -54,16 +54,16 @@ module RubySpeech
           its(:weight) { should == 1.1 }
 
           it "with valid value" do
-            lambda { subject.weight = 1 }.should_not raise_error
-            lambda { subject.weight = 1.0 }.should_not raise_error
-            lambda { subject.weight = 0.1 }.should_not raise_error
-            lambda { subject.weight = '.1' }.should_not raise_error
-            lambda { subject.weight = '1.' }.should_not raise_error
+            expect { subject.weight = 1 }.not_to raise_error
+            expect { subject.weight = 1.0 }.not_to raise_error
+            expect { subject.weight = 0.1 }.not_to raise_error
+            expect { subject.weight = '.1' }.not_to raise_error
+            expect { subject.weight = '1.' }.not_to raise_error
           end
 
           it "with an invalid value" do
-            lambda { subject.weight = 'one' }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
-            lambda { subject.weight = -1 }.should raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
+            expect { subject.weight = 'one' }.to raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
+            expect { subject.weight = -1 }.to raise_error(ArgumentError, "A Item's weight attribute must be a positive floating point number")
           end
         end
       end
@@ -87,8 +87,8 @@ module RubySpeech
           end
 
           it "invalid values" do
-            lambda { subject.repeat = -1 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = 'one' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = -1 }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = 'one' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
           end
         end
 
@@ -111,12 +111,12 @@ module RubySpeech
           end
 
           it "illegal ranges from m to n" do
-            lambda { subject.repeat = '5-1' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = '-1-2' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = '1-2-3' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = '1-B' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = -1..2 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = 1..-2 }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = '5-1' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = '-1-2' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = '1-2-3' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = '1-B' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = -1..2 }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = 1..-2 }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
           end
 
           context "valid ranges of m or more" do
@@ -134,8 +134,8 @@ module RubySpeech
           end
 
           it "illegal ranges for m or more" do
-            lambda { subject.repeat = '-1-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
-            lambda { subject.repeat = 'B-' }.should raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = '-1-' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
+            expect { subject.repeat = 'B-' }.to raise_error(ArgumentError, "A Item's repeat must be 0 or a positive integer")
           end
         end
       end
@@ -143,17 +143,17 @@ module RubySpeech
       # repeat probability (repeat-prob) -- http://www.w3.org/TR/speech-grammar/#S2.5.1
       describe "#repeat_prob" do
         it "should handle all valid values" do
-          lambda { subject.repeat_prob = 0 }.should_not raise_error
-          lambda { subject.repeat_prob = 1 }.should_not raise_error
-          lambda { subject.repeat_prob = 1.0 }.should_not raise_error
-          lambda { subject.repeat_prob = '1.' }.should_not raise_error
-          lambda { subject.repeat_prob = '1.0' }.should_not raise_error
-          lambda { subject.repeat_prob = '.5' }.should_not raise_error
+          expect { subject.repeat_prob = 0 }.not_to raise_error
+          expect { subject.repeat_prob = 1 }.not_to raise_error
+          expect { subject.repeat_prob = 1.0 }.not_to raise_error
+          expect { subject.repeat_prob = '1.' }.not_to raise_error
+          expect { subject.repeat_prob = '1.0' }.not_to raise_error
+          expect { subject.repeat_prob = '.5' }.not_to raise_error
         end
 
         it "should raise an error for invalid values" do
-          lambda { subject.repeat_prob = -1 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
-          lambda { subject.repeat_prob = 1.5 }.should raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
+          expect { subject.repeat_prob = -1 }.to raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
+          expect { subject.repeat_prob = 1.5 }.to raise_error(ArgumentError, "A Item's repeat probablity attribute must be a floating point number between 0.0 and 1.0")
         end
       end
 
@@ -166,27 +166,27 @@ module RubySpeech
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept OneOf" do
-          lambda { subject << OneOf.new(doc) }.should_not raise_error
+          expect { subject << OneOf.new(doc) }.not_to raise_error
         end
 
         it "should accept Item" do
-          lambda { subject << Item.new(doc) }.should_not raise_error
+          expect { subject << Item.new(doc) }.not_to raise_error
         end
 
         it "should accept Ruleref" do
-          lambda { subject << Ruleref.new(doc) }.should_not raise_error
+          expect { subject << Ruleref.new(doc) }.not_to raise_error
         end
 
         it "should accept Tag" do
-          lambda { subject << Tag.new(doc) }.should_not raise_error
+          expect { subject << Tag.new(doc) }.not_to raise_error
         end
 
         it "should accept Token" do
-          lambda { subject << Token.new(doc) }.should_not raise_error
+          expect { subject << Token.new(doc) }.not_to raise_error
         end
       end
     end # Item

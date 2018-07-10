@@ -30,8 +30,8 @@ sudo yum install pcre-devel
     gem install ruby_speech
 
 ## Ruby Version Compatability
-  * CRuby 1.9.3+ (1.9.2 is unofficially supported, but not regularly tested)
-  * JRuby 1.7+
+  * CRuby 2.1+
+  * JRuby 9.1+
 
 ## Library
 

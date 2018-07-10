@@ -16,7 +16,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:sub).should == Sub
+        expect(Element.class_from_registration(:sub)).to eq(Sub)
       end
 
       describe "from a document" do
@@ -24,36 +24,36 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Sub }
+        it { is_expected.to be_instance_of Sub }
 
         its(:alias) { should == 'foo' }
       end
 
       describe "comparing objects" do
         it "should be equal if the content and alias are the same" do
-          Sub.new(doc, :alias => 'jp', :content => "Hello there").should == Sub.new(doc, :alias => 'jp', :content => "Hello there")
+          expect(Sub.new(doc, :alias => 'jp', :content => "Hello there")).to eq(Sub.new(doc, :alias => 'jp', :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Sub.new(doc, :content => "Hello").should_not == Sub.new(doc, :content => "Hello there")
+            expect(Sub.new(doc, :content => "Hello")).not_to eq(Sub.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the alias is different" do
           it "should not be equal" do
-            Sub.new(doc, :alias => 'jp').should_not == Sub.new(doc, :alias => 'en')
+            expect(Sub.new(doc, :alias => 'jp')).not_to eq(Sub.new(doc, :alias => 'en'))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << Voice.new(doc) }.should raise_error(InvalidChildError, "A Sub can only accept Strings as children")
+          expect { subject << Voice.new(doc) }.to raise_error(InvalidChildError, "A Sub can only accept Strings as children")
         end
       end
     end # Desc

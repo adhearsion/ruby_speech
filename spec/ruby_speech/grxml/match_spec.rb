@@ -7,7 +7,7 @@ module RubySpeech
 
       describe "equality" do
         it "should never be equal to a MaxMatch" do
-          described_class.new.should_not eql(MaxMatch.new)
+          expect(described_class.new).not_to eql(MaxMatch.new)
         end
       end
     end

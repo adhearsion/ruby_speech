@@ -21,7 +21,7 @@ class SpeechDocMatcher
     " expected #{subject} to be a valid #{type} document\n#{errors}"
   end
 
-  def negative_failure_message
+  def failure_message_when_negated
     " expected #{subject} not to be a valid #{type} document"
   end
 

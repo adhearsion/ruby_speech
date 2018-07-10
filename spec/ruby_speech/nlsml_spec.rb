@@ -52,7 +52,7 @@ describe RubySpeech::NLSML do
         end
       end
 
-      document.to_xml.should == expected_document
+      expect(document.to_xml).to eq(expected_document)
     end
 
     it "should return a structured/parsed document" do
@@ -68,7 +68,7 @@ describe RubySpeech::NLSML do
         end
       end
 
-      document.should be_match
+      expect(document).to be_match
     end
 
     context "with a string instance" do
@@ -92,7 +92,7 @@ describe RubySpeech::NLSML do
           end
         end
 
-        document.to_xml.should == expected_document
+        expect(document.to_xml).to eq(expected_document)
       end
     end
   end
@@ -106,7 +106,7 @@ describe RubySpeech::NLSML do
 
     its(:grammar) { should == 'http://flight' }
 
-    it { should be_match }
+    it { is_expected.to be_match }
 
     let(:expected_best_interpretation) do
       {
@@ -133,11 +133,11 @@ describe RubySpeech::NLSML do
     its(:best_interpretation) { should == expected_best_interpretation }
 
     it "should be equal if the XML is the same" do
-      subject.should be == RubySpeech.parse(example_document)
+      expect(subject).to eq(RubySpeech.parse(example_document))
     end
 
     it "should not be equal if the XML is different" do
-      subject.should_not be == RubySpeech.parse(empty_result)
+      expect(subject).not_to eq(RubySpeech.parse(empty_result))
     end
 
     context "when the XML is already parsed and is not the root of a document" do
@@ -280,7 +280,7 @@ describe RubySpeech::NLSML do
         RubySpeech.parse empty_result
       end
 
-      it { should_not be_match }
+      it { is_expected.not_to be_match }
     end
 
     context "with interpretations out of confidence order" do
@@ -389,7 +389,7 @@ describe RubySpeech::NLSML do
         '''
       end
 
-      it { should_not be_match }
+      it { is_expected.not_to be_match }
     end
 
     context "with multiple interpretations where one is a nomatch input" do
@@ -413,7 +413,7 @@ describe RubySpeech::NLSML do
         '''
       end
 
-      it { should be_match }
+      it { is_expected.to be_match }
     end
 
     context "with a single interpretation with a noinput" do
@@ -429,8 +429,8 @@ describe RubySpeech::NLSML do
         '''
       end
 
-      it { should_not be_match }
-      it { should be_noinput }
+      it { is_expected.not_to be_match }
+      it { is_expected.to be_noinput }
     end
   end
 end

@@ -11,7 +11,7 @@ module RubySpeech
       its(:uri)   { should == '#testrule' }
 
       it 'registers itself' do
-        Element.class_from_registration(:ruleref).should == Ruleref
+        expect(Element.class_from_registration(:ruleref)).to eq(Ruleref)
       end
 
       describe "from a document" do
@@ -19,7 +19,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Ruleref }
+        it { is_expected.to be_instance_of Ruleref }
 
         its(:uri) { should == '#one' }
       end
@@ -29,27 +29,27 @@ module RubySpeech
 
         context "with reserved values" do
           it "with a valid value" do
-            lambda { subject.special = :NULL }.should_not raise_error
-            lambda { subject.special = :VOID }.should_not raise_error
-            lambda { subject.special = 'GARBAGE' }.should_not raise_error
+            expect { subject.special = :NULL }.not_to raise_error
+            expect { subject.special = :VOID }.not_to raise_error
+            expect { subject.special = 'GARBAGE' }.not_to raise_error
           end
           it "with an invalid value" do
-            lambda { subject.special = :SOMETHINGELSE }.should raise_error
+            expect { subject.special = :SOMETHINGELSE }.to raise_error
           end
         end
       end
 
       describe "#uri" do
         it "allows implict, explicit and external references" do
-          lambda { subject.uri = '#dtmf' }.should_not raise_error
-          lambda { subject.uri = '../test.grxml' }.should_not raise_error
-          lambda { subject.uri = 'http://grammar.example.com/world-cities.grxml#canada' }.should_not raise_error
+          expect { subject.uri = '#dtmf' }.not_to raise_error
+          expect { subject.uri = '../test.grxml' }.not_to raise_error
+          expect { subject.uri = 'http://grammar.example.com/world-cities.grxml#canada' }.not_to raise_error
         end
       end
 
       describe "only uri or special can be specified" do
         it "should raise an error" do
-          lambda { subject << Ruleref.new(doc, :uri => '#test', :special => :NULL) }.should raise_error(ArgumentError, "A Ruleref can only take uri or special")
+          expect { subject << Ruleref.new(doc, :uri => '#test', :special => :NULL) }.to raise_error(ArgumentError, "A Ruleref can only take uri or special")
         end
       end
     end # Ruleref

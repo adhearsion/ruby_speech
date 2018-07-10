@@ -5,11 +5,11 @@ module RubySpeech
     describe NoMatch do
       describe "equality" do
         it "should be equal to another NoMatch" do
-          NoMatch.new.should == NoMatch.new
+          expect(NoMatch.new).to eq(NoMatch.new)
         end
 
         it "should not equal a match" do
-          NoMatch.new.should_not == Match.new
+          expect(NoMatch.new).not_to eq(Match.new)
         end
       end
     end

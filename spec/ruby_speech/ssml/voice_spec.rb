@@ -21,7 +21,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:voice).should == Voice
+        expect(Element.class_from_registration(:voice)).to eq(Voice)
       end
 
       describe "from a document" do
@@ -29,7 +29,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Voice }
+        it { is_expected.to be_instance_of Voice }
 
         its(:language)  { should == 'jp' }
         its(:gender)    { should == :male }
@@ -50,13 +50,13 @@ module RubySpeech
         its(:gender) { should == :male }
 
         it "with a valid gender" do
-          lambda { subject.gender = :male }.should_not raise_error
-          lambda { subject.gender = :female }.should_not raise_error
-          lambda { subject.gender = :neutral }.should_not raise_error
+          expect { subject.gender = :male }.not_to raise_error
+          expect { subject.gender = :female }.not_to raise_error
+          expect { subject.gender = :neutral }.not_to raise_error
         end
 
         it "with an invalid gender" do
-          lambda { subject.gender = :something }.should raise_error(ArgumentError, "You must specify a valid gender (:male, :female, :neutral)")
+          expect { subject.gender = :something }.to raise_error(ArgumentError, "You must specify a valid gender (:male, :female, :neutral)")
         end
       end
 
@@ -66,15 +66,15 @@ module RubySpeech
         its(:age) { should == 12 }
 
         it "with an integer of 0" do
-          lambda { subject.age = 0 }.should_not raise_error
+          expect { subject.age = 0 }.not_to raise_error
         end
 
         it "with an integer less than 0" do
-          lambda { subject.age = -1 }.should raise_error(ArgumentError, "You must specify a valid age (non-negative integer)")
+          expect { subject.age = -1 }.to raise_error(ArgumentError, "You must specify a valid age (non-negative integer)")
         end
 
         it "with something other than an integer" do
-          lambda { subject.age = "bah" }.should raise_error(ArgumentError, "You must specify a valid age (non-negative integer)")
+          expect { subject.age = "bah" }.to raise_error(ArgumentError, "You must specify a valid age (non-negative integer)")
         end
       end
 
@@ -84,11 +84,11 @@ module RubySpeech
         its(:variant) { should == 12 }
 
         it "with an integer less than 1" do
-          lambda { subject.variant = 0 }.should raise_error(ArgumentError, "You must specify a valid variant (positive integer)")
+          expect { subject.variant = 0 }.to raise_error(ArgumentError, "You must specify a valid variant (positive integer)")
         end
 
         it "with something other than an integer" do
-          lambda { subject.variant = "bah" }.should raise_error(ArgumentError, "You must specify a valid variant (positive integer)")
+          expect { subject.variant = "bah" }.to raise_error(ArgumentError, "You must specify a valid variant (positive integer)")
         end
       end
 
@@ -106,97 +106,97 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language, gender, age, variant, name are the same" do
-          Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello").should == Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello")
+          expect(Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello")).to eq(Voice.new(doc, :language => 'jp', :gender => :male, :age => 25, :variant => 2, :name => "paul", :content => "hello"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Voice.new(doc, :content => "Hello").should_not == Voice.new(doc, :content => "Hello there")
+            expect(Voice.new(doc, :content => "Hello")).not_to eq(Voice.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Voice.new(doc, :language => "Hello").should_not == Voice.new(doc, :language => "Hello there")
+            expect(Voice.new(doc, :language => "Hello")).not_to eq(Voice.new(doc, :language => "Hello there"))
           end
         end
 
         describe "when the gender is different" do
           it "should not be equal" do
-            Voice.new(doc, :gender => :male).should_not == Voice.new(doc, :gender => :female)
+            expect(Voice.new(doc, :gender => :male)).not_to eq(Voice.new(doc, :gender => :female))
           end
         end
 
         describe "when the age is different" do
           it "should not be equal" do
-            Voice.new(doc, :age => 20).should_not == Voice.new(doc, :age => 30)
+            expect(Voice.new(doc, :age => 20)).not_to eq(Voice.new(doc, :age => 30))
           end
         end
 
         describe "when the variant is different" do
           it "should not be equal" do
-            Voice.new(doc, :variant => 1).should_not == Voice.new(doc, :variant => 2)
+            expect(Voice.new(doc, :variant => 1)).not_to eq(Voice.new(doc, :variant => 2))
           end
         end
 
         describe "when the name is different" do
           it "should not be equal" do
-            Voice.new(doc, :name => "Hello").should_not == Voice.new(doc, :name => "Hello there")
+            expect(Voice.new(doc, :name => "Hello")).not_to eq(Voice.new(doc, :name => "Hello there"))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new(doc) }.should_not raise_error
+          expect { subject << Audio.new(doc) }.not_to raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new(doc) }.should_not raise_error
+          expect { subject << Break.new(doc) }.not_to raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new(doc) }.should_not raise_error
+          expect { subject << Emphasis.new(doc) }.not_to raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new(doc) }.should_not raise_error
+          expect { subject << Mark.new(doc) }.not_to raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new(doc) }.should_not raise_error
+          expect { subject << P.new(doc) }.not_to raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new(doc) }.should_not raise_error
+          expect { subject << Phoneme.new(doc) }.not_to raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new(doc) }.should_not raise_error
+          expect { subject << Prosody.new(doc) }.not_to raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
+          expect { subject << SayAs.new(doc, :interpret_as => :foo) }.not_to raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new(doc) }.should_not raise_error
+          expect { subject << Sub.new(doc) }.not_to raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new(doc) }.should_not raise_error
+          expect { subject << S.new(doc) }.not_to raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new(doc) }.should_not raise_error
+          expect { subject << Voice.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "A Voice can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
     end # Voice

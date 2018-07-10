@@ -2,6 +2,7 @@
 *.gem
 *.bundle
 *.jar
+*.so
 Gemfile.lock
 pkg/*
 spec/reports

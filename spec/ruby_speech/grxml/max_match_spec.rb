@@ -5,11 +5,11 @@ module RubySpeech
     describe MaxMatch do
       it_behaves_like "match"
 
-      it { should be_a Match }
+      it { is_expected.to be_a Match }
 
       describe "equality" do
         it "should never be equal to a MaxMatch" do
-          described_class.new.should_not eql(Match.new)
+          expect(described_class.new).not_to eql(Match.new)
         end
       end
     end

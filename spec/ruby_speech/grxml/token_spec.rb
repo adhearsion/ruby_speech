@@ -10,7 +10,7 @@ module RubySpeech
       its(:name) { should == 'token' }
 
       it 'registers itself' do
-        Element.class_from_registration(:token).should == Token
+        expect(Element.class_from_registration(:token)).to eq(Token)
       end
 
       describe "from a document" do
@@ -18,7 +18,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Token }
+        it { is_expected.to be_instance_of Token }
 
         its(:content) { should == 'hello' }
       end
@@ -35,30 +35,30 @@ module RubySpeech
 
           element.normalize_whitespace
 
-          element.content.should == 'Welcome to San Francisco'
+          expect(element.content).to eq('Welcome to San Francisco')
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content is the same" do
-          Token.new(doc, :content => "hello").should == Token.new(doc, :content => "hello")
+          expect(Token.new(doc, :content => "hello")).to eq(Token.new(doc, :content => "hello"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Token.new(doc, :content => "Hello").should_not == Token.new(doc, :content => "Hello there")
+            expect(Token.new(doc, :content => "Hello")).not_to eq(Token.new(doc, :content => "Hello there"))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should allow chaining" do
           subject << 'foo' << 'bar'
-          subject.content.should == 'foobar'
+          expect(subject.content).to eq('foobar')
         end
       end
     end # Token

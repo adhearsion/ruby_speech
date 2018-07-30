@@ -17,18 +17,32 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:break).should == Break
+        expect(Element.class_from_registration(:break)).to eq(Break)
       end
 
       describe "from a document" do
-        let(:document) { '<break strength="strong" time="3"/>' }
-
         subject { Element.import document }
 
-        it { should be_instance_of Break }
+        context 'with time of 3' do
+          let(:document) { '<break strength="strong" time="3"/>' }
 
-        its(:strength)  { should == :strong }
-        its(:time)      { should == 3 }
+          it { is_expected.to be_instance_of Break }
+
+          its(:strength)  { should == :strong }
+          its(:time)      { should eql 3.0 }
+        end
+
+        context 'with time of 4s' do
+          let(:document) { '<break time="4s"/>' }
+
+          its(:time)      { should eql 4.0 }
+        end
+
+        context 'with time of 5555ms' do
+          let(:document) { '<break time="5555ms"/>' }
+
+          its(:time)      { should eql 5.555 }
+        end
       end
 
       describe "#strength" do
@@ -37,65 +51,71 @@ module RubySpeech
         its(:strength) { should == :strong }
 
         it "with a valid level" do
-          lambda { subject.strength = :none }.should_not raise_error
-          lambda { subject.strength = :'x-weak' }.should_not raise_error
-          lambda { subject.strength = :weak }.should_not raise_error
-          lambda { subject.strength = :medium }.should_not raise_error
-          lambda { subject.strength = :strong }.should_not raise_error
-          lambda { subject.strength = :'x-strong' }.should_not raise_error
+          expect { subject.strength = :none }.not_to raise_error
+          expect { subject.strength = :'x-weak' }.not_to raise_error
+          expect { subject.strength = :weak }.not_to raise_error
+          expect { subject.strength = :medium }.not_to raise_error
+          expect { subject.strength = :strong }.not_to raise_error
+          expect { subject.strength = :'x-strong' }.not_to raise_error
         end
 
         it "with an invalid strength" do
-          lambda { subject.strength = :something }.should raise_error(ArgumentError, "You must specify a valid strength (:none, :\"x-weak\", :weak, :medium, :strong, :\"x-strong\")")
+          expect { subject.strength = :something }.to raise_error(ArgumentError, "You must specify a valid strength (:none, :\"x-weak\", :weak, :medium, :strong, :\"x-strong\")")
         end
       end
 
       describe "#time" do
-        context "with a valid value" do
+        context "with a valid whole seconds value of 3" do
           before { subject.time = 3 }
 
-          its(:time) { should == 3 }
+          its(:time) { should eql 3.0 }
+        end
+
+        context "with a valid fractional seconds value of 3.5" do
+          before { subject.time = 3.5 }
+
+          its(:time) { should eql 3.5 }
         end
 
         context "with a negative value" do
           it do
-            lambda { subject.time = -3 }.should raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
+            expect { subject.time = -3 }.to raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
           end
         end
 
         context "with an invalid value" do
           it do
-            lambda { subject.time = 'blah' }.should raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
+            expect { subject.time = 'blah' }.to raise_error(ArgumentError, "You must specify a valid time (positive float value in seconds)")
           end
         end
       end
 
       describe "<<" do
         it "should always raise InvalidChildError" do
-          lambda { subject << 'anything' }.should raise_error(InvalidChildError, "A Break cannot contain children")
+          expect { subject << 'anything' }.to raise_error(InvalidChildError, "A Break cannot contain children")
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there").should == Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there")
+          expect(Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there")).to eq(Break.new(doc, :strength => :strong, :time => 1, :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Break.new(doc, :content => "Hello").should_not == Break.new(doc, :content => "Hello there")
+            expect(Break.new(doc, :content => "Hello")).not_to eq(Break.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the strength is different" do
           it "should not be equal" do
-            Break.new(doc, :strength => :strong).should_not == Break.new(doc, :strength => :weak)
+            expect(Break.new(doc, :strength => :strong)).not_to eq(Break.new(doc, :strength => :weak))
           end
         end
 
         describe "when the time is different" do
           it "should not be equal" do
-            Break.new(doc, :time => 1).should_not == Break.new(doc, :time => 2)
+            expect(Break.new(doc, :time => 1)).not_to eq(Break.new(doc, :time => 2))
           end
         end
       end

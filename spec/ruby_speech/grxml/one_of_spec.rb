@@ -10,7 +10,7 @@ module RubySpeech
       its(:name) { should == 'one-of' }
 
       it 'registers itself' do
-        Element.class_from_registration(:'one-of').should == OneOf
+        expect(Element.class_from_registration(:'one-of')).to eq(OneOf)
       end
 
       describe "from a document" do
@@ -18,7 +18,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of OneOf }
+        it { is_expected.to be_instance_of OneOf }
       end
 
       describe "#language" do
@@ -29,22 +29,22 @@ module RubySpeech
 
       describe "<<" do
         it "should accept Item" do
-          lambda { subject << Item.new(doc) }.should_not raise_error
+          expect { subject << Item.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A OneOf can only accept Item as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "A OneOf can only accept Item as children")
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the language (when specified) is the same" do
-          OneOf.new(doc, :language => "jp").should == OneOf.new(doc, :language => "jp")
+          expect(OneOf.new(doc, :language => "jp")).to eq(OneOf.new(doc, :language => "jp"))
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            OneOf.new(doc, :language => "jp").should_not == OneOf.new(doc, :content => "fr-CA")
+            expect(OneOf.new(doc, :language => "jp")).not_to eq(OneOf.new(doc, :content => "fr-CA"))
           end
         end
       end

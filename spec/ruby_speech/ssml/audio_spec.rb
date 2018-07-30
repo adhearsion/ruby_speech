@@ -17,7 +17,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:audio).should == Audio
+        expect(Element.class_from_registration(:audio)).to eq(Audio)
       end
 
       describe "from a document" do
@@ -25,7 +25,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Audio }
+        it { is_expected.to be_instance_of Audio }
 
         its(:src)     { should == 'http://whatever.you-say-boss.com' }
         its(:content) { should == 'Hello' }
@@ -47,76 +47,76 @@ module RubySpeech
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new(doc) }.should_not raise_error
+          expect { subject << Audio.new(doc) }.not_to raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new(doc) }.should_not raise_error
+          expect { subject << Break.new(doc) }.not_to raise_error
         end
 
         it "should accept Desc" do
-          lambda { subject << Desc.new(doc) }.should_not raise_error
+          expect { subject << Desc.new(doc) }.not_to raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new(doc) }.should_not raise_error
+          expect { subject << Emphasis.new(doc) }.not_to raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new(doc) }.should_not raise_error
+          expect { subject << Mark.new(doc) }.not_to raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new(doc) }.should_not raise_error
+          expect { subject << P.new(doc) }.not_to raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new(doc) }.should_not raise_error
+          expect { subject << Phoneme.new(doc) }.not_to raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new(doc) }.should_not raise_error
+          expect { subject << Prosody.new(doc) }.not_to raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
+          expect { subject << SayAs.new(doc, :interpret_as => :foo) }.not_to raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new(doc) }.should_not raise_error
+          expect { subject << Sub.new(doc) }.not_to raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new(doc) }.should_not raise_error
+          expect { subject << S.new(doc) }.not_to raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new(doc) }.should_not raise_error
+          expect { subject << Voice.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "An Audio can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "An Audio can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content, and src are the same" do
-          Audio.new(doc, :src => "one", :content => "Hello there").should == Audio.new(doc, :src => "one", :content => "Hello there")
+          expect(Audio.new(doc, :src => "one", :content => "Hello there")).to eq(Audio.new(doc, :src => "one", :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Audio.new(doc, :content => "Hello").should_not == Audio.new(doc, :content => "Hello there")
+            expect(Audio.new(doc, :content => "Hello")).not_to eq(Audio.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the src is different" do
           it "should not be equal" do
-            Audio.new(doc, :src => 'one').should_not == Audio.new(doc, :src => 'two')
+            expect(Audio.new(doc, :src => 'one')).not_to eq(Audio.new(doc, :src => 'two'))
           end
         end
       end

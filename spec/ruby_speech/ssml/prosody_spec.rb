@@ -16,12 +16,12 @@ module RubySpeech
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:prosody).should == Prosody
+        expect(Element.class_from_registration(:prosody)).to eq(Prosody)
       end
 
       describe "from a document" do
@@ -29,13 +29,13 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Prosody }
+        it { is_expected.to be_instance_of Prosody }
 
         its(:pitch)     { should == :medium }
         its(:contour)   { should == 'something' }
         its(:range)     { should == '20Hz' }
         its(:rate)      { should == 2 }
-        its(:duration)  { should == 10 }
+        its(:duration)  { should eql 10 }
         its(:volume)    { should == :loud }
       end
 
@@ -46,16 +46,16 @@ module RubySpeech
           its(:pitch) { should == :medium }
 
           it "with a valid value" do
-            lambda { subject.pitch = :'x-low' }.should_not raise_error
-            lambda { subject.pitch = :low }.should_not raise_error
-            lambda { subject.pitch = :medium }.should_not raise_error
-            lambda { subject.pitch = :high }.should_not raise_error
-            lambda { subject.pitch = :'x-high' }.should_not raise_error
-            lambda { subject.pitch = :default }.should_not raise_error
+            expect { subject.pitch = :'x-low' }.not_to raise_error
+            expect { subject.pitch = :low }.not_to raise_error
+            expect { subject.pitch = :medium }.not_to raise_error
+            expect { subject.pitch = :high }.not_to raise_error
+            expect { subject.pitch = :'x-high' }.not_to raise_error
+            expect { subject.pitch = :default }.not_to raise_error
           end
 
           it "with an invalid value" do
-            lambda { subject.pitch = :something }.should raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.pitch = :something }.to raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
         end
 
@@ -67,11 +67,11 @@ module RubySpeech
           end
 
           it "with a negative value" do
-            lambda { subject.pitch = "-100Hz" }.should raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.pitch = "-100Hz" }.to raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
 
           it "when missing 'hz'" do
-            lambda { subject.pitch = "440" }.should raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.pitch = "440" }.to raise_error(ArgumentError, "You must specify a valid pitch (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
         end
       end
@@ -89,16 +89,16 @@ module RubySpeech
           its(:range) { should == :medium }
 
           it "with a valid value" do
-            lambda { subject.range = :'x-low' }.should_not raise_error
-            lambda { subject.range = :low }.should_not raise_error
-            lambda { subject.range = :medium }.should_not raise_error
-            lambda { subject.range = :high }.should_not raise_error
-            lambda { subject.range = :'x-high' }.should_not raise_error
-            lambda { subject.range = :default }.should_not raise_error
+            expect { subject.range = :'x-low' }.not_to raise_error
+            expect { subject.range = :low }.not_to raise_error
+            expect { subject.range = :medium }.not_to raise_error
+            expect { subject.range = :high }.not_to raise_error
+            expect { subject.range = :'x-high' }.not_to raise_error
+            expect { subject.range = :default }.not_to raise_error
           end
 
           it "with an invalid value" do
-            lambda { subject.range = :something }.should raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.range = :something }.to raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
         end
 
@@ -110,11 +110,11 @@ module RubySpeech
           end
 
           it "with a negative value" do
-            lambda { subject.range = "-100Hz" }.should raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.range = "-100Hz" }.to raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
 
           it "when missing 'hz'" do
-            lambda { subject.range = "440" }.should raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
+            expect { subject.range = "440" }.to raise_error(ArgumentError, "You must specify a valid range (\"[positive-number]Hz\", :\"x-low\", :low, :medium, :high, :\"x-high\", :default)")
           end
         end
       end
@@ -126,16 +126,16 @@ module RubySpeech
           its(:rate) { should == :medium }
 
           it "with a valid value" do
-            lambda { subject.rate = :'x-slow' }.should_not raise_error
-            lambda { subject.rate = :slow }.should_not raise_error
-            lambda { subject.rate = :medium }.should_not raise_error
-            lambda { subject.rate = :fast }.should_not raise_error
-            lambda { subject.rate = :'x-fast' }.should_not raise_error
-            lambda { subject.rate = :default }.should_not raise_error
+            expect { subject.rate = :'x-slow' }.not_to raise_error
+            expect { subject.rate = :slow }.not_to raise_error
+            expect { subject.rate = :medium }.not_to raise_error
+            expect { subject.rate = :fast }.not_to raise_error
+            expect { subject.rate = :'x-fast' }.not_to raise_error
+            expect { subject.rate = :default }.not_to raise_error
           end
 
           it "with an invalid value" do
-            lambda { subject.rate = :something }.should raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
+            expect { subject.rate = :something }.to raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
           end
         end
 
@@ -147,7 +147,25 @@ module RubySpeech
           end
 
           it "with a negative value" do
-            lambda { subject.rate = -100 }.should raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
+            expect { subject.rate = -100 }.to raise_error(ArgumentError, "You must specify a valid rate ([positive-number](multiplier), :\"x-slow\", :slow, :medium, :fast, :\"x-fast\", :default)")
+          end
+
+          describe "with a percentage" do
+            before { subject.rate = "22.5%" }
+
+            its(:rate) { should == "22.5%" }
+          end
+
+          describe "with a percentage and a plus sign" do
+            before { subject.rate = "+22.5%" }
+
+            its(:rate) { should == "+22.5%" }
+          end
+
+          describe "with a percentage and a minus sign" do
+            before { subject.rate = "-22.5%" }
+
+            its(:rate) { should == "-22.5%" }
           end
         end
       end
@@ -156,18 +174,18 @@ module RubySpeech
         context "with a valid value" do
           before { subject.duration = 3 }
 
-          its(:duration) { should == 3 }
+          its(:duration) { should eql 3 }
         end
 
         context "with a negative value" do
           it do
-            lambda { subject.duration = -3 }.should raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
+            expect { subject.duration = -3 }.to raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
           end
         end
 
         context "with an invalid value" do
           it do
-            lambda { subject.duration = 'blah' }.should raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
+            expect { subject.duration = 'blah' }.to raise_error(ArgumentError, "You must specify a valid duration (positive float value in seconds)")
           end
         end
       end
@@ -179,17 +197,17 @@ module RubySpeech
           its(:volume) { should == :medium }
 
           it "with a valid value" do
-            lambda { subject.volume = :silent }.should_not raise_error
-            lambda { subject.volume = :'x-soft' }.should_not raise_error
-            lambda { subject.volume = :soft }.should_not raise_error
-            lambda { subject.volume = :medium }.should_not raise_error
-            lambda { subject.volume = :loud }.should_not raise_error
-            lambda { subject.volume = :'x-loud' }.should_not raise_error
-            lambda { subject.volume = :default }.should_not raise_error
+            expect { subject.volume = :silent }.not_to raise_error
+            expect { subject.volume = :'x-soft' }.not_to raise_error
+            expect { subject.volume = :soft }.not_to raise_error
+            expect { subject.volume = :medium }.not_to raise_error
+            expect { subject.volume = :loud }.not_to raise_error
+            expect { subject.volume = :'x-loud' }.not_to raise_error
+            expect { subject.volume = :default }.not_to raise_error
           end
 
           it "with an invalid value" do
-            lambda { subject.volume = :something }.should raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
+            expect { subject.volume = :something }.to raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
           end
         end
 
@@ -201,111 +219,111 @@ module RubySpeech
           end
 
           it "with a negative value" do
-            lambda { subject.volume = -1.5 }.should raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
-            lambda { subject.volume = 100.5 }.should raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
+            expect { subject.volume = -1.5 }.to raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
+            expect { subject.volume = 100.5 }.to raise_error(ArgumentError, "You must specify a valid volume ([positive-number](0.0 -> 100.0), :silent, :\"x-soft\", :soft, :medium, :loud, :\"x-loud\", :default)")
           end
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the content, strength and base uri are the same" do
-          Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there").should == Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there")
+          expect(Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there")).to eq(Prosody.new(doc, :pitch => :medium, :contour => "something", :range => '20Hz', :rate => 2, :duration => 10, :volume => :loud, :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Prosody.new(doc, :content => "Hello").should_not == Prosody.new(doc, :content => "Hello there")
+            expect(Prosody.new(doc, :content => "Hello")).not_to eq(Prosody.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the pitch is different" do
           it "should not be equal" do
-            Prosody.new(doc, :pitch => :medium).should_not == Prosody.new(doc, :pitch => :high)
+            expect(Prosody.new(doc, :pitch => :medium)).not_to eq(Prosody.new(doc, :pitch => :high))
           end
         end
 
         describe "when the contour is different" do
           it "should not be equal" do
-            Prosody.new(doc, :contour => 'foo').should_not == Prosody.new(doc, :contour => 'bar')
+            expect(Prosody.new(doc, :contour => 'foo')).not_to eq(Prosody.new(doc, :contour => 'bar'))
           end
         end
 
         describe "when the range is different" do
           it "should not be equal" do
-            Prosody.new(doc, :range => '20Hz').should_not == Prosody.new(doc, :range => '30Hz')
+            expect(Prosody.new(doc, :range => '20Hz')).not_to eq(Prosody.new(doc, :range => '30Hz'))
           end
         end
 
         describe "when the rate is different" do
           it "should not be equal" do
-            Prosody.new(doc, :rate => 2).should_not == Prosody.new(doc, :rate => 3)
+            expect(Prosody.new(doc, :rate => 2)).not_to eq(Prosody.new(doc, :rate => 3))
           end
         end
 
         describe "when the duration is different" do
           it "should not be equal" do
-            Prosody.new(doc, :duration => 10).should_not == Prosody.new(doc, :duration => 20)
+            expect(Prosody.new(doc, :duration => 10)).not_to eq(Prosody.new(doc, :duration => 20))
           end
         end
 
         describe "when the volume is different" do
           it "should not be equal" do
-            Prosody.new(doc, :volume => :loud).should_not == Prosody.new(doc, :volume => :soft)
+            expect(Prosody.new(doc, :volume => :loud)).not_to eq(Prosody.new(doc, :volume => :soft))
           end
         end
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new(doc) }.should_not raise_error
+          expect { subject << Audio.new(doc) }.not_to raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new(doc) }.should_not raise_error
+          expect { subject << Break.new(doc) }.not_to raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new(doc) }.should_not raise_error
+          expect { subject << Emphasis.new(doc) }.not_to raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new(doc) }.should_not raise_error
+          expect { subject << Mark.new(doc) }.not_to raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new(doc) }.should_not raise_error
+          expect { subject << P.new(doc) }.not_to raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new(doc) }.should_not raise_error
+          expect { subject << Phoneme.new(doc) }.not_to raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new(doc) }.should_not raise_error
+          expect { subject << Prosody.new(doc) }.not_to raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new(doc) }.should_not raise_error
+          expect { subject << S.new(doc) }.not_to raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
+          expect { subject << SayAs.new(doc, :interpret_as => :foo) }.not_to raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new(doc) }.should_not raise_error
+          expect { subject << Sub.new(doc) }.not_to raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new(doc) }.should_not raise_error
+          expect { subject << Voice.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Prosody can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "A Prosody can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
     end # Prosody

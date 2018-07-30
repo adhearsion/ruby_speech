@@ -23,17 +23,17 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '6',
                                               :interpretation => 'dtmf-6'
-            subject.match(input).should == expected_match
-            input.should == '6'
+            expect(subject.match(input)).to eq(expected_match)
+            expect(input).to eq('6')
           end
 
           it "should potentially match an empty buffer" do
-            subject.match('').should == GRXML::PotentialMatch.new
+            expect(subject.match('')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{1 2 3 4 5 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -69,7 +69,7 @@ module RubySpeech
           it "should return the literal tag interpretation" do
             expected_match = GRXML::MaxMatch.new mode: :dtmf, confidence: 1,
               utterance: '2', interpretation: 'bar'
-            subject.match('2').should == expected_match
+            expect(subject.match('2')).to eq(expected_match)
           end
         end
 
@@ -87,18 +87,18 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '56',
                                               :interpretation => 'dtmf-5 dtmf-6'
-            subject.match('56').should == expected_match
+            expect(subject.match('56')).to eq(expected_match)
           end
 
           it "should potentially match '5'" do
             input = '5'
-            subject.match(input).should == GRXML::PotentialMatch.new
-            input.should == '5'
+            expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
+            expect(input).to eq('5')
           end
 
           %w{* *7 #6 6* 1 2 3 4 6 7 8 9 10 65 57 46 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -117,16 +117,16 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '*6',
                                               :interpretation => 'dtmf-star dtmf-6'
-            subject.match('*6').should == expected_match
+            expect(subject.match('*6')).to eq(expected_match)
           end
 
           it "should potentially match '*'" do
-            subject.match('*').should == GRXML::PotentialMatch.new
+            expect(subject.match('*')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{*7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -145,16 +145,16 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '#6',
                                               :interpretation => 'dtmf-pound dtmf-6'
-            subject.match('#6').should == expected_match
+            expect(subject.match('#6')).to eq(expected_match)
           end
 
           it "should potentially match '#'" do
-            subject.match('#').should == GRXML::PotentialMatch.new
+            expect(subject.match('#')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{* *6 #7 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -178,16 +178,16 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '*6',
                                               :interpretation => 'dtmf-star dtmf-6'
-            subject.match('*6').should == expected_match
+            expect(subject.match('*6')).to eq(expected_match)
           end
 
           it "should potentially match '*'" do
-            subject.match('*').should == GRXML::PotentialMatch.new
+            expect(subject.match('*')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{*7 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -209,7 +209,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '6',
                                               :interpretation => 'dtmf-6'
-            subject.match('6').should == expected_match
+            expect(subject.match('6')).to eq(expected_match)
           end
 
           it "should maximally match '7'" do
@@ -217,12 +217,12 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '7',
                                               :interpretation => 'dtmf-7'
-            subject.match('7').should == expected_match
+            expect(subject.match('7')).to eq(expected_match)
           end
 
           %w{* # 1 2 3 4 5 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -250,7 +250,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '65',
                                               :interpretation => 'dtmf-6 dtmf-5'
-            subject.match('65').should == expected_match
+            expect(subject.match('65')).to eq(expected_match)
           end
 
           it "should maximally match '72'" do
@@ -258,18 +258,18 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '72',
                                               :interpretation => 'dtmf-7 dtmf-2'
-            subject.match('72').should == expected_match
+            expect(subject.match('72')).to eq(expected_match)
           end
 
           %w{6 7}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{* # 1 2 3 4 5 8 9 10 66 26 61 75}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -299,7 +299,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '652',
                                               :interpretation => 'dtmf-6 dtmf-5 dtmf-2'
-            subject.match('652').should == expected_match
+            expect(subject.match('652')).to eq(expected_match)
           end
 
           it "should maximally match '728'" do
@@ -307,18 +307,18 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '728',
                                               :interpretation => 'dtmf-7 dtmf-2 dtmf-8'
-            subject.match('728').should == expected_match
+            expect(subject.match('728')).to eq(expected_match)
           end
 
           %w{6 65 7 72}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{* # 1 2 3 4 5 8 9 10 66 26 61 75 729 654}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -341,7 +341,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '*6',
                                               :interpretation => 'dtmf-star dtmf-6'
-            subject.match('*6').should == expected_match
+            expect(subject.match('*6')).to eq(expected_match)
           end
 
           it "should maximally match '*7'" do
@@ -349,16 +349,16 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '*7',
                                               :interpretation => 'dtmf-star dtmf-7'
-            subject.match('*7').should == expected_match
+            expect(subject.match('*7')).to eq(expected_match)
           end
 
           it "should potentially match '*'" do
-            subject.match('*').should == GRXML::PotentialMatch.new
+            expect(subject.match('*')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{*8 #6 6* 1 2 3 4 5 6 7 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -381,7 +381,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '6*',
                                               :interpretation => 'dtmf-6 dtmf-star'
-            subject.match('6*').should == expected_match
+            expect(subject.match('6*')).to eq(expected_match)
           end
 
           it "should maximally match '7*'" do
@@ -389,22 +389,22 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '7*',
                                               :interpretation => 'dtmf-7 dtmf-star'
-            subject.match('7*').should == expected_match
+            expect(subject.match('7*')).to eq(expected_match)
           end
 
           %w{6 7}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           it "should potentially match '7'" do
-            subject.match('7').should == GRXML::PotentialMatch.new
+            expect(subject.match('7')).to eq(GRXML::PotentialMatch.new)
           end
 
           %w{8* 6# *6 *7 1 2 3 4 5 8 9 10 66 26 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -426,18 +426,18 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '166',
                                               :interpretation => 'dtmf-1 dtmf-6 dtmf-6'
-            subject.match('166').should == expected_match
+            expect(subject.match('166')).to eq(expected_match)
           end
 
           %w{1 16}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{1666 16666 17}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -459,18 +459,18 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '661',
                                               :interpretation => 'dtmf-6 dtmf-6 dtmf-1'
-            subject.match('661').should == expected_match
+            expect(subject.match('661')).to eq(expected_match)
           end
 
           %w{6 66}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{61 6661 66661 71 771}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -492,7 +492,7 @@ module RubySpeech
                                               :confidence     => 1,
                                               :utterance      => '1666',
                                               :interpretation => 'dtmf-1 dtmf-6 dtmf-6 dtmf-6'
-            subject.match('1666').should == expected_match
+            expect(subject.match('1666')).to eq(expected_match)
           end
 
           {
@@ -505,13 +505,13 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{6 16666 17}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -537,7 +537,7 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
@@ -549,13 +549,13 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{6666 7}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -583,19 +583,19 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{6 66 666}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{66661 71}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -622,19 +622,19 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{1 16}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{7 17}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -661,19 +661,19 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{6 66}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{7 71 61}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end
@@ -714,19 +714,19 @@ module RubySpeech
                                                 :confidence     => 1,
                                                 :utterance      => input,
                                                 :interpretation => interpretation
-              subject.match(input).should == expected_match
+              expect(subject.match(input)).to eq(expected_match)
             end
           end
 
           %w{* 1 12 123 1234}.each do |input|
             it "should potentially match '#{input}'" do
-              subject.match(input).should == GRXML::PotentialMatch.new
+              expect(subject.match(input)).to eq(GRXML::PotentialMatch.new)
             end
           end
 
           %w{11111 #1111 *7}.each do |input|
             it "should not match '#{input}'" do
-              subject.match(input).should == GRXML::NoMatch.new
+              expect(subject.match(input)).to eq(GRXML::NoMatch.new)
             end
           end
         end

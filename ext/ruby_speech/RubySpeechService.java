@@ -1,4 +1,4 @@
-package com.benlangfeld.ruby_speech;
+package com.adhearsion.ruby_speech;
 
 import org.jruby.Ruby;
 import org.jruby.RubyClass;

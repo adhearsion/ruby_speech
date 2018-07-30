@@ -1,17 +1,26 @@
 language: ruby
-
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - jruby
-  - rbx
+  - 2.1.10
+  - 2.2.10
+  - 2.3.7
+  - 2.4.4
+  - jruby-9.1.17.0
+  - jruby-head
+  - rbx-3
   - ruby-head
+jdk:
+  - openjdk8 # for jruby
 matrix:
   allow_failures:
+    - rvm: rbx-3
     - rvm: ruby-head
+sudo: false
+addons:
+  apt:
+    packages:
+    - libpcre3
+    - libpcre3-dev
 before_install:
-  - sudo apt-get install libpcre3 libpcre3-dev
-
+  - gem install bundler
 notifications:
   irc: "irc.freenode.org#adhearsion"

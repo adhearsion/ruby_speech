@@ -7,7 +7,7 @@ module RubySpeech
 
       subject { described_class.new doc }
 
-      it { should be_a_valid_ssml_document }
+      it { is_expected.to be_a_valid_ssml_document }
 
       its(:name) { should == 'speak' }
       its(:language) { should == 'en-US' }
@@ -20,7 +20,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:speak).should == Speak
+        expect(Element.class_from_registration(:speak)).to eq(Speak)
       end
 
       describe "from a document" do
@@ -28,7 +28,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Speak }
+        it { is_expected.to be_instance_of Speak }
 
         its(:language) { should == 'jp' }
         its(:base_uri) { should == 'blah' }
@@ -48,24 +48,24 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language and base uri are the same" do
-          Speak.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there").should == Speak.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there")
+          expect(Speak.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there")).to eq(Speak.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Speak.new(doc, :content => "Hello").should_not == Speak.new(doc, :content => "Hello there")
+            expect(Speak.new(doc, :content => "Hello")).not_to eq(Speak.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Speak.new(doc, :language => 'en-US').should_not == Speak.new(doc, :language => 'en-GB')
+            expect(Speak.new(doc, :language => 'en-US')).not_to eq(Speak.new(doc, :language => 'en-GB'))
           end
         end
 
         describe "when the base URI is different" do
           it "should not be equal" do
-            Speak.new(doc, :base_uri => 'foo').should_not == Speak.new(doc, :base_uri => 'bar')
+            expect(Speak.new(doc, :base_uri => 'foo')).not_to eq(Speak.new(doc, :base_uri => 'bar'))
           end
         end
 
@@ -76,7 +76,7 @@ module RubySpeech
             s2 = Speak.new doc
             s2 << SayAs.new(doc, :interpret_as => 'time')
 
-            s1.should_not == s2
+            expect(s1).not_to eq(s2)
           end
         end
       end
@@ -86,66 +86,66 @@ module RubySpeech
         s.voice :gender => :male, :content => 'Hello'
         expected_s = Speak.new doc
         expected_s << Voice.new(doc, :gender => :male, :content => 'Hello')
-        s.should == expected_s
+        expect(s).to eq(expected_s)
       end
 
       describe "<<" do
         it "should accept String" do
-          lambda { subject << 'anything' }.should_not raise_error
+          expect { subject << 'anything' }.not_to raise_error
         end
 
         it "should accept Audio" do
-          lambda { subject << Audio.new(doc) }.should_not raise_error
+          expect { subject << Audio.new(doc) }.not_to raise_error
         end
 
         it "should accept Break" do
-          lambda { subject << Break.new(doc) }.should_not raise_error
+          expect { subject << Break.new(doc) }.not_to raise_error
         end
 
         it "should accept Emphasis" do
-          lambda { subject << Emphasis.new(doc) }.should_not raise_error
+          expect { subject << Emphasis.new(doc) }.not_to raise_error
         end
 
         it "should accept Mark" do
-          lambda { subject << Mark.new(doc) }.should_not raise_error
+          expect { subject << Mark.new(doc) }.not_to raise_error
         end
 
         it "should accept P" do
-          lambda { subject << P.new(doc) }.should_not raise_error
+          expect { subject << P.new(doc) }.not_to raise_error
         end
 
         it "should accept Phoneme" do
-          lambda { subject << Phoneme.new(doc) }.should_not raise_error
+          expect { subject << Phoneme.new(doc) }.not_to raise_error
         end
 
         it "should accept Prosody" do
-          lambda { subject << Prosody.new(doc) }.should_not raise_error
+          expect { subject << Prosody.new(doc) }.not_to raise_error
         end
 
         it "should accept SayAs" do
-          lambda { subject << SayAs.new(doc, :interpret_as => :foo) }.should_not raise_error
+          expect { subject << SayAs.new(doc, :interpret_as => :foo) }.not_to raise_error
         end
 
         it "should accept Sub" do
-          lambda { subject << Sub.new(doc) }.should_not raise_error
+          expect { subject << Sub.new(doc) }.not_to raise_error
         end
 
         it "should accept S" do
-          lambda { subject << S.new(doc) }.should_not raise_error
+          expect { subject << S.new(doc) }.not_to raise_error
         end
 
         it "should accept Voice" do
-          lambda { subject << Voice.new(doc) }.should_not raise_error
+          expect { subject << Voice.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "A Speak can only accept String, Audio, Break, Emphasis, Mark, P, Phoneme, Prosody, SayAs, Sub, S, Voice as children")
         end
       end
 
       describe "#to_doc" do
         it "should create an XML document from the grammar" do
-          subject.to_doc.should == subject.document
+          expect(subject.to_doc).to eq(subject.document)
         end
       end
 
@@ -176,11 +176,11 @@ module RubySpeech
         end
 
         concat = (speak1 + speak2)
-        speak1.to_s.should == speak1_string
-        speak2.to_s.should == speak2_string
-        concat.should == expected_concat
-        concat.document.root.should == concat
-        concat.to_s.should_not include('default')
+        expect(speak1.to_s).to eq(speak1_string)
+        expect(speak2.to_s).to eq(speak2_string)
+        expect(concat).to eq(expected_concat)
+        expect(concat.document.root).to eq(concat)
+        expect(concat.to_s).not_to include('default')
       end
 
       context "when concatenating" do
@@ -199,7 +199,7 @@ module RubySpeech
             end
 
             concat = (speak1 + speak2)
-            concat.should == expected_concat
+            expect(concat).to eq(expected_concat)
           end
         end
       end

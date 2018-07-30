@@ -30,7 +30,7 @@ describe RubySpeech do
         '''
       end
 
-      it { should be_a RubySpeech::SSML::Element }
+      it { is_expected.to be_a RubySpeech::SSML::Element }
     end
 
     context "with a GRXML document" do
@@ -91,7 +91,7 @@ describe RubySpeech do
         '''
       end
 
-      it { should be_a RubySpeech::GRXML::Element }
+      it { is_expected.to be_a RubySpeech::GRXML::Element }
     end
 
     context "with an NLSML document" do
@@ -118,7 +118,7 @@ describe RubySpeech do
         '''
       end
 
-      it { should be_a RubySpeech::NLSML::Document }
+      it { is_expected.to be_a RubySpeech::NLSML::Document }
     end
   end
 end

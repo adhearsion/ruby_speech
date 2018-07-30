@@ -7,7 +7,7 @@ module RubySpeech
 
       subject { described_class.new doc }
 
-      it { should be_a_valid_grxml_document }
+      it { is_expected.to be_a_valid_grxml_document }
 
       its(:name)      { should == 'grammar' }
       its(:language)  { should == 'en-US' }
@@ -36,7 +36,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:grammar).should == Grammar
+        expect(Element.class_from_registration(:grammar)).to eq(Grammar)
       end
 
       describe "from a document" do
@@ -48,7 +48,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Grammar }
+        it { is_expected.to be_instance_of Grammar }
 
         its(:language)  { should == 'jp' }
         its(:base_uri)  { should == 'blah' }
@@ -70,24 +70,24 @@ module RubySpeech
 
       describe "comparing objects" do
         it "should be equal if the content, language and base uri are the same" do
-          Grammar.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there").should == Grammar.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there")
+          expect(Grammar.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there")).to eq(Grammar.new(doc, :language => 'en-GB', :base_uri => 'blah', :content => "Hello there"))
         end
 
         describe "when the content is different" do
           it "should not be equal" do
-            Grammar.new(doc, :content => "Hello").should_not == Grammar.new(doc, :content => "Hello there")
+            expect(Grammar.new(doc, :content => "Hello")).not_to eq(Grammar.new(doc, :content => "Hello there"))
           end
         end
 
         describe "when the language is different" do
           it "should not be equal" do
-            Grammar.new(doc, :language => 'en-US').should_not == Grammar.new(doc, :language => 'en-GB')
+            expect(Grammar.new(doc, :language => 'en-US')).not_to eq(Grammar.new(doc, :language => 'en-GB'))
           end
         end
 
         describe "when the base URI is different" do
           it "should not be equal" do
-            Grammar.new(doc, :base_uri => 'foo').should_not == Grammar.new(doc, :base_uri => 'bar')
+            expect(Grammar.new(doc, :base_uri => 'foo')).not_to eq(Grammar.new(doc, :base_uri => 'bar'))
           end
         end
 
@@ -98,7 +98,7 @@ module RubySpeech
             g2 = Grammar.new doc
             g2 << Rule.new(doc, :id => 'main2')
 
-            g1.should_not == g2
+            expect(g1).not_to eq(g2)
           end
         end
       end
@@ -108,32 +108,32 @@ module RubySpeech
         g.rule :id => :main, :scope => 'public'
         expected_g = Grammar.new doc
         expected_g << Rule.new(doc, :id => :main, :scope => 'public')
-        g.should == expected_g
+        expect(g).to eq(expected_g)
       end
 
       describe "<<" do
         it "should accept Rule" do
-          lambda { subject << Rule.new(doc) }.should_not raise_error
+          expect { subject << Rule.new(doc) }.not_to raise_error
         end
 
         it "should accept Tag" do
-          lambda { subject << Tag.new(doc) }.should_not raise_error
+          expect { subject << Tag.new(doc) }.not_to raise_error
         end
 
         it "should raise InvalidChildError with non-acceptable objects" do
-          lambda { subject << 1 }.should raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
+          expect { subject << 1 }.to raise_error(InvalidChildError, "A Grammar can only accept Rule and Tag as children")
         end
       end
 
       describe "#to_doc" do
         it "should create an XML document from the grammar" do
-          subject.to_doc.should == subject.document
+          expect(subject.to_doc).to eq(subject.document)
         end
       end
 
       describe "#tag_format" do
         it "should allow setting tag-format identifier" do
-          lambda { subject.tag_format = "semantics/1.0" }.should_not raise_error
+          expect { subject.tag_format = "semantics/1.0" }.not_to raise_error
         end
       end
 
@@ -152,11 +152,11 @@ module RubySpeech
           expected_concat << Rule.new(doc, :id => 'millie', :scope => 'public', :content => "Hi Millie")
 
           concat = grammar1 + grammar2
-          grammar1.to_s.should == grammar1_string
-          grammar2.to_s.should == grammar2_string
-          concat.should == expected_concat
-          concat.document.root.should == concat
-          concat.to_s.should_not include('default')
+          expect(grammar1.to_s).to eq(grammar1_string)
+          expect(grammar2.to_s).to eq(grammar2_string)
+          expect(concat).to eq(expected_concat)
+          expect(concat.document.root).to eq(concat)
+          expect(concat.to_s).not_to include('default')
         end
       end
 
@@ -167,7 +167,7 @@ module RubySpeech
         foo = GRXML::Rule.new doc, :id => 'foo'
         grammar << foo
 
-        grammar.root_rule.should == foo
+        expect(grammar.root_rule).to eq(foo)
       end
 
       describe "inlining rule references" do
@@ -224,13 +224,147 @@ module RubySpeech
         end
 
         it "should be possible in a non-destructive manner" do
-          grammar.inline.should == inline_grammar
-          grammar.should_not == inline_grammar
+          expect(grammar.inline).to eq(inline_grammar)
+          expect(grammar).not_to eq(inline_grammar)
         end
 
         it "should be possible in a destructive manner" do
-          grammar.inline!.should == inline_grammar
-          grammar.should == inline_grammar
+          expect(grammar.inline!).to eq(inline_grammar)
+          expect(grammar).to eq(inline_grammar)
+        end
+
+        context 'nested' do
+          let :expected_doc do
+            RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+              rule id: :main, scope: 'public' do
+                string "How about an oatmeal cookie?  You'll feel better."
+              end
+            end
+          end
+
+          context '1 level deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { is_expected.to eq expected_doc }
+          end
+
+          context '2 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { is_expected.to eq expected_doc }
+          end
+
+          context '3 levels deep' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#rabbit_hole2'
+                end
+                rule id: 'rabbit_hole2' do
+                  ruleref uri: '#rabbit_hole3'
+                end
+                rule id: 'rabbit_hole3' do
+                  ruleref uri: '#rabbit_hole4'
+                end
+                rule id: 'rabbit_hole4' do
+                  string "How about an oatmeal cookie?  You'll feel better."
+                end
+              end.inline
+            end
+
+            it { is_expected.to eq expected_doc }
+          end
+
+          context 'in a self-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#paradox'
+                end
+                rule id: 'paradox' do
+                  ruleref uri: '#paradox'
+                end
+              end.inline
+            end
+
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
+          end
+
+          context 'in a cross-referencial infinite loop' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#007'
+                end
+                rule id: '007' do
+                  one_of do
+                    item do
+                      ruleref uri: '#bond'
+                    end
+                  end
+                end
+                rule id: 'bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#james_bond'
+                    end
+                  end
+                end
+                rule id: 'james_bond' do
+                  one_of do
+                    item do
+                      ruleref uri: '#007'
+                    end
+                  end
+                end
+              end.inline
+            end
+
+            it 'should raise an Exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::ReferentialLoopError
+            end
+          end
+
+          context 'with an invalid-reference' do
+            subject do
+              RubySpeech::GRXML.draw mode: :dtmf, root: 'main' do
+                rule id: :main, scope: 'public' do
+                  ruleref uri: '#lost'
+                end
+              end.inline
+            end
+
+            it 'should raise a descriptive exception' do
+              expect { subject }
+                .to raise_error RubySpeech::GRXML::MissingReferenceError,
+                                "Ruleref '#lost' is referenced but not defined"
+            end
+          end
         end
       end
 
@@ -259,7 +393,7 @@ module RubySpeech
           let(:tokens)  { 'hello' }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -268,7 +402,7 @@ module RubySpeech
           let(:tokens)  { ['2'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -277,7 +411,7 @@ module RubySpeech
           let(:tokens)  { ['San Francisco'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -286,7 +420,7 @@ module RubySpeech
           let(:tokens)  { ['hello'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -295,7 +429,7 @@ module RubySpeech
           let(:tokens)  { ['bon', 'voyage'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -304,7 +438,7 @@ module RubySpeech
           let(:tokens)  { ['this', 'is', 'a', 'test'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -313,7 +447,7 @@ module RubySpeech
           let(:tokens)  { ['San Francisco'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
 
@@ -328,7 +462,7 @@ module RubySpeech
           let(:tokens) { ['Welcome', 'to', 'San Francisco', 'Have Fun!'] }
 
           it "should tokenize correctly" do
-            should == tokenized_version
+            is_expected.to eq(tokenized_version)
           end
         end
       end
@@ -349,9 +483,9 @@ module RubySpeech
             end
           end
 
-          grammar.should_not == normalized_grammar
+          expect(grammar).not_to eq(normalized_grammar)
           grammar.normalize_whitespace
-          grammar.should == normalized_grammar
+          expect(grammar).to eq(normalized_grammar)
         end
       end
     end # Grammar

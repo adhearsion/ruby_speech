@@ -16,7 +16,7 @@ module RubySpeech
       end
 
       it 'registers itself' do
-        Element.class_from_registration(:mark).should == Mark
+        expect(Element.class_from_registration(:mark)).to eq(Mark)
       end
 
       describe "from a document" do
@@ -24,7 +24,7 @@ module RubySpeech
 
         subject { Element.import document }
 
-        it { should be_instance_of Mark }
+        it { is_expected.to be_instance_of Mark }
 
         its(:name)  { should == 'foo' }
       end
@@ -37,18 +37,18 @@ module RubySpeech
 
       describe "<<" do
         it "should always raise InvalidChildError" do
-          lambda { subject << 'anything' }.should raise_error(InvalidChildError, "A Mark cannot contain children")
+          expect { subject << 'anything' }.to raise_error(InvalidChildError, "A Mark cannot contain children")
         end
       end
 
       describe "comparing objects" do
         it "should be equal if the name is the same" do
-          Mark.new(doc, :name => "foo").should == Mark.new(doc, :name => "foo")
+          expect(Mark.new(doc, :name => "foo")).to eq(Mark.new(doc, :name => "foo"))
         end
 
         describe "when the name is different" do
           it "should not be equal" do
-            Mark.new(doc, :name => "foo").should_not == Mark.new(doc, :name => "bar")
+            expect(Mark.new(doc, :name => "foo")).not_to eq(Mark.new(doc, :name => "bar"))
           end
         end
       end

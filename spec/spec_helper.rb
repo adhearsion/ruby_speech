@@ -1,7 +1,13 @@
-require 'ruby_speech'
+# encoding: utf-8
+# frozen_string_literal: true
 
-require 'coveralls'
+require "coveralls"
 Coveralls.wear!
+
+%w{
+  rspec/its
+  ruby_speech
+}.each { |f| require f }
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
@@ -18,5 +24,4 @@ puts "Finished loading schema."
 RSpec.configure do |config|
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 end

@@ -1,6 +1,16 @@
 # [develop](https://github.com/benlangfeld/ruby_speech)
   * Bugfix: Fix grammar parsing error where MATCH_END is returned even when a partial match exists on a separate item
 
+# [3.0.0](https://github.com/benlangfeld/ruby_speech/compare/v2.4.0...v3.0.0) - [2018-07-10](https://rubygems.org/gems/ruby_speech/versions/3.0.0)
+  * Feature: Loosen and bump Nokogiri version to ~>1.8, >=1.8.3
+  * Feature: Bump RSpec to 3.x and convert specs with Transpec
+
+# [2.4.0](https://github.com/benlangfeld/ruby_speech/compare/v2.3.2...v2.4.0) - [2018-02-23](https://rubygems.org/gems/ruby_speech/versions/2.4.0)
+  * Feature: Permit percentage rate values for prosody tags
+  * Bugfix: Rulerefs referenced n-levels deep under Rulerefs should be expanded.
+  * Bugfix: Optimize performance of built-in number DTMF grammar
+  * Bugfix: Fix handling of millisecond values
+
 # [2.3.2](https://github.com/benlangfeld/ruby_speech/compare/v2.3.1...v2.3.2) - [2014-04-21](https://rubygems.org/gems/ruby_speech/versions/2.3.2)
   * Bugfix: String nodes should take non-strings and cast to a string (`#to_s`)
   * Bugfix: Cleanly handle NLSML with no input tag

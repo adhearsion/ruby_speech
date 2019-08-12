@@ -20,7 +20,5 @@ addons:
     packages:
     - libpcre3
     - libpcre3-dev
-before_install:
-  - gem install bundler
 notifications:
   irc: "irc.freenode.org#adhearsion"

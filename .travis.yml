@@ -1,3 +1,4 @@
+dist: bionic
 language: ruby
 rvm:
   - 2.1.10
@@ -14,7 +15,6 @@ matrix:
   allow_failures:
     - rvm: rbx-3
     - rvm: ruby-head
-sudo: false
 addons:
   apt:
     packages:

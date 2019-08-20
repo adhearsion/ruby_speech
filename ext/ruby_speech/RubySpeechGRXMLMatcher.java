@@ -50,13 +50,14 @@ public class RubySpeechGRXMLMatcher extends RubyObject {
     return nomatch.callMethod(context, "new");
   }
 
-  public Boolean is_max_match(String buffer)
-  {
-    String search_set = "0123456789#*ABCD";
-    for (int i = 0; i < 16; i++) {
-      String new_buffer = buffer + search_set.charAt(i);
-      Matcher m = p.matcher(new_buffer);
-      if (m.matches()) return false;
+  private boolean is_max_match(String buffer) {
+    final int len = buffer.length();
+    StringBuilder new_buffer = new StringBuilder(len + 1);
+    new_buffer.append(buffer).append('\0');
+    final String search_set = "0123456789#*ABCD";
+    for (int i = 0; i < search_set.length(); i++) {
+      new_buffer.setCharAt(len, search_set.charAt(i));
+      if (p.matcher(new_buffer).matches()) return false;
     }
     return true;
   }

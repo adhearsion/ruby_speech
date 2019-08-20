@@ -6,6 +6,7 @@ import org.jruby.RubyModule;
 import org.jruby.RubyObject;
 import org.jruby.anno.JRubyClass;
 import org.jruby.anno.JRubyMethod;
+import org.jruby.runtime.Block;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.Visibility;
@@ -43,11 +44,9 @@ public class RubySpeechGRXMLMatcher extends RubyObject {
       }
       return callMethod(context, "match_for_buffer", buffer);
     } else if (m.hitEnd()) {
-      RubyModule potential_match = runtime.getClassFromPath("RubySpeech::GRXML::PotentialMatch");
-      return potential_match.callMethod(context, "new");
+      return getGRXMLType(runtime, "PotentialMatch").newInstance(context, Block.NULL_BLOCK);
     }
-    RubyModule nomatch = runtime.getClassFromPath("RubySpeech::GRXML::NoMatch");
-    return nomatch.callMethod(context, "new");
+    return getGRXMLType(runtime, "NoMatch").newInstance(context, Block.NULL_BLOCK);
   }
 
   private boolean is_max_match(String buffer) {
@@ -60,6 +59,11 @@ public class RubySpeechGRXMLMatcher extends RubyObject {
       if (p.matcher(new_buffer).matches()) return false;
     }
     return true;
+  }
+
+  private static RubyClass getGRXMLType(final Ruby runtime, final String name) {
+    RubyModule grxml = (RubyModule) runtime.getModule("RubySpeech").getConstantAt("GRXML");
+    return (RubyClass) grxml.getConstantAt(name);
   }
 
 }

@@ -22,6 +22,9 @@ addons:
     packages:
     - libpcre3
     - libpcre3-dev
+env:
+  global:
+  - JRUBY_OPTS='--debug'
 before_install: rvm list
 notifications:
   irc: "irc.freenode.org#adhearsion"

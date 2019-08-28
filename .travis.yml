@@ -1,9 +1,12 @@
+dist: xenial
 language: ruby
 rvm:
   - 2.1.10
   - 2.2.10
-  - 2.3.7
-  - 2.4.4
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
+  - 2.6.3
   - jruby-9.1.17.0
   - jruby-head
   - rbx-3
@@ -14,13 +17,14 @@ matrix:
   allow_failures:
     - rvm: rbx-3
     - rvm: ruby-head
-sudo: false
 addons:
   apt:
     packages:
     - libpcre3
     - libpcre3-dev
-before_install:
-  - gem install bundler
+env:
+  global:
+  - JRUBY_OPTS='--debug'
+before_install: rvm list
 notifications:
   irc: "irc.freenode.org#adhearsion"

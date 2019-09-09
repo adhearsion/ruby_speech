@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   end
 
   s.add_runtime_dependency %q<nokogiri>, ["~> 1.8", ">= 1.8.3"]
-  s.add_runtime_dependency %q<activesupport>, [">= 3.0.7", "< 5.0.0"]
+  s.add_runtime_dependency %q<activesupport>, [">= 3.0.7"]
 
   s.add_development_dependency %q<bundler>, [">= 1.0.0"]
   s.add_development_dependency %q<rspec>, ["~> 3.0"]

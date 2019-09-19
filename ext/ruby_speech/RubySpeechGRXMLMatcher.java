@@ -6,6 +6,7 @@ import org.jruby.RubyModule;
 import org.jruby.RubyObject;
 import org.jruby.anno.JRubyClass;
 import org.jruby.anno.JRubyMethod;
+import org.jruby.runtime.Block;
 import org.jruby.runtime.ObjectAllocator;
 import org.jruby.runtime.ThreadContext;
 import org.jruby.runtime.Visibility;
@@ -43,22 +44,26 @@ public class RubySpeechGRXMLMatcher extends RubyObject {
       }
       return callMethod(context, "match_for_buffer", buffer);
     } else if (m.hitEnd()) {
-      RubyModule potential_match = runtime.getClassFromPath("RubySpeech::GRXML::PotentialMatch");
-      return potential_match.callMethod(context, "new");
+      return getGRXMLType(runtime, "PotentialMatch").newInstance(context, Block.NULL_BLOCK);
     }
-    RubyModule nomatch = runtime.getClassFromPath("RubySpeech::GRXML::NoMatch");
-    return nomatch.callMethod(context, "new");
+    return getGRXMLType(runtime, "NoMatch").newInstance(context, Block.NULL_BLOCK);
   }
 
-  public Boolean is_max_match(String buffer)
-  {
-    String search_set = "0123456789#*ABCD";
-    for (int i = 0; i < 16; i++) {
-      String new_buffer = buffer + search_set.charAt(i);
-      Matcher m = p.matcher(new_buffer);
-      if (m.matches()) return false;
+  private boolean is_max_match(String buffer) {
+    final int len = buffer.length();
+    StringBuilder new_buffer = new StringBuilder(len + 1);
+    new_buffer.append(buffer).append('\0');
+    final String search_set = "0123456789#*ABCD";
+    for (int i = 0; i < search_set.length(); i++) {
+      new_buffer.setCharAt(len, search_set.charAt(i));
+      if (p.matcher(new_buffer).matches()) return false;
     }
     return true;
+  }
+
+  private static RubyClass getGRXMLType(final Ruby runtime, final String name) {
+    RubyModule grxml = (RubyModule) runtime.getModule("RubySpeech").getConstantAt("GRXML");
+    return (RubyClass) grxml.getConstantAt(name);
   }
 
 }

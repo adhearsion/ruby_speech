@@ -9,13 +9,16 @@ rvm:
   - 2.6.3
   - jruby-9.1.17.0
   - jruby-head
-  - rbx-3
   - ruby-head
 jdk:
   - openjdk8 # for jruby
 matrix:
+  include:
+    - rvm: rbx-4
+      dist: trusty
+      name: Rubinius
   allow_failures:
-    - rvm: rbx-3
+    - name: Rubinius
     - rvm: ruby-head
 addons:
   apt:

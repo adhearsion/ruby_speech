@@ -1,4 +1,6 @@
-# [develop](https://github.com/benlangfeld/ruby_speech)
+# [3.0.1](https://github.com/benlangfeld/ruby_speech/compare/v3.0.0...v3.0.1) - [2022-02-15](https://rubygems.org/gems/ruby_speech/versions/3.0.1)
+  * Misc: Relax dependency limits to allow newer ActiveSupport versions and thus Ruby 3.0
+  * Bugfix: Misc performance improvements
 
 # [3.0.0](https://github.com/benlangfeld/ruby_speech/compare/v2.4.0...v3.0.0) - [2018-07-10](https://rubygems.org/gems/ruby_speech/versions/3.0.0)
   * Feature: Loosen and bump Nokogiri version to ~>1.8, >=1.8.3

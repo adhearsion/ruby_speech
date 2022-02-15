@@ -90,7 +90,7 @@ module RubySpeech
       #       ```
       #
       def match(buffer)
-        find_match buffer.dup
+        find_match buffer
       end
 
       private
